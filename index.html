@@ -19,14 +19,12 @@
 }
 </style>
 
-<style id="final-polish">
+<style id="navigation-fix">
 .menuTitle{padding:10px 12px 6px;color:#6fdfff;font-weight:900;font-size:12px;letter-spacing:1px;text-transform:uppercase}
 .menuDivider{height:1px;background:#1c3853;margin:7px 4px}
 .navBar{display:flex;gap:8px;margin:0 0 10px}.navBtn{width:auto!important;margin:0!important;padding:9px 13px!important}
-.menu{max-height:calc(100vh - 70px);overflow:auto}
-.menu button{border-radius:10px!important}
+.menu{max-height:calc(100vh - 70px);overflow:auto}.menu button{border-radius:10px!important}
 .teamInfo{min-width:0}.teamActions{width:82px;flex:none}.mini{width:auto!important;padding:8px 10px!important;font-size:12px!important;margin:0!important}
-.featureGrid{display:none!important}
 </style>
 </head>
 <body>
@@ -75,13 +73,22 @@
       <div class="grid"><div class="stat"><span>My Jobs</span><b id="myJobs">0</b></div><div class="stat"><span>Completed</span><b id="myDone">0</b></div><div class="stat"><span>Pending</span><b id="myPending">0</b></div><div class="stat"><span>Success Rate</span><b id="myRate">0%</b></div></div>
     </div>
 
-    
-<div class="card" id="successPreview" style="background:linear-gradient(135deg,#0b2b45,#0a1929)">
-  <div class="row"><div><span class="pill">PERFORMANCE</span><h3 style="margin:8px 0 3px">🏆 Technician Success Rate</h3><p class="muted">Completed jobs compared with assigned jobs</p></div><div class="spacer"></div><div class="kpi" id="homeRate">0%</div></div>
-  <div class="progress"><i id="homeRateBar" style="width:0%"></i></div>
-  <button class="secondary" onclick="navigate('success')" style="margin-top:12px">View all technicians →</button>
-</div>
-<div id="rolePanel" class="card"></div>
+    <div class="card"><h3>Maintenance Modules</h3>
+      <div class="featureGrid">
+        <div class="card feature" onclick="showView('street')"><img src="public/images/street_light_survey.png"><div class="featureContent"><div class="featureIcon">💡</div><h3>Street Light Survey</h3><p class="muted">Working, faulty, dim, flickering & damage survey</p></div></div>
+        <div class="card feature" onclick="showView('tower')"><img src="public/images/telecom_tower.png"><div class="featureContent"><div class="featureIcon">📡</div><h3>Telecom Tower</h3><p class="muted">Tower work, location, field notes & jobs</p></div></div>
+        <div class="card feature" onclick="showView('battery')"><img src="public/images/battery_bank.png"><div class="featureContent"><div class="featureIcon">🔋</div><h3>Battery Maintenance</h3><p class="muted">Battery condition, status & next due date</p></div></div>
+        <div class="card feature" onclick="showView('earth')"><img src="public/images/earth_pit.png"><div class="featureContent"><div class="featureIcon">🌍</div><h3>Earth Pit</h3><p class="muted">Condition, resistance & maintenance</p></div></div>
+        <div class="card feature" onclick="showView('wiring')"><img src="public/images/wiring_fault.png"><div class="featureContent"><div class="featureIcon">⚡</div><h3>Wiring Fault</h3><p class="muted">Fault reporting and field job tracking</p></div></div>
+        <div class="card feature" onclick="showView('renovation')"><div class="featureContent"><div class="featureIcon">🛠️</div><h3>Renovation</h3><p class="muted">Maintenance / renovation work status</p></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg,#0b2b45,#0a1929)">
+<div class="row"><div><span class="pill">PERFORMANCE</span><h3 style="margin:8px 0 3px">🏆 Technician Success Rate</h3><p class="muted">Completed jobs compared with assigned jobs</p></div><div class="spacer"></div><div class="kpi" id="homeRate">0%</div></div>
+<div class="progress"><i id="homeRateBar" style="width:0%"></i></div>
+<button class="secondary" onclick="navigate('success')" style="margin-top:12px">View all technicians →</button>
+</div><div id="rolePanel" class="card"></div>
   </div>
 
   <div id="street" class="view hidden"><div class="navBar"><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button><button class="secondary navBtn" onclick="goBack()">← Back</button></div>
@@ -157,7 +164,7 @@ function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidde
 function toggleMenu(){ $("menu").classList.toggle("hidden") } function closeMenu(){ $("menu").classList.add("hidden") }
 function showView(id){
  document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
- $(id)?.classList.remove("hidden");
+ const el=document.getElementById(id); if(el)el.classList.remove("hidden");
  closeMenu();
  if(id==="notifications")loadNotifications();
  if(id==="team")loadTeam();
@@ -167,8 +174,8 @@ function showView(id){
  if(id==="battery")loadBattery();
  if(id==="earth")loadEarth();
  if(id==="renovation")loadRenovation();
- if(id==="backup")loadBackupSummary?.();
- window.scrollTo({top:0,behavior:"smooth"});
+ if(id==="backup" && typeof loadBackupSummary==="function")loadBackupSummary();
+ window.scrollTo(0,0);
 }
 async function loadHome(){
  const j=await db.from("jobs").select("id,status,assigned_worker");const rows=j.data||[];
@@ -209,8 +216,6 @@ async function fetchBackupData(){
     out.tables[t]=r.data||[];
   }
   return out;
-
- const all=(j.data||[]);const mine=all.filter(y=>y.assigned_worker===user.id);const md=mine.filter(y=>y.status==="completed").length;const mr=mine.length?Math.round(md/mine.length*100):0;if($("homeRate"))$("homeRate").textContent=mr+"%";if($("homeRateBar"))$("homeRateBar").style.width=mr+"%";
 }
 async function downloadBackup(){
   if(!user)return alert("Login required");
@@ -308,32 +313,14 @@ showView=function(id){_showView(id);if(id==="backup")loadBackupSummary();}
 
 
 let navHistory=["home"];
-function closeMenu(){ $("menu").classList.add("hidden"); }
-function toggleMenu(){ $("menu").classList.toggle("hidden"); }
-function navigate(id){
-  closeMenu();
-  if(!document.getElementById(id)) return;
-  navHistory.push(id);
-  showView(id);
-}
-function goBack(){
-  closeMenu();
-  if(navHistory.length>1) navHistory.pop();
-  const id=navHistory[navHistory.length-1]||"home";
-  showView(id);
-}
-document.addEventListener("click",e=>{
-  const m=$("menu"), b=$("menuBtn");
+function closeMenu(){ const m=document.getElementById("menu"); if(m)m.classList.add("hidden"); }
+function toggleMenu(){ const m=document.getElementById("menu"); if(m)m.classList.toggle("hidden"); }
+function navigate(id){ closeMenu(); navHistory.push(id); showView(id); }
+function goBack(){ closeMenu(); if(navHistory.length>1)navHistory.pop(); showView(navHistory[navHistory.length-1]||"home"); }
+document.addEventListener("click",function(e){
+  const m=document.getElementById("menu"), b=document.getElementById("menuBtn");
   if(m && !m.classList.contains("hidden") && !m.contains(e.target) && e.target!==b) closeMenu();
 });
-async function removeMember(id,name){
-  if(profile?.role!=="admin") return alert("Admin only");
-  if(!confirm("Remove "+name+"? Their access will be disabled.")) return;
-  const r=await db.from("profiles").update({active:false,approval_status:"rejected"}).eq("id",id);
-  if(r.error) return alert(r.error.message);
-  alert("User removed / disabled.");
-  loadTeam(); loadHome(); loadSuccessRate();
-}
 
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
