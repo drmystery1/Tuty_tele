@@ -1,0 +1,9 @@
+{
+  "name":"Tele Tuty",
+  "short_name":"Tele Tuty",
+  "start_url":".",
+  "display":"standalone",
+  "background_color":"#f4f7fb",
+  "theme_color":"#1266f1",
+  "icons":[{"src":"tele-tuty-logo.png","sizes":"1024x1024","type":"image/png","purpose":"any maskable"}]
+}

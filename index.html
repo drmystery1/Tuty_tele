@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1266f1"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="tele-tuty-logo.png"><title>Tele Tuty</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#17202a;font-family:system-ui,Arial}.top{background:linear-gradient(135deg,#1266f1,#2789ff);color:white;padding:16px 20px;font-size:21px;font-weight:800}.wrap{max-width:1000px;margin:auto;padding:16px}.auth{max-width:430px;margin:7vh auto}.logo{text-align:center}.logo b{font-size:55px}.card{background:#fff;border:1px solid #e4e9f0;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 5px 18px #0000000b}input,select,textarea,button{width:100%;padding:12px;border-radius:11px;border:1px solid #d6dee9;margin:6px 0;font-size:15px}button{background:#1266f1;color:#fff;border:0;font-weight:750}.secondary{background:#edf3ff;color:#1266f1}.ok{background:#159447}.bad{background:#d83a31}.warn{background:#fff0d0;color:#8b5b00}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#f7f9fc;padding:14px;border-radius:14px}.stat b{display:block;font-size:25px}.hidden{display:none}.muted{color:#6b7480;font-size:13px}.row{display:flex;gap:8px}.row>*{flex:1}.person{display:flex;align-items:center;gap:9px;border-bottom:1px solid #eee;padding:11px 0}.avatar{width:40px;height:40px;border-radius:50%;background:#eaf0ff;color:#1266f1;display:grid;place-items:center;font-weight:800}.spacer{flex:1}.job{border-left:5px solid #1266f1}.done{border-left-color:#159447}.pending{border-left-color:#c37a00}@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.row{flex-direction:column}}
+</style></head><body><div class="top">📡 Tele Tuty</div><main class="wrap">
+
+<section id="login" class="auth"><div class="logo"><img src="tele-tuty-logo.png" alt="Tele Tuty logo" style="width:min(240px,70vw);height:auto;border-radius:28px"><p class="muted">Telephone & Electrical Work Management</p></div>
+<div class="card"><h2>Login</h2><input id="email" type="email" placeholder="Email address"><input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button>
+<p class="muted">Access is granted only after Admin approval and role assignment.</p></div></section>
+
+<section id="pending" class="auth hidden"><div class="card" style="text-align:center"><div style="font-size:48px">⏳</div><h2>Approval Pending</h2><p class="muted">Your account must be approved by an Admin.</p><button class="secondary" onclick="load()">Check Approval</button><button class="secondary" onclick="logout()">Logout</button></div></section>
+
+<section id="app" class="hidden"><div class="card"><div class="row">
+<div class="avatar" id="myAvatar">A</div><div><b id="hello"></b><div id="role" class="muted"></div></div><div class="spacer"></div><button class="secondary" onclick="logout()">Logout</button></div>
+<div class="row" style="margin-top:10px">
+<button class="secondary" onclick="loadNotifications()">🔔 Notifications <span id="notifCount">0</span></button>
+<label class="secondary" style="text-align:center;cursor:pointer">📷 My Photo
+<input id="avatarFile" type="file" accept="image/*" style="display:none" onchange="uploadAvatar()"></label>
+</div></div>
+
+<div class="card"><h3>Notifications</h3><div id="notifications"><p class="muted">No new notifications.</p></div></div>
+<div id="admin" class="hidden"><div class="grid"><div class="stat">Users<b id="users">0</b></div><div class="stat">Jobs<b id="jobs">0</b></div><div class="stat">Pending<b id="pend">0</b></div><div class="stat">Done<b id="done">0</b></div></div>
+<div class="card"><h3>Add Engineer / Technician</h3>
+<p class="muted">Admin only. New accounts are created approved and active.</p>
+<input id="newname" placeholder="Full name">
+<input id="newemail" type="email" placeholder="Email address">
+<input id="newpass" type="password" placeholder="Temporary password (8+ characters)">
+<select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select>
+<button onclick="adminCreateUser()">Create User</button>
+<p id="createResult" class="muted"></p></div>
+<div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div><div class="card"><h3>Approved Team</h3><div id="team"></div></div></div>
+
+<div id="engineer" class="hidden"><div class="card"><h3>Assign Job</h3><input id="term" placeholder="Job term / code"><input id="customer" placeholder="Customer name"><input id="cphone" placeholder="Customer phone"><input id="loc" placeholder="Location"><textarea id="work" placeholder="Work details"></textarea><select id="worker"></select><button onclick="assign()">Assign Job</button></div><div class="card"><h3>Jobs & 30-Day History</h3><div id="ejobs"></div></div></div>
+
+<div id="worker" class="hidden"><div class="card"><h3>My Jobs</h3><p class="muted">Technician view: assigned active jobs only.</p><p class="muted">Update the result and add remarks.</p></div><div id="wjobs"></div></div>
+</section></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co","sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe");
+let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden")}
+async function login(){let e=$("email").value.trim(),p=$("password").value;if(!e||!p)return alert("Enter email and password");let r=await db.auth.signInWithPassword({email:e,password:p});if(r.error)return alert(r.error.message);user=r.data.user;load()}
+async function load(){if(!user){let s=await db.auth.getSession();user=s.data.session?.user}if(!user)return;let r=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();if(r.error)return alert(r.error.message);profile=r.data;if(!profile||profile.approval_status!=="approved"||!profile.active)return show("pending");show("app");$("hello").textContent="Hi, "+profile.full_name;$("role").textContent=profile.role.toUpperCase();["admin","engineer","worker"].forEach(x=>$(x).classList.add("hidden"));$(profile.role).classList.remove("hidden");const av=localStorage.getItem("tele_tuty_avatar_"+user.id); if(av)setAvatar(av); loadNotifications(); if(profile.role==="admin")adminLoad();if(profile.role==="engineer")engLoad();if(profile.role==="worker")workerLoad()}
+async function logout(){await db.auth.signOut();location.reload()}
+async function adminCreateUser(){
+ const full_name=$("newname").value.trim(), email=$("newemail").value.trim(), password=$("newpass").value, role=$("newrole").value;
+ if(!full_name||!email||!password)return alert("Enter name, email and password");
+ if(password.length<8)return alert("Password must be at least 8 characters");
+ $("createResult").textContent="Creating...";
+ const r=await db.functions.invoke("admin-create-user-v2",{body:{full_name,email,password,role}});
+ if(r.error){$("createResult").textContent="";return alert(r.error.message)}
+ if(r.data?.error){$("createResult").textContent="";return alert(r.data.error)}
+ $("newname").value="";$("newemail").value="";$("newpass").value="";
+ $("createResult").textContent="User created successfully.";
+ adminLoad();
+}
+
+async function loadNotifications(){
+  if(!user)return;
+  const r=await db.from("notifications").select("id,title,body,created_at,read_at,job_id").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(20);
+  const ns=r.data||[];
+  $("notifCount").textContent=ns.filter(n=>!n.read_at).length;
+  $("notifications").innerHTML=ns.map(n=>`<div class="person"><div class="avatar">🔔</div><div><b>${esc(n.title)}</b><div>${esc(n.body)}</div><div class="muted">${new Date(n.created_at).toLocaleString()}</div></div></div>`).join("")||"<p class='muted'>No new notifications.</p>";
+}
+async function uploadAvatar(){
+  const f=$("avatarFile").files?.[0];
+  if(!f||!user)return;
+  if(!f.type.startsWith("image/"))return alert("Please choose an image");
+  if(f.size>2*1024*1024)return alert("Photo must be 2 MB or smaller");
+  // The current database does not require a profile-photo column for the app to work.
+  // Store a local preview for this browser/device without requesting any extra permission.
+  const reader=new FileReader();
+  reader.onload=()=>{ localStorage.setItem("tele_tuty_avatar_"+user.id, reader.result); setAvatar(reader.result); };
+  reader.readAsDataURL(f);
+}
+function setAvatar(src){
+  const a=$("myAvatar"); if(!a)return;
+  if(src){a.innerHTML=`<img src="${src}" alt="Profile" style="width:40px;height:40px;border-radius:50%;object-fit:cover">`; }
+}
+async function adminLoad(){let u=await db.from("profiles").select("id,full_name,role,approval_status,active,phone,created_at").order("created_at",{ascending:false});let j=await db.from("jobs").select("id,status");let us=u.data||[],js=j.data||[];$("users").textContent=us.length;$("jobs").textContent=js.length;$("pend").textContent=js.filter(x=>x.status==="pending").length;$("done").textContent=js.filter(x=>x.status==="completed").length;
+$("approvals").innerHTML=us.filter(x=>x.approval_status==="pending").map(x=>`<div class="person"><div class="avatar">${esc((x.full_name||"?")[0])}</div><div><b>${esc(x.full_name)}</b><div class="muted">${esc(x.email||"")}</div></div><div class="spacer"></div><select id="r${x.id}" style="width:110px"><option value="worker">Technician</option><option value="engineer">Engineer</option><option value="admin">Admin</option></select><button class="ok" style="width:auto" onclick="approve('${x.id}')">Approve</button><button class="bad" style="width:auto" onclick="reject('${x.id}')">Reject</button></div>`).join("")||"<p class='muted'>No pending users.</p>";
+$("team").innerHTML=us.filter(x=>x.approval_status==="approved").map(x=>`<div class="person"><div class="avatar">${esc((x.full_name||"?")[0])}</div><div><b>${esc(x.full_name)}</b><div class="muted">${x.role==="worker"?"Technician":x.role}</div></div></div>`).join("")}
+async function approve(id){let role=$("r"+id).value;let r=await db.from("profiles").update({role,approval_status:"approved",active:true,approved_by:user.id,approved_at:new Date().toISOString()}).eq("id",id);if(r.error)return alert(r.error.message);adminLoad()}
+async function reject(id){let r=await db.from("profiles").update({approval_status:"rejected",active:false}).eq("id",id);if(r.error)return alert(r.error.message);adminLoad()}
+async function engLoad(){let t=await db.rpc("get_team_directory");$("worker").innerHTML=(t.data||[]).filter(x=>x.role==="worker").map(x=>`<option value="${x.id}">${esc(x.full_name)}</option>`).join("");let r=await db.from("jobs").select("*").or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`).gte("created_at",new Date(Date.now()-30*86400000).toISOString()).order("created_at",{ascending:false});$("ejobs").innerHTML=(r.data||[]).map(card).join("")||"<p class='muted'>No jobs.</p>"}
+async function assign(){let c=await db.from("customers").insert({name:$("customer").value||"Customer",phone:$("cphone").value||null,address:$("loc").value||null}).select("id").single();if(c.error)return alert(c.error.message);let r=await db.from("jobs").insert({job_term:$("term").value||null,customer_id:c.data.id,location:$("loc").value||null,work_description:$("work").value||"Work",assigned_engineer:user.id,assigned_worker:$("worker").value,created_by:user.id});if(r.error)return alert(r.error.message);alert("Job assigned");engLoad()}
+function card(j){return `<div class="card job ${j.status==="completed"?"done":"pending"}"><b>${esc(j.job_term||j.job_code)}</b><h3>${esc(j.work_description)}</h3><div class="muted">📍 ${esc(j.location||"")}</div><p>Status: ${esc(j.status)}</p>${j.worker_remarks?`<p><b>Remarks:</b> ${esc(j.worker_remarks)}</p>`:""}${j.pending_reason?`<p><b>Pending:</b> ${esc(j.pending_reason)}</p>`:""}</div>`}
+async function workerLoad(){let r=await db.from("jobs").select("*").eq("assigned_worker",user.id).order("created_at",{ascending:false});$("wjobs").innerHTML=(r.data||[]).map(j=>`<div class="card job"><b>${esc(j.job_term||j.job_code)}</b><h3>${esc(j.work_description)}</h3><div class="muted">📍 ${esc(j.location||"")}</div><textarea id="m${j.id}" placeholder="Remarks">${esc(j.worker_remarks||"")}</textarea><textarea id="p${j.id}" placeholder="Pending reason (if pending)">${esc(j.pending_reason||"")}</textarea><div class="row"><button class="ok" onclick="updateJob(${j.id},'completed')">✓ Completed</button><button class="warn" onclick="updateJob(${j.id},'not_completed')">⏳ Pending</button></div></div>`).join("")||"<p class='muted'>No jobs assigned.</p>"}
+async function updateJob(id,status){let m=$("m"+id).value.trim(),p=$("p"+id).value.trim();if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");let r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m||null,p_pending_reason:p||null});if(r.error)return alert(r.error.message);workerLoad()}
+db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
+</script></body></html>
