@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#07111f"><link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="tele-tuty-logo.png"><title>Tele Tuty</title>
 <style>
 /* V34 render guard: style elements must never become visible text */
@@ -971,6 +971,44 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
   #home .cleanKpis .dashKpi { min-height:145px !important; }
   #home .dashboardShortcut { padding:16px !important; }
 }
+</style>
+
+<style id="full-white-theme">
+/* Full white theme across every Tele-Tuty screen */
+:root{--bg:#ffffff;--panel:#ffffff;--panel2:#ffffff;--line:#e5e7eb;--text:#111827;--muted:#6b7280;}
+html,body{background:#fff!important;color:#111827!important;}
+body{background:#fff!important;background-image:none!important;}
+body:before{display:none!important;}
+.top,.globalPageNav,.bottomNav,.tabs,.menu,.viewHeader{background:#fff!important;background-image:none!important;color:#111827!important;border-color:#e5e7eb!important;box-shadow:0 2px 10px rgba(0,0,0,.06)!important;}
+.wrap{background:#fff!important;}
+.card,.hero,.feature,.stat,.person,.empty,.table,.engineerCreateCard,.loginHero{background:#fff!important;background-image:none!important;color:#111827!important;border-color:#e5e7eb!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important;}
+.card:before,.feature:after,.homeKpis .stat:after,.globalPageNav:before{display:none!important;}
+.hero h1,.hero h2,.hero h3,.hero p,.card h1,.card h2,.card h3,.card h4,.feature h1,.feature h2,.feature h3,.stat b,.person strong,.table th,.table td{color:#111827!important;}
+.muted,.stat span,.empty{color:#6b7280!important;}
+input,select,textarea{background:#fff!important;background-image:none!important;color:#111827!important;border:1px solid #d1d5db!important;box-shadow:none!important;}
+button{background:#fff!important;background-image:none!important;color:#111827!important;border:1px solid #d1d5db!important;box-shadow:none!important;}
+button:hover,.menu button:hover{background:#f8fafc!important;}
+.secondary,.menu button,.tabs button,.menuBtn,.royalNavBtn,.royalNavBtn.home{background:#fff!important;background-image:none!important;color:#111827!important;border:1px solid #d1d5db!important;box-shadow:none!important;}
+.ok,.warn,.bad{background:#fff!important;background-image:none!important;color:#111827!important;border:1px solid #d1d5db!important;}
+.pill{background:#f3f4f6!important;background-image:none!important;color:#374151!important;border:1px solid #e5e7eb!important;box-shadow:none!important;}
+.progress{background:#f3f4f6!important;border-color:#e5e7eb!important;}
+.progress i{background:#2563eb!important;box-shadow:none!important;}
+.homeKpis .stat,.homeKpis .stat:nth-child(1),.homeKpis .stat:nth-child(2),.homeKpis .stat:nth-child(3),.homeKpis .stat:nth-child(4){background:#fff!important;background-image:none!important;border-color:#e5e7eb!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important;}
+.homeKpis .stat:nth-child(1) span,.homeKpis .stat:nth-child(2) span,.homeKpis .stat:nth-child(3) span,.homeKpis .stat:nth-child(4) span{color:#6b7280!important;}
+.homeKpis .stat:nth-child(1) b{color:#2563eb!important}.homeKpis .stat:nth-child(2) b{color:#7c3aed!important}.homeKpis .stat:nth-child(3) b{color:#ea580c!important}.homeKpis .stat:nth-child(4) b{color:#16a34a!important}
+.feature img{opacity:.04!important;}
+.viewHeader{position:sticky!important;}
+.menuTitle,.menuGroupTitle{color:#374151!important;}
+.menuDivider{background:#e5e7eb!important;}
+.job,.done,.pending{border-left-color:#d1d5db!important;}
+.table th{background:#f9fafb!important;color:#111827!important}.table td{background:#fff!important;}
+.kpi{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;color:#111827!important;text-shadow:none!important;}
+.person{border-bottom-color:#e5e7eb!important;}
+.royalIcon,.royalNavBtn.home .royalIcon,.royalNavTitle,.royalNavTitle .crown{color:#374151!important;text-shadow:none!important;}
+/* Keep every page container white even where older page-specific themes exist */
+[id]{background-color:#fff;}
+#battery,#earth,#tower,#street,#wiring,#renovation,#adminTools,#success{background:#fff!important;background-image:none!important;color:#111827!important;}
+#battery h2,#earth h2,#tower h2,#street h2,#wiring h2,#renovation h2,#adminTools h2,#success h2{color:#111827!important;}
 </style>
 </head>
 
