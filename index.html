@@ -606,9 +606,9 @@ img{border-radius:14px}
 
 <style id="v29-maintenance-ui">
 .maintenanceCenter{margin-top:14px;background:linear-gradient(135deg,rgba(8,29,49,.98),rgba(29,20,58,.96));border:1px solid rgba(116,190,255,.24)}
-.maintenanceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}.maintenanceTile.tower{background:linear-gradient(135deg,#283c87,#6b2f9c)!important}.maintenanceTile.wiring{background:linear-gradient(135deg,#8a3a19,#8d1f4b)!important}.maintenanceTile.renovation{background:linear-gradient(135deg,#4e2d7f,#9b2c72)!important}
+.maintenanceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}.maintenanceTile.tower{background:linear-gradient(135deg,#283c87,#6b2f9c)!important}.maintenanceTile.wiring{background:linear-gradient(135deg,#8a3a19,#8d1f4b)!important}.maintenanceTile.renovation{background:linear-gradient(135deg,#4e2d7f,#9b2c72)!important}
 .menu{max-height:calc(100vh - 76px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}.menu button{display:block!important;visibility:visible!important;min-height:42px!important;color:#edf8ff!important}.menuGroupTitle,.menuTitle{color:#fff!important}
-@media(max-width:600px){.maintenanceGrid{grid-template-columns:1fr 1fr;gap:16px!important}.maintenanceTile{min-height:96px!important}}
+@media(max-width:600px){.maintenanceGrid{grid-template-columns:1fr 1fr}.maintenanceTile{min-height:96px!important}}
 @media(max-width:380px){.maintenanceGrid{grid-template-columns:1fr}.maintenanceTile{min-height:82px!important}}
 </style>
 <style id="v28-stability-ui">
@@ -800,7 +800,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 .featureRibbon{gap:13px !important}
 .featureRibbon button{min-height:132px !important;border-radius:20px !important;background:linear-gradient(145deg,rgba(10,28,49,.96),rgba(12,17,35,.95)) !important;border-color:rgba(104,205,255,.18) !important}
 .featureRibbon b{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,rgba(38,149,255,.18),rgba(142,72,255,.16));border:1px solid rgba(113,214,255,.18)}
-.maintenanceGrid{gap:16px !important}
+.maintenanceGrid{gap:13px !important}
 .maintenanceTile{border-radius:21px !important;min-height:124px !important;position:relative;overflow:hidden}
 .maintenanceTile span{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:rgba(4,15,28,.28);border:1px solid rgba(255,255,255,.20);font-size:25px !important}
 .recentList{gap:12px !important}
@@ -1004,7 +1004,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
       </div>
 
       <div class="panel maintenanceCenter" id="maintenanceCenter">
-        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery, earth pit, tower and electrical work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
+        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery, earth pit and renovation work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
         <div class="maintenanceGrid">
           <button class="maintenanceTile street" onclick="navigate('street')"><span>💡</span><b>Street Light</b><small>Survey & faults</small></button>
           <button class="maintenanceTile battery" onclick="navigate('battery')"><span>🔋</span><b>Battery</b><small>Maintenance & due dates</small></button>
