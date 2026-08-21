@@ -519,6 +519,72 @@ img{border-radius:14px}
 }
 </style>
 
+
+<style id="v26-royal-nav-hard-fix">
+/* V26: navigation must always be visible and must not depend on page/router state */
+#globalPageNav.globalPageNav{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:sticky!important;
+  top:10px!important;
+  z-index:999!important;
+  width:100%!important;
+  min-height:62px!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  margin:10px 0 16px!important;
+  padding:8px 10px!important;
+  border-radius:20px!important;
+  background:linear-gradient(135deg,#0b2140 0%,#27347a 48%,#6a267d 100%)!important;
+  border:1px solid rgba(133,205,255,.55)!important;
+  box-shadow:0 12px 32px rgba(50,35,125,.28),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+#globalPageNav.globalPageNav .royalNavBtn{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:104px!important;
+  height:46px!important;
+  margin:0!important;
+  padding:0 16px!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  border-radius:15px!important;
+  color:#fff!important;
+  font-size:14px!important;
+  font-weight:900!important;
+  background:linear-gradient(135deg,#164d83,#4b2b9b)!important;
+  border:1px solid rgba(165,224,255,.45)!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.15)!important;
+}
+#globalPageNav.globalPageNav .royalNavBtn.home{
+  background:linear-gradient(135deg,#234f8e,#7132a4 60%,#b33c83)!important;
+  border-color:rgba(255,192,246,.5)!important;
+}
+#globalPageNav.globalPageNav .royalIcon{font-size:25px!important;color:#b9efff!important}
+#globalPageNav.globalPageNav .home .royalIcon{color:#ffe27a!important}
+#globalPageNav.globalPageNav .royalNavTitle{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  flex:1 1 auto!important;min-width:0!important;text-align:center!important;
+  color:#fff!important;font-size:14px!important;font-weight:900!important;
+  text-shadow:0 2px 12px rgba(0,0,0,.35)!important;
+}
+#globalPageNav.globalPageNav .crown{color:#ffd85c!important}
+/* never let a hidden-class accidentally kill the global navigation */
+#globalPageNav.globalPageNav.hidden{display:flex!important}
+.compactHero h2,.compactHero .muted,.compactHero .teamInfo{color:#fff!important}
+@media(max-width:520px){
+  #globalPageNav.globalPageNav{top:6px!important;min-height:58px!important;padding:7px!important;margin:8px 0 14px!important;border-radius:17px!important}
+  #globalPageNav.globalPageNav .royalNavBtn{min-width:88px!important;height:44px!important;padding:0 11px!important;font-size:13px!important}
+  #globalPageNav.globalPageNav .royalNavTitle{font-size:11px!important}
+  #globalPageNav.globalPageNav .royalIcon{font-size:23px!important}
+}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -595,7 +661,7 @@ img{border-radius:14px}
       <div id="adminDashboard" class="rolePane hidden">
         <div class="kpiGrid four">
           <button class="dashKpi blue" onclick="navigate('jobs')"><span class="kpiIcon">▣</span><strong id="users">0</strong><small>Total Users</small></button>
-          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="jobs">0</strong><small>Total Jobs</small></button>
+          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="totalJobsCount">0</strong><small>Total Jobs</small></button>
           <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="done">0</strong><small>Completed</small></button>
           <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="pend">0</strong><small>Pending / Open</small></button>
         </div>
@@ -868,7 +934,7 @@ async function loadHome(){
 
  if(role==="admin"){
    $("users").textContent=users.length;
-   $("jobs").textContent=total;
+   $("totalJobsCount").textContent=total;
    $("done").textContent=completed;
    $("pend").textContent=open;
    $("homeRecentJobs").innerHTML=renderRecentJobs(rows.slice(0,6));
@@ -1308,7 +1374,7 @@ function showView(id){
   document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
   el.classList.remove("hidden");
   const nav=document.getElementById("globalPageNav");
-  if(nav) nav.classList.remove("hidden");
+  if(nav){ nav.classList.remove("hidden"); nav.style.display="flex"; nav.style.visibility="visible"; nav.style.opacity="1"; }
   const title=document.getElementById("globalPageTitle");
   if(title){
     const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",tower:"Telecom Tower",wiring:"Wiring Fault",renovation:"Renovation",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
