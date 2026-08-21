@@ -597,6 +597,10 @@ img{border-radius:14px}
 .jobCard{padding:15px;margin:10px 0;border:1px solid rgba(126,198,255,.24);border-radius:18px;background:linear-gradient(135deg,rgba(13,31,53,.96),rgba(35,24,66,.94));box-shadow:0 8px 22px rgba(0,0,0,.14)}
 .jobTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.jobTop span{display:block}.jobBody{display:grid;gap:5px;margin-top:10px}.jobActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.jobActions input{grid-column:1/-1}.approvalRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(126,198,255,.22);border-radius:16px;background:rgba(8,24,43,.72)}.approvalActions{display:flex;gap:7px}.approvalActions button{margin:0!important;padding:9px 11px!important}.royalNavBtn[disabled]{opacity:.42;filter:grayscale(.5);pointer-events:none}@media(max-width:520px){.approvalRow{align-items:flex-start;flex-direction:column}.approvalActions{width:100%}.approvalActions button{flex:1}.jobActions{grid-template-columns:1fr}.jobActions input{grid-column:auto}}
 </style>
+
+.settingsHero{background:linear-gradient(135deg,#0b2440,#211044)!important}
+#settings .card{border-color:rgba(105,190,255,.22)}
+#settings h3{margin-top:0}
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -617,8 +621,10 @@ img{border-radius:14px}
   <button onclick="navigate('jobs')">📋 Jobs</button>
   <button onclick="navigate('success')">🏆 Technician Success Rate</button>
   <button onclick="navigate('notifications')">🔔 Notifications</button>
+  <div class="menuDivider"></div>
+  <div class="menuGroupTitle">Account</div>
   <button onclick="navigate('profile')">👤 Profile</button>
-  <button onclick="navigate('settings')">⚙️ Settings</button>
+  <button onclick="navigate('settings')">⚙️ Settings & Password</button>
   <button onclick="navigate('backup')">💾 Backup & PDF</button>
   <div id="adminMenu" class="hidden">
     <div class="menuDivider"></div>
@@ -793,7 +799,11 @@ img{border-radius:14px}
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">◉</span> My Profile</h1><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
   <div id="settings" class="view hidden">
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">Profile & Photo</button><button class="bad" onclick="logout()">Logout</button></div></div>
+<div class="card settingsHero"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><p class="muted">Manage your account, security and app preferences.</p></div>
+<div class="card"><h3>🔐 Change Password</h3><p class="muted">Enter your current password and choose a new password.</p><input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password"><input id="newPassword" type="password" autocomplete="new-password" placeholder="New password (8+ characters)"><input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirm new password"><button onclick="changePassword()">🔒 Change Password</button><p id="passwordMsg" class="muted"></p></div>
+<div class="card"><h3>⚙️ App Preferences</h3><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">👤 Profile & Photo</button></div>
+<div class="card"><h3>🚪 Session</h3><p class="muted">Signed in as <b id="settingsEmail">—</b></p><button class="bad" onclick="logout()">Logout</button></div>
+</div>
 
   <div id="notifications" class="view hidden">
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">●</span> Notifications</h1><div id="notificationsList"></div></div></div>
@@ -883,6 +893,7 @@ async function load(){
     if($("role"))$("role").textContent=(role==="worker"?"Technician":(profile.role||"User"))+" • "+(user.email||"");
     if($("profileName"))$("profileName").textContent=profile.full_name||user.email||"User";
     if($("profileRole"))$("profileRole").textContent=role==="worker"?"Technician":(profile.role||"User");
+    if($("settingsEmail"))$("settingsEmail").textContent=user.email||"—";
     if($("myAvatar"))$("myAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
     if($("profileAvatar"))$("profileAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
     if($("adminMenu"))$("adminMenu").classList.toggle("hidden",role!=="admin");
@@ -1381,6 +1392,35 @@ async function loadBackupSummary(){
   }catch(e){}
 }
 
+
+/* ---- Account security ---- */
+async function changePassword(){
+  if(!user?.email) return alert("Please login again.");
+  const current=$("currentPassword")?.value||"";
+  const next=$("newPassword")?.value||"";
+  const confirm=$("confirmPassword")?.value||"";
+  const msg=$("passwordMsg");
+  if(msg) msg.textContent="";
+  if(!current || !next || !confirm) { if(msg) msg.textContent="Fill all password fields."; return; }
+  if(next.length<8){ if(msg) msg.textContent="New password must be at least 8 characters."; return; }
+  if(next!==confirm){ if(msg) msg.textContent="New passwords do not match."; return; }
+  if(current===next){ if(msg) msg.textContent="New password must be different from current password."; return; }
+  const btn=document.querySelector('#settings button[onclick="changePassword()"]');
+  try{
+    if(btn){btn.disabled=true;btn.textContent="Changing…";}
+    const check=await db.auth.signInWithPassword({email:user.email,password:current});
+    if(check.error) throw new Error("Current password is incorrect.");
+    const r=await db.auth.updateUser({password:next});
+    if(r.error) throw r.error;
+    ["currentPassword","newPassword","confirmPassword"].forEach(id=>{const el=$(id);if(el)el.value=""});
+    if(msg) msg.textContent="Password changed successfully.";
+  }catch(e){
+    console.error("Change password error",e);
+    if(msg) msg.textContent=e?.message||"Could not change password.";
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent="🔒 Change Password";}
+  }
+}
 
 /* ---- Authentication / session controls ---- */
 let signingOut = false;
