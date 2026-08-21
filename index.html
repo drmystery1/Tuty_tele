@@ -943,6 +943,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
   background:#eef4ff; color:#1769e0;
 }
 #home .dashboardShortcut .techIcon { background:#f2edff; color:#6338c6; }
+#home .dashboardShortcut .createIcon { background:#eefbf3; color:#16834a; font-size:28px; font-weight:600; }
 #home .dashboardShortcut b { display:block; font-size:16px; margin-bottom:4px; }
 #home .dashboardShortcut small { display:block; color:#6b7280; font-size:12px; }
 #home .dashboardShortcut > strong { font-size:28px; color:#4b5563; font-weight:400; }
@@ -1168,6 +1169,11 @@ button:hover,.menu button:hover{background:#f8fafc!important;}
           <button class="dashboardShortcut" onclick="navigate('success')">
             <span class="shortcutIcon techIcon">♙</span>
             <span><b>Technician Performance</b><small>Track and evaluate technician performance</small></span>
+            <strong>›</strong>
+          </button>
+          <button class="dashboardShortcut createJobShortcut" onclick="navigate('jobs'); setTimeout(focusEngineerJobForm, 120)">
+            <span class="shortcutIcon createIcon">＋</span>
+            <span><b>Create Job</b><small>Create and assign a new job to a technician</small></span>
             <strong>›</strong>
           </button>
         </div>
