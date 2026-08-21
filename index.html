@@ -522,6 +522,12 @@ img{border-radius:14px}
 </style>
 
 
+<style id="v36-field-hero-isolation">
+/* V36: Field Operations hero is dashboard-only. Prevent overlap/flash on module pages. */
+#app > #fieldOperationsHero.hidden{display:none!important}
+#app > #fieldOperationsHero{position:relative;z-index:1}
+</style>
+
 <style id="v26-royal-nav-hard-fix">
 /* V26: navigation must always be visible and must not depend on page/router state */
 #globalPageNav.globalPageNav{
@@ -648,7 +654,7 @@ img{border-radius:14px}
 <section id="pending" class="auth hidden"><div class="card" style="text-align:center"><div style="font-size:50px">⏳</div><h2>Approval Pending</h2><p class="muted">Your account is waiting for Admin approval.</p><button class="secondary" onclick="load()">Check Approval</button><button class="secondary" onclick="logout()">Logout</button></div></section>
 
 <section id="app" class="hidden">
-  <div class="card hero compactHero"><div class="heroIcon">🛰️</div><div class="teamInfo"><h2>Field Operations</h2><p class="muted">Jobs • Maintenance • Surveys • Performance</p></div><span id="rolePill" class="pill"></span></div>
+  <div id="fieldOperationsHero" class="card hero compactHero"><div class="heroIcon">🛰️</div><div class="teamInfo"><h2>Field Operations</h2><p class="muted">Jobs • Maintenance • Surveys • Performance</p></div><span id="rolePill" class="pill"></span></div>
 
   <nav id="globalPageNav" class="globalPageNav" aria-label="Page navigation">
     <button class="royalNavBtn back" onclick="goBack()" aria-label="Back"><span class="royalIcon">‹</span><span>Back</span></button>
@@ -1506,6 +1512,14 @@ function showView(id){
   if(!el) return false;
   document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
   el.classList.remove("hidden");
+  // The Field Operations hero belongs to the dashboard only.
+  // Never let it sit above / overlap a module view.
+  const fieldHero=document.getElementById("fieldOperationsHero");
+  if(fieldHero){
+    const isHome=id==="home";
+    fieldHero.classList.toggle("hidden", !isHome);
+    fieldHero.setAttribute("aria-hidden", String(!isHome));
+  }
   const nav=document.getElementById("globalPageNav");
   if(nav){ nav.classList.remove("hidden"); nav.style.display="flex"; nav.style.visibility="visible"; nav.style.opacity="1"; }
   const title=document.getElementById("globalPageTitle");
