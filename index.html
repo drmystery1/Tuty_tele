@@ -527,7 +527,7 @@ img{border-radius:14px}
 
 <section id="login" class="auth">
   <div class="card loginHero"><img src="tele-tuty-logo.png" alt="Tele Tuty"><h2>Tele Tuty Field Operations</h2><p class="muted">Telephone • Electrical • Telecom Maintenance Management</p></div>
-  <div class="card"><h2>Sign in</h2><input id="email" type="email" placeholder="Email address"><input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button><p id="loginMsg" class="muted">Access is granted after Admin approval and role assignment.</p></div>
+  <div class="card"><h2>Sign in</h2><input id="email" type="email" placeholder="Email address"><input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button><p id="loginMsg" class="muted">Access is granted after Admin approval and role assignment.</p><p class="muted" style="font-size:11px;margin-top:8px">Secure session login • Supabase Auth</p></div>
 </section>
 
 <section id="pending" class="auth hidden"><div class="card" style="text-align:center"><div style="font-size:50px">⏳</div><h2>Approval Pending</h2><p class="muted">Your account is waiting for Admin approval.</p><button class="secondary" onclick="load()">Check Approval</button><button class="secondary" onclick="logout()">Logout</button></div></section>
@@ -767,7 +767,7 @@ img{border-radius:14px}
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 let navHistory=["home"], routerBusy=false;
-function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
+function show(id){["login","pending","app"].forEach(x=>{const el=$(x);if(el)el.classList.add("hidden")});const el=$(id);if(el)el.classList.remove("hidden");}
 async function load(){
   try{
     if(!user){
@@ -775,62 +775,51 @@ async function load(){
       user=session.data?.session?.user||null;
     }
     if(!user){ show("login"); return; }
-
     const r=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();
-    if(r.error){
-      console.error("Profile load error",r.error);
-      show("login");
-      $("loginMsg").textContent="Profile load failed: "+r.error.message;
-      return;
-    }
-    if(!r.data){
-      show("login");
-      $("loginMsg").textContent="No profile found for this account. Ask Admin to create/approve your profile.";
-      return;
-    }
-
+    if(r.error){ console.error("Profile load error",r.error); show("login"); if($("loginMsg"))$("loginMsg").textContent="Profile load failed: "+r.error.message; return; }
+    if(!r.data){ show("login"); if($("loginMsg"))$("loginMsg").textContent="No profile found for this account. Ask Admin to create/approve your profile."; return; }
     profile=r.data;
-    const approved=String(profile.approval_status||"").toLowerCase()==="approved";
-    if(profile.active===false || !approved){
-      $("menuBtn").classList.add("hidden");
-      show("pending");
-      return;
-    }
-
+    const role=String(profile.role||"").toLowerCase();
+    const approved=String(profile.approval_status||"").toLowerCase()==="approved" || profile.approval_status==null || profile.approval_status==="";
+    if(profile.active===false || !approved){ if($("menuBtn"))$("menuBtn").classList.add("hidden"); show("pending"); return; }
     show("app");
-    $("menuBtn").classList.remove("hidden");
-    $("rolePill").textContent=profile.role==="worker"?"Technician":(profile.role||"User");
-    $("hello").textContent="Welcome, "+(profile.full_name||user.email||"User");
-    $("role").textContent=(profile.role==="worker"?"Technician":(profile.role||"User"))+" • "+(user.email||"");
-    $("profileName").textContent=profile.full_name||user.email||"User";
-    $("profileRole").textContent=profile.role==="worker"?"Technician":(profile.role||"User");
-    $("myAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
-    $("profileAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
-    $("adminMenu").classList.toggle("hidden",profile.role!=="admin");
-    $("adminTools").classList.toggle("hidden",profile.role!=="admin");
+    if($("menuBtn"))$("menuBtn").classList.remove("hidden");
+    if($("rolePill"))$("rolePill").textContent=role==="worker"?"Technician":(profile.role||"User");
+    if($("hello"))$("hello").textContent="Welcome, "+(profile.full_name||user.email||"User");
+    if($("role"))$("role").textContent=(role==="worker"?"Technician":(profile.role||"User"))+" • "+(user.email||"");
+    if($("profileName"))$("profileName").textContent=profile.full_name||user.email||"User";
+    if($("profileRole"))$("profileRole").textContent=role==="worker"?"Technician":(profile.role||"User");
+    if($("myAvatar"))$("myAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
+    if($("profileAvatar"))$("profileAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
+    if($("adminMenu"))$("adminMenu").classList.toggle("hidden",role!=="admin");
+    if($("adminTools"))$("adminTools").classList.toggle("hidden",role!=="admin");
     navHistory=["home"];
     showView("home");
-    await loadHome();
+    try{ await loadHome(); }catch(e){ console.error("Dashboard load error",e); if($("loginMsg"))$("loginMsg").textContent="Dashboard data load failed: "+(e?.message||e); }
     const savedAvatar=localStorage.getItem("tele_tuty_avatar_"+user.id);
     if(savedAvatar) setAvatar(savedAvatar);
   }catch(err){
-    console.error("Load error",err);
-    show("login");
-    $("loginMsg").textContent="Login succeeded, but profile loading failed: "+(err?.message||err);
+    console.error("Load error",err); show("login"); if($("loginMsg"))$("loginMsg").textContent="Login succeeded, but loading failed: "+(err?.message||err);
   }
 }
+
 async function login(){
- const e=$("email").value.trim(), p=$("password").value;
- const msg=$("loginMsg");
+ const emailEl=$("email"), passEl=$("password"), msg=$("loginMsg");
+ const e=(emailEl?.value||"").trim(), p=passEl?.value||"";
+ if(msg) msg.textContent="";
  if(!e||!p){ if(msg) msg.textContent="Enter email and password"; return; }
- if(msg) msg.textContent="Signing in...";
+ const btn=document.querySelector('#login button[onclick="login()"]');
+ if(btn){btn.disabled=true;btn.textContent="Signing in…";}
  try{
    const r=await db.auth.signInWithPassword({email:e,password:p});
-   if(r.error){ if(msg) msg.textContent=r.error.message; return; }
-   user=r.data.user;
+   if(r.error){ if(msg) msg.textContent=r.error.message||"Invalid email or password"; return; }
+   user=r.data?.user||null;
+   if(!user){ if(msg) msg.textContent="Login failed. Please try again."; return; }
    await load();
- }catch(err){ if(msg) msg.textContent=err?.message||"Login failed"; }
+ }catch(err){ console.error(err); if(msg) msg.textContent=err?.message||"Login failed"; }
+ finally{ if(btn){btn.disabled=false;btn.textContent="Login";} }
 }
+
 async function loadHome(){
  const q=await db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,created_at").order("created_at",{ascending:false}).limit(40);
  const rows=q.data||[];
@@ -880,9 +869,7 @@ function renderRecentJobs(rows){
    return `<div class="recentItem"><span class="stripe ${st}"></span><div><b>${esc(j.job_term||j.job_code||"JOB")}</b><div>${esc(j.work_description||"Field maintenance job")}</div><div class="muted">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
  }).join("");
 }
-async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}
-async function loadTeam(){const r=await db.from("profiles").select("id,full_name,role,approval_status,active,phone").order("created_at",{ascending:false});const a=r.data||[];$("teamList").innerHTML=a.map(x=>`<div class="person"><div class="avatar">${esc((x.full_name||"?")[0])}</div><div><b>${esc(x.full_name)}</b><div class="muted">${x.role==="worker"?"Technician":x.role} • ${x.approval_status}</div></div></div>`).join("")||`<div class="empty">No team members.</div>`}
-async function loadJobs(){let q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);if(profile.role==="worker")q=q.eq("assigned_worker",user.id);else if(profile.role==="engineer")q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);const r=await q;$("jobsList").innerHTML=(r.data||[]).map(j=>`<div class="card job ${j.status==="completed"?"done":"pending"}"><div class="row"><div><b>${esc(j.job_term||j.job_code)}</b><h3>${esc(j.work_description)}</h3><div class="muted">📍 ${esc(j.location||"")}</div></div><div class="spacer"></div><span class="pill">${esc(j.status)}</span></div>${j.status!=="completed"&&profile.role==="worker"?`<textarea id="rm${j.id}" placeholder="Remarks"></textarea><textarea id="pr${j.id}" placeholder="Pending reason if not completed"></textarea><div class="row"><button class="ok" onclick="updateJob(${j.id},'completed')">✓ Completed</button><button class="warn" onclick="updateJob(${j.id},'not_completed')">⏳ Pending</button></div>`:""}${j.worker_remarks?`<p><b>Remarks:</b> ${esc(j.worker_remarks)}</p>`:""}${j.pending_reason?`<p><b>Pending:</b> ${esc(j.pending_reason)}</p>`:""}</div>`).join("")||`<div class="empty">No jobs found.</div>`}
+async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
 let successCache=[];
 async function loadSuccessRate(){
@@ -935,7 +922,7 @@ async function fetchBackupData(){
     out.tables[t]=r.data||[];
   }
   return out;
-  }catch(e){const el=$("notificationsList");if(el)el.innerHTML=`<div class="empty">Unable to load data. $Please retry.</div>`;console.warn("loadNotifications",e)}}
+}
 async function downloadBackup(){
   if(!user)return alert("Login required");
   try{
