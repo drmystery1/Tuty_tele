@@ -160,6 +160,7 @@
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co","sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe");
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+let navHistory=["home"];
 function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
 function toggleMenu(){ $("menu").classList.toggle("hidden") } function closeMenu(){ $("menu").classList.add("hidden") }
 async function load(){
@@ -375,7 +376,7 @@ showView=function(id){_showView(id);if(id==="backup")loadBackupSummary();}
 })();
 
 
-let navHistory=["home"];
+
 function closeMenu(){ const m=document.getElementById("menu"); if(m)m.classList.add("hidden"); }
 function toggleMenu(){ const m=document.getElementById("menu"); if(m)m.classList.toggle("hidden"); }
 function navigate(id){ closeMenu(); navHistory.push(id); showView(id); }
