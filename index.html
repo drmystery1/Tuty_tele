@@ -206,6 +206,27 @@ document.addEventListener('keydown', function(e){
 });
 </script>
 
+
+<style id="universal-back-fix">
+.universalViewNav{
+  position:sticky;
+  top:64px;
+  z-index:20;
+  padding:8px 0 10px;
+  background:transparent;
+}
+@media(max-width:520px){
+  .universalViewNav{top:58px}
+}
+</style>
+
+
+<script id="navigation-guard">
+window.addEventListener("error",function(e){
+  const active=document.querySelector(".view:not(.hidden)");
+  if(active && e?.message) console.warn("Tele Tuty UI:",e.message);
+});
+</script>
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -265,7 +286,7 @@ document.addEventListener('keydown', function(e){
 </div><div id="rolePanel" class="card"></div>
   </div>
 
-  <div id="street" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+  <div id="street" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
     <div class="card"><div class="row"><div><h2>💡 Street Light Survey</h2><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div><button class="secondary" style="width:auto" onclick="navigate('home')">Back</button></div>
       <div class="grid"><div><label>Area Name</label><input id="slArea" placeholder="Area / street"></div><div><label>Total Lights</label><input id="slTotal" type="number" min="0" value="0"></div><div><label>Working Lights</label><input id="slWorking" type="number" min="0" value="0"></div><div><label>Fault Lights</label><input id="slFault" type="number" min="0" value="0"></div></div>
       <label>Fault Details</label><textarea id="slFaultDetails" placeholder="Not working / dim / flickering / damaged pole / wiring issue..."></textarea>
@@ -276,28 +297,28 @@ document.addEventListener('keydown', function(e){
     <div class="card"><h3>Recent Street Light Surveys</h3><div id="streetList"></div></div>
   </div>
 
-  <div id="tower" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>📡 Telecom Tower</h2><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
+  <div id="tower" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>📡 Telecom Tower</h2><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
 
-  <div id="battery" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🔋 Battery Maintenance</h2><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
+  <div id="battery" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🔋 Battery Maintenance</h2><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
 
-  <div id="earth" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🌍 Earth Pit Maintenance</h2><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
+  <div id="earth" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🌍 Earth Pit Maintenance</h2><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
 
-  <div id="wiring" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>⚡ Wiring Fault</h2><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
+  <div id="wiring" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>⚡ Wiring Fault</h2><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
 
-  <div id="renovation" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🛠️ Renovation</h2><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
+  <div id="renovation" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🛠️ Renovation</h2><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
 
-  <div id="profile" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>👤 My Profile</h2><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
+  <div id="profile" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>👤 My Profile</h2><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
-  <div id="settings" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>⚙️ Settings</h2><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">Profile & Photo</button><button class="bad" onclick="logout()">Logout</button></div></div>
+  <div id="settings" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>⚙️ Settings</h2><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">Profile & Photo</button><button class="bad" onclick="logout()">Logout</button></div></div>
 
-  <div id="notifications" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🔔 Notifications</h2><div id="notificationsList"></div></div></div>
+  <div id="notifications" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🔔 Notifications</h2><div id="notificationsList"></div></div></div>
 
-  <div id="team" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>👥 Team</h2><div id="teamList"></div></div></div>
-  <div id="jobs" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>📋 Jobs</h2><div id="jobsList"></div></div></div>
-  <div id="success" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🏆 Technician Success Rate</h2><p class="muted">Completed jobs ÷ total jobs × 100</p><div id="successList"></div></div></div>
-  <div id="adminTools" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>👑 Admin Controls</h2><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
+  <div id="team" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>👥 Team</h2><div id="teamList"></div></div></div>
+  <div id="jobs" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>📋 Jobs</h2><div id="jobsList"></div></div></div>
+  <div id="success" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>🏆 Technician Success Rate</h2><p class="muted">Completed jobs ÷ total jobs × 100</p><div id="successList"></div></div></div>
+  <div id="adminTools" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="card"><h2>👑 Admin Controls</h2><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
 
-  <div id="backup" class="view hidden"><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+  <div id="backup" class="view hidden"><div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div><div class="viewHeader"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
     <div class="card">
       <h2>💾 Backup & Reports</h2>
       <p class="muted">Backup your application data or create printable PDF reports.</p>
@@ -334,9 +355,8 @@ document.addEventListener('keydown', function(e){
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co","sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe");
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-let navHistory=["home"];
+let navHistory=["home"], routerBusy=false;
 function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
-function toggleMenu(){ $("menu").classList.toggle("hidden") } function closeMenu(){ $("menu").classList.add("hidden") }
 async function load(){
   try{
     if(!user){
@@ -676,42 +696,62 @@ async function loadBackupSummary(){
     ].map(x=>`<div class="stat"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
   }catch(e){}
 }
-const _showView=showView;
-showView=function(id){_showView(id);if(id==="backup")loadBackupSummary();}
 
-
-(function(){
- const oldLoadHome=loadHome;
- loadHome=async function(){
-   await oldLoadHome();
-   const m=document.getElementById("menu");
-   if(!m.querySelector("[data-admin-links]") && profile?.role==="admin"){
-     const div=document.createElement("div");div.setAttribute("data-admin-links","1");
-     div.innerHTML='<button onclick="navigate(\'team\')">👥 Team</button><button onclick="navigate(\'jobs\')">📋 All Jobs</button><button onclick="navigate(\'success\')">🏆 Technician Success Rate</button><button onclick="navigate(\'adminTools\')">👑 Admin Controls</button>';
-     m.insertBefore(div,m.lastElementChild);
-   }
- }
-})();
-
-
-
-function closeMenu(){ const m=document.getElementById("menu"); if(m)m.classList.add("hidden"); }
-function toggleMenu(){ const m=document.getElementById("menu"); if(m)m.classList.toggle("hidden"); }
-function navigate(id){
+/* ---- Stable app router ---- */
+function closeMenu(){
+  const m=document.getElementById("menu");
+  if(m) m.classList.add("hidden");
+}
+function toggleMenu(){
+  const m=document.getElementById("menu");
+  if(m) m.classList.toggle("hidden");
+}
+function currentView(){
+  return navHistory[navHistory.length-1] || "home";
+}
+function showView(id){
+  const el=document.getElementById(id);
+  if(!el) return false;
+  document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
+  el.classList.remove("hidden");
   closeMenu();
-  if(!id) return;
-  if(id==="home"){ navHistory=["home"]; showView("home"); return; }
-  if(navHistory[navHistory.length-1]!==id) navHistory.push(id);
+  if(id==="notifications")loadNotifications().catch?.(()=>{});
+  if(id==="team")loadTeam().catch?.(()=>{});
+  if(id==="jobs")loadJobs().catch?.(()=>{});
+  if(id==="success")loadSuccessRate().catch?.(()=>{});
+  if(id==="street")loadStreet().catch?.(()=>{});
+  if(id==="battery")loadBattery().catch?.(()=>{});
+  if(id==="earth")loadEarth().catch?.(()=>{});
+  if(id==="renovation")loadRenovation().catch?.(()=>{});
+  if(id==="backup" && typeof loadBackupSummary==="function")loadBackupSummary();
+  window.scrollTo({top:0,behavior:"instant"});
+  return true;
+}
+function navigate(id){
+  if(!user || !document.getElementById(id)) return;
+  closeMenu();
+  if(id==="home"){
+    navHistory=["home"];
+    showView("home");
+    return;
+  }
+  if(currentView()===id) return;
+  navHistory.push(id);
   showView(id);
 }
 function goBack(){
+  if(!user) return;
   closeMenu();
   if(navHistory.length>1) navHistory.pop();
-  showView(navHistory[navHistory.length-1]||"home");
+  if(!navHistory.length) navHistory=["home"];
+  showView(currentView());
 }
 document.addEventListener("click",function(e){
   const m=document.getElementById("menu"), b=document.getElementById("menuBtn");
   if(m && !m.classList.contains("hidden") && !m.contains(e.target) && e.target!==b) closeMenu();
+});
+window.addEventListener("keydown",function(e){
+  if(e.key==="Escape") closeMenu();
 });
 
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
