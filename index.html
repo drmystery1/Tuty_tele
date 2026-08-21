@@ -379,6 +379,119 @@ button:active{transform:scale(.985)}
 }
 </style>
 
+
+<style id="reference-ui-v22">
+:root{
+  --navy:#071120;--navy2:#0b1729;--ink:#f6f8ff;--sub:#9ba9bc;
+  --line2:rgba(255,255,255,.10);--blue2:#258cff;--purple2:#7a43ff;
+  --green2:#22c55e;--orange2:#f59e0b;--red2:#ef3b4f;
+}
+body{
+  background:
+    radial-gradient(circle at 50% -10%,rgba(71,40,180,.20),transparent 32%),
+    radial-gradient(circle at 0% 55%,rgba(0,143,255,.10),transparent 26%),
+    linear-gradient(160deg,#030813,#071426 55%,#040811);
+  color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+body:before{opacity:.08}
+.top{display:none!important}
+.wrap{max-width:1440px;padding:0 16px 90px}
+#app{max-width:1440px;margin:auto}
+.card{border-radius:18px;background:linear-gradient(180deg,rgba(12,24,42,.95),rgba(7,16,29,.96));border:1px solid var(--line2);box-shadow:0 12px 34px rgba(0,0,0,.25)}
+.hidden{display:none!important}
+
+.roleDashboard{max-width:1280px;margin:0 auto;padding:18px 0 80px}
+.dashHero{
+  min-height:390px;border-radius:24px;overflow:hidden;position:relative;
+  background:linear-gradient(145deg,#08152a,#0b1b35 50%,#0b0d20);
+  border:1px solid rgba(102,157,255,.22);
+  box-shadow:0 22px 70px rgba(0,0,0,.30);
+}
+.dashHeroArt{position:absolute;inset:0;background-size:cover;background-position:left center;opacity:.92}
+.dashHero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,7,18,.20),rgba(2,8,19,.28) 36%,rgba(2,8,18,.96) 94%)}
+.dashTopline,.dashWelcome{position:relative;z-index:2}
+.dashTopline{display:flex;align-items:center;justify-content:space-between;padding:18px 20px}
+.dashBrand{display:flex;align-items:center;gap:11px}
+.dashLogo{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#0f8fff,#5b35ff);font-size:20px;box-shadow:0 10px 30px rgba(47,129,255,.30)}
+.dashBrand b{display:block;font-size:20px}.dashBrand span{display:block;color:#b5c4d8;font-size:12px;margin-top:2px}
+.dashActions{display:flex;gap:8px}.iconBtn{width:44px!important;height:44px!important;padding:0!important;border-radius:13px!important;background:rgba(8,18,34,.72)!important;border:1px solid rgba(255,255,255,.13)!important;font-size:21px!important}
+.dashWelcome{display:flex;align-items:center;gap:16px;padding:112px 28px 36px}
+.dashAvatar{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#0f76ff,#7b35e9);font-size:24px;font-weight:900;border:3px solid rgba(255,255,255,.22);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.eyebrow{font-size:11px;letter-spacing:1.5px;color:#9cb0ca;font-weight:800}
+.dashWelcome h1{margin:2px 0 0;font-size:42px;line-height:1.05}.dashWelcome p{margin:7px 0 0;color:#c5d0df}
+
+.rolePane{margin-top:-34px;position:relative;z-index:3;padding:0 10px}
+.kpiGrid{display:grid;gap:14px}.kpiGrid.four{grid-template-columns:repeat(4,1fr)}
+.dashKpi{min-height:138px!important;padding:18px!important;text-align:left;border-radius:18px!important;border:1px solid rgba(255,255,255,.12)!important;position:relative;overflow:hidden;box-shadow:0 18px 34px rgba(0,0,0,.20)!important}
+.dashKpi:after{content:"";position:absolute;inset:auto -20px -30px auto;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.10)}
+.dashKpi .kpiIcon{float:right;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);font-size:22px}
+.dashKpi strong{display:block;clear:both;font-size:34px;margin-top:18px}.dashKpi small{font-size:14px;opacity:.9}
+.dashKpi.blue{background:linear-gradient(135deg,#0965dc,#187ff4)}.dashKpi.orange{background:linear-gradient(135deg,#f38b00,#ee4b23)}.dashKpi.green{background:linear-gradient(135deg,#079947,#14c86d)}.dashKpi.red{background:linear-gradient(135deg,#ef2438,#c91d5c)}.dashKpi.purple{background:linear-gradient(135deg,#6424dd,#8b45f4)}
+
+.dashTwoCol{display:grid;grid-template-columns:1.35fr .95fr;gap:16px;margin-top:16px}
+.panel{background:linear-gradient(180deg,rgba(12,25,43,.96),rgba(7,16,29,.97));border:1px solid rgba(121,164,224,.13);border-radius:18px;padding:18px;box-shadow:0 14px 35px rgba(0,0,0,.22);margin-top:16px}
+.panelHead{display:flex;justify-content:space-between;align-items:center;gap:10px}.panelHead h2{font-size:18px;margin:0}.textBtn{width:auto!important;background:none!important;color:#43a5ff!important;padding:4px 0!important;font-weight:800}
+.recentList{display:grid;gap:9px;margin-top:12px}
+.recentItem{display:grid;grid-template-columns:8px 1fr auto;gap:12px;align-items:center;padding:14px;border:1px solid rgba(121,164,224,.12);border-radius:14px;background:rgba(11,23,39,.82)}
+.recentItem .stripe{width:4px;height:58px;border-radius:8px}.recentItem .stripe.pending{background:#f59e0b}.recentItem .stripe.completed{background:#22c55e}.recentItem .stripe.not_completed{background:#ef3b4f}.recentItem .stripe.in_progress{background:#3b82f6}
+.recentItem b{font-size:14px}.recentItem .muted{margin-top:3px}.recentStatus{padding:7px 10px;border-radius:9px;font-size:11px;font-weight:800}.recentStatus.pending{color:#ffbf45;background:rgba(245,158,11,.13)}.recentStatus.completed{color:#4be28b;background:rgba(34,197,94,.13)}.recentStatus.not_completed{color:#ff6d7c;background:rgba(239,59,79,.13)}.recentStatus.in_progress{color:#62b2ff;background:rgba(59,130,246,.13)}
+.quickGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.quick{min-height:105px!important;border-radius:14px!important;background:#0b1a2d!important;border:1px solid rgba(255,255,255,.08)!important;text-align:left;padding:15px!important}.quick i{display:block;font-style:normal;font-size:25px;margin-bottom:9px}.quick span{display:block;font-weight:800}.quick.blue i{color:#4da8ff}.quick.red i{color:#ff6377}.quick.purple i{color:#a675ff}.quick.orange i{color:#ffb12e}.quick.green i{color:#47df8b}
+.quick small{display:block;color:#8fa1b7;margin-top:4px}
+.miniUsers{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.miniUser{padding:12px;border-radius:13px;background:#0b192b;border:1px solid rgba(255,255,255,.07)}.miniUser b{display:block}.miniUser span{color:#8195ab;font-size:11px}
+.featureRibbon{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.featureRibbon button{min-height:110px!important;text-align:left!important;padding:16px!important;background:#0a1728!important;border:1px solid rgba(74,139,255,.16)!important;border-radius:15px!important}.featureRibbon b{font-size:24px;color:#3ea1ff}.featureRibbon span{display:block;font-weight:800;margin-top:10px}.featureRibbon small{display:block;color:#8295aa;margin-top:4px}
+.bottomNav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:50;width:min(650px,calc(100vw - 24px));display:grid;grid-template-columns:repeat(5,1fr);padding:8px;border-radius:20px;background:rgba(9,20,36,.92);border:1px solid rgba(118,157,218,.16);backdrop-filter:blur(18px);box-shadow:0 20px 50px rgba(0,0,0,.40)}
+.bottomNav button{background:transparent!important;border:0!important;padding:8px 5px!important;color:#a6b4c7;font-size:11px!important}.bottomNav b{display:block;font-size:20px;line-height:1;margin-bottom:4px}.bottomNav .active{color:#4da4ff!important}
+
+.pageNav{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:25;padding:12px 2px;background:linear-gradient(180deg,#050b15 75%,transparent);margin-bottom:8px}
+.pageNavTitle{flex:1;font-weight:900;font-size:18px}.backBtn,.homeBtn{width:42px!important;height:42px!important;padding:0!important;border-radius:13px!important;background:#0d2036!important;border:1px solid rgba(93,167,255,.20)!important}.homeBtn{font-size:19px!important}
+
+.analyticsHead{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:12px 0 16px}.analyticsHead h1{margin:0;font-size:28px}.dateChip{padding:11px 14px;border:1px solid var(--line2);border-radius:12px;background:#0b1728;color:#d7e1ed;font-size:13px}
+.analyticsKpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.analyticsKpi{min-height:120px;padding:15px;border-radius:15px;background:#0b1728;border:1px solid var(--line2)}.analyticsKpi small{display:block;color:#a3b1c3}.analyticsKpi b{display:block;font-size:30px;margin:12px 0 6px}.analyticsKpi span{font-size:11px;color:#7f92aa}.analyticsKpi.purple b{color:#a981ff}.analyticsKpi.green b{color:#43db83}.analyticsKpi.orange b{color:#ffb23c}.analyticsKpi.red b{color:#ff6372}.analyticsKpi.blue b{color:#56a9ff}
+.filterBar{display:grid;grid-template-columns:1.5fr .75fr .75fr auto;gap:10px;margin:16px 0}.filterBar input,.filterBar button{height:48px;margin:0!important}.filterBar button{background:#0b1728!important;border:1px solid var(--line2)!important}.filterBar .filterBtn{color:#9e7cff!important}
+.tableHead{display:grid;grid-template-columns:2fr .8fr .8fr .8fr .95fr 1fr;padding:0 14px 9px;color:#899bb1;font-size:11px;text-transform:uppercase;letter-spacing:.5px}.analyticsTable .card{margin:7px 0!important}.analyticsTable #successList>.card{background:#0b1728;border-radius:13px;padding:14px;margin:7px 0}.analyticsTable #successList>.card .kpi{font-size:23px;color:#45d984}.analyticsTable #successList>.card .progress{margin-top:8px}
+.moduleTitle{font-size:25px;margin:0 0 4px;display:flex;align-items:center;gap:10px}.moduleIcon{width:42px;height:42px;border-radius:13px;display:inline-grid;place-items:center;background:#0e2038;color:#52a9ff;border:1px solid rgba(82,169,255,.2)}.streetIcon{color:#ffcb4b}.batteryIcon{color:#4aa7ff}.earthIcon{color:#35d77f}.wiringIcon{color:#ff5e72}.renovationIcon{color:#a980ff}
+
+input,select,textarea{background:#091727!important;border-color:rgba(103,152,211,.18)!important;border-radius:12px!important}label{color:#a9b7c9;font-size:12px;font-weight:700}
+button{border-radius:12px!important}
+img{border-radius:14px}
+#menu{background:rgba(9,20,36,.97)!important;border-color:rgba(120,160,220,.20)!important;box-shadow:0 24px 70px rgba(0,0,0,.55)!important}
+
+@media(max-width:900px){
+  .wrap{padding:0 10px 92px}
+  .roleDashboard{padding-top:8px}
+  .dashHero{min-height:430px;border-radius:20px}
+  .dashHeroArt{background-position:left center}
+  .dashWelcome{padding:150px 18px 34px}
+  .dashWelcome h1{font-size:32px}
+  .kpiGrid.four{grid-template-columns:1fr 1fr}
+  .dashTwoCol{grid-template-columns:1fr}
+  .featureRibbon{grid-template-columns:1fr 1fr}
+  .miniUsers{grid-template-columns:1fr 1fr}
+  .analyticsKpis{grid-template-columns:1fr 1fr}
+  .analyticsKpi:first-child{grid-column:span 2}
+  .filterBar{grid-template-columns:1fr 1fr}
+  .tableHead{display:none}
+  .analyticsTable #successList>.card .row{align-items:flex-start}
+}
+@media(min-width:901px){
+  .roleDashboard{padding-top:24px}
+  .dashHero{min-height:420px}
+  .dashHeroArt{background-position:left center}
+}
+@media(max-width:520px){
+  .dashHero{min-height:405px}
+  .dashTopline{padding:14px}.dashBrand b{font-size:18px}
+  .dashWelcome{padding:145px 16px 28px}.dashWelcome h1{font-size:29px}
+  .dashAvatar{width:54px;height:54px}
+  .dashKpi{min-height:116px!important;padding:14px!important}.dashKpi strong{font-size:28px;margin-top:14px}
+  .featureRibbon{grid-template-columns:1fr 1fr}.featureRibbon button{min-height:105px!important}
+  .analyticsHead{align-items:flex-start;flex-direction:column}.analyticsHead h1{font-size:24px}
+  .analyticsKpis{grid-template-columns:1fr 1fr}.analyticsKpi:first-child{grid-column:span 2}
+  .filterBar{grid-template-columns:1fr}
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -422,29 +535,116 @@ button:active{transform:scale(.985)}
 <section id="app" class="hidden">
   <div class="card hero compactHero"><div class="heroIcon">🛰️</div><div class="teamInfo"><h2>Field Operations</h2><p class="muted">Jobs • Maintenance • Surveys • Performance</p></div><span id="rolePill" class="pill"></span></div>
 
-  <div id="home" class="view">
-    <div class="card"><div class="row"><div id="myAvatar" class="avatar">A</div><div><b id="hello"></b><div id="role" class="muted"></div></div><div class="spacer"></div><button class="secondary" style="width:auto" onclick="navigate('notifications')">🔔 <span id="notifCount">0</span></button></div></div>
-    <div id="adminHome" class="hidden">
-      <div class="grid homeKpis"><div class="stat stat-click" onclick="navigate('team')" role="button" tabindex="0"><span>Team Users</span><b id="users">0</b><small>Tap to view team →</small></div><div class="stat stat-click" onclick="navigate('jobs')" role="button" tabindex="0"><span>Total Jobs</span><b id="jobs">0</b><small>Tap to view jobs →</small></div><div class="stat stat-click" onclick="navigate('jobs')" role="button" tabindex="0"><span>Pending</span><b id="pend">0</b><small>Tap to view pending →</small></div><div class="stat stat-click" onclick="navigate('jobs')" role="button" tabindex="0"><span>Completed</span><b id="done">0</b><small>Tap to view completed →</small></div></div>
-    </div>
-    <div id="techKpi" class="hidden">
-      <div class="grid homeKpis"><div class="stat"><span>My Jobs</span><b id="myJobs">0</b></div><div class="stat"><span>Completed</span><b id="myDone">0</b></div><div class="stat"><span>Pending</span><b id="myPending">0</b></div><div class="stat"><span>Success Rate</span><b id="myRate">0%</b></div></div>
-    </div>
 
-    <div class="card" style="background:linear-gradient(135deg,#0b2b45,#0a1929)">
-<div class="row"><div><span class="pill">PERFORMANCE</span><h3 style="margin:8px 0 3px">🏆 Technician Success Rate</h3><p class="muted">Completed jobs compared with assigned jobs</p></div><div class="spacer"></div><div class="kpi" id="homeRate">0%</div></div>
-<div class="progress"><i id="homeRateBar" style="width:0%"></i></div>
-<button class="secondary" onclick="navigate('success')" style="margin-top:12px">View all technicians →</button>
-</div><div id="rolePanel" class="card"></div>
+  <div id="home" class="view">
+    <section class="roleDashboard" id="dashboardShell">
+      <div class="dashHero">
+        <div class="dashHeroArt"></div>
+        <div class="dashTopline">
+          <div class="dashBrand">
+            <div class="dashLogo">📡</div>
+            <div><b>Tele Tuty</b><span id="dashRoleLabel">Field Operations</span></div>
+          </div>
+          <div class="dashActions">
+            <button class="iconBtn" onclick="navigate('notifications')" aria-label="Notifications">♧</button>
+            <button class="iconBtn" onclick="toggleMenu()" aria-label="Menu">⋮</button>
+          </div>
+        </div>
+        <div class="dashWelcome">
+          <div class="dashAvatar" id="myAvatar">A</div>
+          <div>
+            <div class="eyebrow">WELCOME BACK</div>
+            <h1 id="hello">Admin</h1>
+            <p id="role">Field Operations</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="adminDashboard" class="rolePane hidden">
+        <div class="kpiGrid four">
+          <button class="dashKpi blue" onclick="navigate('jobs')"><span class="kpiIcon">▣</span><strong id="users">0</strong><small>Total Users</small></button>
+          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="jobs">0</strong><small>Total Jobs</small></button>
+          <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="done">0</strong><small>Completed</small></button>
+          <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="pend">0</strong><small>Pending / Open</small></button>
+        </div>
+
+        <div class="dashTwoCol">
+          <div class="panel">
+            <div class="panelHead"><h2>Recent Jobs</h2><button class="textBtn" onclick="navigate('jobs')">View All</button></div>
+            <div id="homeRecentJobs" class="recentList"></div>
+          </div>
+          <div class="panel">
+            <div class="panelHead"><h2>Quick Actions</h2></div>
+            <div class="quickGrid">
+              <button onclick="navigate('adminTools')" class="quick blue"><i>＋</i><span>Add User</span></button>
+              <button onclick="navigate('team')" class="quick red"><i>−</i><span>Manage Users</span></button>
+              <button onclick="navigate('team')" class="quick purple"><i>♙</i><span>All Users</span></button>
+              <button onclick="navigate('adminTools')" class="quick orange"><i>▤</i><span>Approval Requests</span></button>
+              <button onclick="navigate('jobs')" class="quick blue"><i>□</i><span>All Jobs</span></button>
+              <button onclick="navigate('success')" class="quick green"><i>▥</i><span>Reports</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelHead"><h2>Users Management</h2><button class="textBtn" onclick="navigate('team')">View All Users</button></div>
+          <div id="homeUsers" class="miniUsers"></div>
+        </div>
+      </div>
+
+      <div id="engineerDashboard" class="rolePane hidden">
+        <div class="kpiGrid four">
+          <button class="dashKpi blue" onclick="navigate('jobs')"><span class="kpiIcon">▣</span><strong id="engJobs">0</strong><small>Total Jobs</small></button>
+          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="engPending">0</strong><small>Pending</small></button>
+          <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="engDone">0</strong><small>Completed</small></button>
+          <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="engNotDone">0</strong><small>Not Completed</small></button>
+        </div>
+        <div class="featureRibbon">
+          <button onclick="navigate('jobs')"><b>＋</b><span>Create New Job</span><small>Create and assign a new job</small></button>
+          <button onclick="navigate('jobs')"><b>♙</b><span>Assign Technicians</span><small>Assign work to your team</small></button>
+          <button onclick="navigate('success')"><b>▥</b><span>Track Progress</span><small>Monitor job performance</small></button>
+          <button onclick="navigate('backup')"><b>▤</b><span>View Reports</span><small>Job history and reports</small></button>
+        </div>
+        <div class="panel">
+          <div class="panelHead"><h2>Today's Jobs</h2><button class="textBtn" onclick="navigate('jobs')">View All</button></div>
+          <div id="homeRecentJobsEng" class="recentList"></div>
+        </div>
+      </div>
+
+      <div id="technicianDashboard" class="rolePane hidden">
+        <div class="kpiGrid four">
+          <button class="dashKpi blue" onclick="navigate('jobs')"><span class="kpiIcon">▣</span><strong id="myJobs">0</strong><small>Assigned Jobs</small></button>
+          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="myPending">0</strong><small>Pending</small></button>
+          <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="myDone">0</strong><small>Completed</small></button>
+          <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="myRate">0%</strong><small>Success Rate</small></button>
+        </div>
+        <div class="panel">
+          <div class="panelHead"><h2>Today's Jobs</h2><button class="textBtn" onclick="navigate('jobs')">View All</button></div>
+          <div id="homeRecentJobsTech" class="recentList"></div>
+        </div>
+        <div class="featureRibbon">
+          <button onclick="navigate('jobs')"><b>✓</b><span>Job Updates</span><small>Update job status in real-time</small></button>
+          <button onclick="navigate('jobs')"><b>▤</b><span>Job Notes</span><small>Add notes and observations</small></button>
+          <button onclick="navigate('profile')"><b>▧</b><span>Image Upload</span><small>Upload site images and proofs</small></button>
+          <button onclick="navigate('success')"><b>◷</b><span>Job History</span><small>View your past job history</small></button>
+        </div>
+      </div>
+
+      <div class="bottomNav">
+        <button class="active" onclick="navigate('home')"><b>⌂</b><span>Dashboard</span></button>
+        <button onclick="navigate('jobs')"><b>▣</b><span>Jobs</span></button>
+        <button onclick="navigate('team')"><b>♙</b><span id="workersNav">Workers</span></button>
+        <button onclick="navigate('success')"><b>▥</b><span>Reports</span></button>
+        <button onclick="toggleMenu()"><b>•••</b><span>More</span></button>
+      </div>
+    </section>
   </div>
 
   <div id="street" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
 
-</div>
-    <div class="card"><div class="row"><div><h2>💡 Street Light Survey</h2><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div>
+    <div class="card"><div class="row"><div><h1 class="moduleTitle"><span class="moduleIcon streetIcon">✦</span> Street Light Survey</h1><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div>
 </div>
       <div class="grid"><div><label>Area Name</label><input id="slArea" placeholder="Area / street"></div><div><label>Total Lights</label><input id="slTotal" type="number" min="0" value="0"></div><div><label>Working Lights</label><input id="slWorking" type="number" min="0" value="0"></div><div><label>Fault Lights</label><input id="slFault" type="number" min="0" value="0"></div></div>
       <label>Fault Details</label><textarea id="slFaultDetails" placeholder="Not working / dim / flickering / damaged pole / wiring issue..."></textarea>
@@ -456,92 +656,80 @@ button:active{transform:scale(.985)}
   </div>
 
   <div id="tower" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>📡 Telecom Tower</h2><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon towerIcon">⌁</span> Telecom Tower</h1><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
 
   <div id="battery" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>🔋 Battery Maintenance</h2><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon batteryIcon">▣</span> Battery Maintenance</h1><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
 
   <div id="earth" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>🌍 Earth Pit Maintenance</h2><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon earthIcon">◉</span> Earth Pit Maintenance</h1><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
 
   <div id="wiring" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>⚡ Wiring Fault</h2><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon wiringIcon">ϟ</span> Wiring Fault</h1><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
 
   <div id="renovation" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>🛠️ Renovation</h2><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon renovationIcon">⌁</span> Renovation</h1><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
 
   <div id="profile" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>👤 My Profile</h2><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">◉</span> My Profile</h1><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
   <div id="settings" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>⚙️ Settings</h2><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">Profile & Photo</button><button class="bad" onclick="logout()">Logout</button></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">Profile & Photo</button><button class="bad" onclick="logout()">Logout</button></div></div>
 
   <div id="notifications" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>🔔 Notifications</h2><div id="notificationsList"></div></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">●</span> Notifications</h1><div id="notificationsList"></div></div></div>
 
   <div id="team" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>👥 Team</h2><div id="teamList"></div></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team</h1><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><div id="jobsList"></div></div></div>
 
-</div><div class="card"><h2>📋 Jobs</h2><div id="jobsList"></div></div></div>
   <div id="success" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+    <div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Technician Success Rate</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+    <div class="analyticsHead">
+      <div><h1>Technician Success Rate</h1><p class="muted">Performance overview of all technicians</p></div>
+      <div class="dateChip">▣ <span>Current period</span>⌄</div>
+    </div>
+    <div class="analyticsKpis">
+      <div class="analyticsKpi purple"><small>Overall Success Rate</small><b id="overallRate">0%</b><span>All Technicians</span></div>
+      <div class="analyticsKpi green"><small>Completed Jobs</small><b id="successCompleted">0</b><span>Completed</span></div>
+      <div class="analyticsKpi orange"><small>Pending Jobs</small><b id="successPending">0</b><span>Pending</span></div>
+      <div class="analyticsKpi red"><small>Not Completed</small><b id="successNotCompleted">0</b><span>Not completed</span></div>
+      <div class="analyticsKpi blue"><small>Total Assigned</small><b id="successAssigned">0</b><span>Assigned</span></div>
+    </div>
+    <div class="filterBar"><input id="techSearch" placeholder="⌕  Search technician..." oninput="filterSuccess()"><button>⌖ All Zones⌄</button><button>♙ All Teams⌄</button><button class="filterBtn">⚱ Filters</button></div>
+    <div class="panel analyticsTable"><div class="tableHead"><span>Technician</span><span>Assigned</span><span>Completed</span><span>Pending</span><span>Not Completed</span><span>Success Rate</span></div><div id="successList"></div></div>
+  </div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>🏆 Technician Success Rate</h2><p class="muted">Completed jobs ÷ total jobs × 100</p><div id="successList"></div></div></div>
   <div id="adminTools" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
-
-</div><div class="card"><h2>👑 Admin Controls</h2><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
 
   <div id="backup" class="view hidden">
-<div class="navBar universalViewNav"><button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate('home')">🏠 Home</button></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="viewHeader">
 
-</div>
     <div class="card">
       <h2>💾 Backup & Reports</h2>
       <p class="muted">Backup your application data or create printable PDF reports.</p>
@@ -644,43 +832,91 @@ async function login(){
  }catch(err){ if(msg) msg.textContent=err?.message||"Login failed"; }
 }
 async function loadHome(){
- const j=await db.from("jobs").select("id,status,assigned_worker");const rows=j.data||[];
- $("jobs").textContent=rows.length;$("pend").textContent=rows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;$("done").textContent=rows.filter(x=>x.status==="completed").length;
- const p=await db.from("profiles").select("id");$("users").textContent=(p.data||[]).length;
- if(profile.role==="worker"){
-   $("techKpi").classList.remove("hidden");
+ const q=await db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,created_at").order("created_at",{ascending:false}).limit(40);
+ const rows=q.data||[];
+ const total=rows.length, completed=rows.filter(x=>x.status==="completed").length, open=rows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
+ const p=await db.from("profiles").select("id,full_name,role,approval_status,active").order("created_at",{ascending:false}).limit(9);
+ const users=p.data||[];
+ const role=profile.role;
+ $("dashRoleLabel").textContent=role==="admin"?"Admin Dashboard":role==="engineer"?"Engineer Dashboard":"Technician Dashboard";
+ $("workersNav").textContent=role==="worker"?"History":role==="engineer"?"Technicians":"Workers";
+ document.querySelectorAll(".rolePane").forEach(x=>x.classList.add("hidden"));
+ $("adminDashboard").classList.toggle("hidden",role!=="admin");
+ $("engineerDashboard").classList.toggle("hidden",role!=="engineer");
+ $("technicianDashboard").classList.toggle("hidden",role!=="worker");
+
+ if(role==="admin"){
+   $("users").textContent=users.length;
+   $("jobs").textContent=total;
+   $("done").textContent=completed;
+   $("pend").textContent=open;
+   $("homeRecentJobs").innerHTML=renderRecentJobs(rows.slice(0,6));
+   $("homeUsers").innerHTML=users.slice(0,6).map(x=>`<div class="miniUser"><b>${esc(x.full_name||"User")}</b><span>${x.role==="worker"?"Technician":x.role} • ${x.active===false?"Inactive":"Active"}</span></div>`).join("")||`<div class="empty">No users found.</div>`;
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/admin_hero.jpg')";
+ }else if(role==="engineer"){
+   $("engJobs").textContent=total;
+   $("engPending").textContent=open;
+   $("engDone").textContent=completed;
+   $("engNotDone").textContent=rows.filter(x=>x.status==="not_completed").length;
+   $("homeRecentJobsEng").innerHTML=renderRecentJobs(rows.slice(0,8));
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/engineer_hero.jpg')";
+ }else{
    const mine=rows.filter(x=>x.assigned_worker===user.id);
-   const d=mine.filter(x=>x.status==="completed").length;
-   const rate=mine.length?Math.round(d/mine.length*100):0;
+   const md=mine.filter(x=>x.status==="completed").length;
    $("myJobs").textContent=mine.length;
-   $("myDone").textContent=d;
-   $("myPending").textContent=mine.length-d;
-   $("myRate").textContent=rate+"%";
-   $("homeRate").textContent=rate+"%";
-   $("homeRateBar").style.width=rate+"%";
- } else {
-   const techJobs=rows.filter(x=>x.assigned_worker);
-   const d=techJobs.filter(x=>x.status==="completed").length;
-   const rate=techJobs.length?Math.round(d/techJobs.length*100):0;
-   $("homeRate").textContent=rate+"%";
-   $("homeRateBar").style.width=rate+"%";
+   $("myDone").textContent=md;
+   $("myPending").textContent=mine.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
+   $("myRate").textContent=(mine.length?Math.round(md/mine.length*100):0)+"%";
+   $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/technician_hero.jpg')";
  }
- if(profile.role==="admin")$("adminHome").classList.remove("hidden");
- $("rolePanel").innerHTML=profile.role==="admin"?`<h3>Admin Command Center</h3><p class="muted">Use ⋮ for Admin Controls, Team, Jobs and Technician Success Rate.</p>`:profile.role==="engineer"?`<h3>Engineer Workspace</h3><p class="muted">Use modules above for surveys and maintenance, and ⋮ → Jobs for job management.</p>`:`<h3>Technician Workspace</h3><p class="muted">Use ⋮ → Jobs to update assigned work and ⋮ → Success Rate to see performance.</p>`;
- if(profile.role==="admin")$("adminTools").classList.remove("hidden");
+ if(role==="admin")$("adminTools").classList.remove("hidden");
 }
-async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="avatar">🔔</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}
+function renderRecentJobs(rows){
+ if(!rows.length)return `<div class="empty">No jobs found.</div>`;
+ return rows.map(j=>{
+   const st=String(j.status||"pending");
+   const label=st.replaceAll("_"," ");
+   return `<div class="recentItem"><span class="stripe ${st}"></span><div><b>${esc(j.job_term||j.job_code||"JOB")}</b><div>${esc(j.work_description||"Field maintenance job")}</div><div class="muted">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
+ }).join("");
+}
+async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}
 async function loadTeam(){const r=await db.from("profiles").select("id,full_name,role,approval_status,active,phone").order("created_at",{ascending:false});const a=r.data||[];$("teamList").innerHTML=a.map(x=>`<div class="person"><div class="avatar">${esc((x.full_name||"?")[0])}</div><div><b>${esc(x.full_name)}</b><div class="muted">${x.role==="worker"?"Technician":x.role} • ${x.approval_status}</div></div></div>`).join("")||`<div class="empty">No team members.</div>`}
 async function loadJobs(){let q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);if(profile.role==="worker")q=q.eq("assigned_worker",user.id);else if(profile.role==="engineer")q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);const r=await q;$("jobsList").innerHTML=(r.data||[]).map(j=>`<div class="card job ${j.status==="completed"?"done":"pending"}"><div class="row"><div><b>${esc(j.job_term||j.job_code)}</b><h3>${esc(j.work_description)}</h3><div class="muted">📍 ${esc(j.location||"")}</div></div><div class="spacer"></div><span class="pill">${esc(j.status)}</span></div>${j.status!=="completed"&&profile.role==="worker"?`<textarea id="rm${j.id}" placeholder="Remarks"></textarea><textarea id="pr${j.id}" placeholder="Pending reason if not completed"></textarea><div class="row"><button class="ok" onclick="updateJob(${j.id},'completed')">✓ Completed</button><button class="warn" onclick="updateJob(${j.id},'not_completed')">⏳ Pending</button></div>`:""}${j.worker_remarks?`<p><b>Remarks:</b> ${esc(j.worker_remarks)}</p>`:""}${j.pending_reason?`<p><b>Pending:</b> ${esc(j.pending_reason)}</p>`:""}</div>`).join("")||`<div class="empty">No jobs found.</div>`}
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
-async function loadSuccessRate(){const p=await db.from("profiles").select("id,full_name,role,active").eq("role","worker");const j=await db.from("jobs").select("assigned_worker,status");const js=j.data||[];$("successList").innerHTML=(p.data||[]).map(x=>{const a=js.filter(y=>y.assigned_worker===x.id),d=a.filter(y=>y.status==="completed").length,rate=a.length?Math.round(d/a.length*100):0;return `<div class="card"><div class="row"><div class="avatar">${esc((x.full_name||"?")[0])}</div><div><b>${esc(x.full_name)}</b><div class="muted">Technician • ${a.length} jobs • ${d} completed</div></div><div class="spacer"></div><div class="kpi">${rate}%</div></div><div class="progress"><i style="width:${rate}%"></i></div></div>`}).join("")||`<div class="empty">No technicians found.</div>`}
-async function loadStreet(){const r=await db.from("street_light_surveys").select("*").order("created_at",{ascending:false}).limit(30);$("streetList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="avatar">💡</div><div><b>${esc(x.area_name)}</b><div class="muted">Total ${x.total_lights} • Working ${x.working_lights} • Fault ${x.fault_lights}</div><div>${esc(x.fault_details||"")}</div></div></div>`).join("")||`<div class="empty">No surveys yet.</div>`}
+let successCache=[];
+async function loadSuccessRate(){
+ const p=await db.from("profiles").select("id,full_name,role,active").eq("role","worker");
+ const j=await db.from("jobs").select("assigned_worker,status");
+ const js=j.data||[];
+ const people=p.data||[];
+ let assigned=0,completed=0,pending=0,notDone=0;
+ successCache=people.map(x=>{
+   const a=js.filter(y=>y.assigned_worker===x.id);
+   const d=a.filter(y=>y.status==="completed").length;
+   const pn=a.filter(y=>["pending","in_progress"].includes(y.status)).length;
+   const nd=a.filter(y=>y.status==="not_completed").length;
+   assigned+=a.length;completed+=d;pending+=pn;notDone+=nd;
+   return { ...x,assigned:a.length,completed:d,pending:pn,notDone:nd,rate:a.length?Math.round(d/a.length*100):0 };
+ });
+ const overall=assigned?Math.round(completed/assigned*100):0;
+ $("overallRate").textContent=overall+"%";$("successAssigned").textContent=assigned;$("successCompleted").textContent=completed;$("successPending").textContent=pending;$("successNotCompleted").textContent=notDone;
+ renderSuccessRows(successCache);
+}
+function renderSuccessRows(list){
+ $("successList").innerHTML=list.map(x=>`<div class="card successRow"><div class="row"><div class="avatar">${esc((x.full_name||"?")[0])}</div><div class="teamInfo"><b>${esc(x.full_name)}</b><div class="muted">Technician • Team</div></div><div class="spacer"></div><div><b>${x.assigned}</b><div class="muted">Assigned</div></div><div><b style="color:#43db83">${x.completed}</b><div class="muted">Completed</div></div><div><b style="color:#ffb23c">${x.pending}</b><div class="muted">Pending</div></div><div><b style="color:#ff6372">${x.notDone}</b><div class="muted">Not Completed</div></div><div class="kpi">${x.rate}%</div></div><div class="progress"><i style="width:${x.rate}%;background:linear-gradient(90deg,#45d984,#78e6a8)"></i></div></div>`).join("")||`<div class="empty">No technicians found.</div>`;
+}
+function filterSuccess(){
+ const q=($("techSearch")?.value||"").toLowerCase();
+ renderSuccessRows(successCache.filter(x=>(x.full_name||"").toLowerCase().includes(q)));
+}
+async function loadStreet(){const r=await db.from("street_light_surveys").select("*").order("created_at",{ascending:false}).limit(30);$("streetList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon streetIcon">✦</div><div><b>${esc(x.area_name)}</b><div class="muted">Total ${x.total_lights} • Working ${x.working_lights} • Fault ${x.fault_lights}</div><div>${esc(x.fault_details||"")}</div></div></div>`).join("")||`<div class="empty">No surveys yet.</div>`}
 async function saveStreetSurvey(){const payload={area_name:$("slArea").value.trim(),total_lights:+$("slTotal").value||0,working_lights:+$("slWorking").value||0,fault_lights:+$("slFault").value||0,fault_details:$("slFaultDetails").value.trim()||null,remarks:$("slRemarks").value.trim()||null,created_by:user.id};if(!payload.area_name)return alert("Area name required");const r=await db.from("street_light_surveys").insert(payload);if(r.error)return alert(r.error.message);$("slMsg").textContent="Survey saved successfully.";loadStreet()}
-async function loadBattery(){const r=await db.from("battery_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("batteryList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="avatar">🔋</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.battery_status||"")} • Due ${esc(x.next_due_date||"-")}</div><div>${esc(x.condition||"")}</div></div></div>`).join("")||`<div class="empty">No battery records yet.</div>`}
+async function loadBattery(){const r=await db.from("battery_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("batteryList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon batteryIcon">▣</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.battery_status||"")} • Due ${esc(x.next_due_date||"-")}</div><div>${esc(x.condition||"")}</div></div></div>`).join("")||`<div class="empty">No battery records yet.</div>`}
 async function saveBattery(){const p={area_name:$("batArea").value.trim(),battery_status:$("batStatus").value,condition:$("batCondition").value.trim()||null,remarks:$("batRemarks").value.trim()||null,next_due_date:$("batDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("battery_maintenance").insert(p);if(r.error)return alert(r.error.message);$("batMsg").textContent="Battery record saved.";loadBattery()}
-async function loadEarth(){const r=await db.from("earthpit_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("earthList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="avatar">🌍</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.condition||"")} • Resistance ${esc(x.resistance||"-")}</div><div>${esc(x.remarks||"")}</div></div></div>`).join("")||`<div class="empty">No earth pit records yet.</div>`}
+async function loadEarth(){const r=await db.from("earthpit_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("earthList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon earthIcon">◉</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.condition||"")} • Resistance ${esc(x.resistance||"-")}</div><div>${esc(x.remarks||"")}</div></div></div>`).join("")||`<div class="empty">No earth pit records yet.</div>`}
 async function saveEarth(){const p={area_name:$("earthArea").value.trim(),condition:$("earthCondition").value,resistance:$("earthResistance").value.trim()||null,remarks:$("earthRemarks").value.trim()||null,next_due_date:$("earthDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("earthpit_maintenance").insert(p);if(r.error)return alert(r.error.message);$("earthMsg").textContent="Earth pit record saved.";loadEarth()}
-async function loadRenovation(){const r=await db.from("renovations").select("*").order("created_at",{ascending:false}).limit(30);$("renoList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="avatar">🛠️</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.status)}</div><div>${esc(x.work_description)}</div></div></div>`).join("")||`<div class="empty">No renovation records.</div>`}
+async function loadRenovation(){const r=await db.from("renovations").select("*").order("created_at",{ascending:false}).limit(30);$("renoList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon renovationIcon">⌁</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.status)}</div><div>${esc(x.work_description)}</div></div></div>`).join("")||`<div class="empty">No renovation records.</div>`}
 async function saveRenovation(){const p={area_name:$("renoArea").value.trim(),work_description:$("renoWork").value.trim(),created_by:user.id};if(!p.area_name||!p.work_description)return alert("Area and work details required");const r=await db.from("renovations").insert(p);if(r.error)return alert(r.error.message);$("renoMsg").textContent="Renovation created.";loadRenovation()}
 async function createModuleJob(type){const area=type==="tower"?$("towerArea").value.trim():$("wireArea").value.trim(),work=type==="tower"?$("towerWork").value.trim():$("wireWork").value.trim();if(!area||!work)return alert("Location and work details required");const c=await db.from("customers").insert({name:area,address:area}).select("id").single();if(c.error)return alert(c.error.message);const p={customer_id:c.data.id,work_description:(type==="tower"?"Tower: ":"Wiring Fault: ")+work,location:area,assigned_engineer:profile.role==="engineer"?user.id:null,created_by:user.id,job_term:type==="tower"?"TOWER":"WIRING"};const r=await db.from("jobs").insert(p);if(r.error)return alert(r.error.message);alert("Job created");showView("jobs");loadJobs()}
 async function adminCreateUser(){const full_name=$("newname").value.trim(),email=$("newemail").value.trim(),password=$("newpass").value,role=$("newrole").value;if(!full_name||!email||password.length<8)return alert("Enter name, email and 8+ character password");$("createResult").textContent="Creating...";const r=await db.functions.invoke("admin-create-user-v2",{body:{full_name,email,password,role}});if(r.error)return alert(r.error.message);if(r.data?.error)return alert(r.data.error);$("createResult").textContent="User created successfully.";loadTeam();loadHome()}
