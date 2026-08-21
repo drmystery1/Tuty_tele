@@ -989,7 +989,7 @@ async function loadTeam(){
       return `<div class="teamUser cardMini">
         <div class="avatar">${esc((x.full_name||"U").charAt(0).toUpperCase())}</div>
         <div class="teamUserInfo"><b>${esc(x.full_name||"User")}</b><span>${esc(role)} • ${esc(status)}</span><small>${esc(x.phone||"No phone added")}</small></div>
-        <div class="teamUserActions">${isSelf?`<span class="pill">You</span>`:`<button class="bad removeUserBtn" onclick="removeUser('${esc(x.id)}',${JSON.stringify(x.full_name||"User")},this)">Remove</button>`}</div>
+        <div class="teamUserActions">${isSelf?`<span class="pill">You</span>`:`<button type="button" class="bad removeUserBtn" data-user-id="${esc(x.id)}" data-user-name="${esc(x.full_name||"User")}">Remove</button>`}</div>
       </div>`;
     }).join("");
   }catch(e){
@@ -997,6 +997,16 @@ async function loadTeam(){
     box.innerHTML=`<div class="empty">Could not load users: ${esc(e?.message||e)}</div>`;
   }
 }
+document.addEventListener("click",(ev)=>{
+  const btn=ev.target.closest?.(".removeUserBtn");
+  if(!btn) return;
+  ev.preventDefault();
+  ev.stopPropagation();
+  const userId=btn.dataset.userId;
+  const name=btn.dataset.userName||"User";
+  if(userId) removeUser(userId,name,btn);
+});
+
 async function removeUser(userId,name,button){
   if(profile?.role!=="admin") return alert("Admin access required");
   if(!userId || userId===user?.id) return alert("You cannot remove your own account.");
