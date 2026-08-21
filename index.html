@@ -598,9 +598,11 @@ img{border-radius:14px}
 .jobTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.jobTop span{display:block}.jobBody{display:grid;gap:5px;margin-top:10px}.jobActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.jobActions input{grid-column:1/-1}.approvalRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(126,198,255,.22);border-radius:16px;background:rgba(8,24,43,.72)}.approvalActions{display:flex;gap:7px}.approvalActions button{margin:0!important;padding:9px 11px!important}.royalNavBtn[disabled]{opacity:.42;filter:grayscale(.5);pointer-events:none}@media(max-width:520px){.approvalRow{align-items:flex-start;flex-direction:column}.approvalActions{width:100%}.approvalActions button{flex:1}.jobActions{grid-template-columns:1fr}.jobActions input{grid-column:auto}}
 </style>
 
+<style id="v32-settings-fix">
 .settingsHero{background:linear-gradient(135deg,#0b2440,#211044)!important}
 #settings .card{border-color:rgba(105,190,255,.22)}
 #settings h3{margin-top:0}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -978,7 +980,7 @@ function renderRecentJobs(rows){
    return `<div class="recentItem"><span class="stripe ${st}"></span><div><b>${esc(j.job_term||j.job_code||"JOB")}</b><div>${esc(j.work_description||"Field maintenance job")}</div><div class="muted">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
  }).join("");
 }
-async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
+async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];const unread=n.filter(x=>!x.read_at).length;const badge=$("notifCount");if(badge)badge.textContent=unread;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
 async function loadTeam(){
   const box=$("teamList");
   if(!box) return;
