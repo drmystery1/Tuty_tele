@@ -718,6 +718,164 @@ button{color:#f7fbff}
 .featureRibbon b,.quick i,.moduleIcon,.royalIcon{filter:drop-shadow(0 1px 4px rgba(0,0,0,.25))}
 </style>
 
+<style id="v50-advanced-hitech-theme">
+/* V50 — Tele Tuty Advanced Hitech UI */
+:root{
+  --ht-bg:#030711; --ht-panel:rgba(8,18,34,.82); --ht-panel2:rgba(12,27,48,.88);
+  --ht-line:rgba(121,207,255,.22); --ht-line2:rgba(165,122,255,.18);
+  --ht-text:#f7fbff; --ht-muted:#a9bdd1; --ht-cyan:#58e7ff; --ht-blue:#4aa7ff;
+  --ht-violet:#9a6cff; --ht-pink:#ff5fcf; --ht-green:#42e69a; --ht-amber:#ffc35a;
+}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(900px 500px at 50% -10%,rgba(91,70,255,.24),transparent 62%),
+    radial-gradient(700px 500px at -10% 40%,rgba(0,205,255,.14),transparent 60%),
+    radial-gradient(700px 500px at 110% 70%,rgba(255,44,188,.11),transparent 58%),
+    linear-gradient(155deg,#02050c,#071321 46%,#030711 100%) !important;
+  color:var(--ht-text) !important;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.28;
+  background-image:linear-gradient(rgba(95,195,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(95,195,255,.045) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,black,transparent 88%);
+}
+body:after{
+  content:"";position:fixed;left:50%;top:0;width:60vw;height:2px;transform:translateX(-50%);pointer-events:none;z-index:999999;
+  background:linear-gradient(90deg,transparent,var(--ht-cyan),var(--ht-violet),transparent);box-shadow:0 0 28px var(--ht-cyan);
+}
+.wrap{max-width:1480px !important;padding:0 18px 110px !important}
+#app{max-width:1480px !important}
+.card,.panel,.stat,.jobCard,.approvalRow,.maintenanceCenter,.jobEditPanel{
+  border-radius:24px !important;
+  border:1px solid rgba(126,204,255,.18) !important;
+  background:linear-gradient(145deg,rgba(10,25,44,.94),rgba(7,14,28,.94) 55%,rgba(20,14,45,.90)) !important;
+  box-shadow:0 24px 60px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+.card:before,.panel:before,.jobCard:before,.stat:before{
+  content:"";display:block;height:1px;margin:-1px 12% 12px;
+  background:linear-gradient(90deg,transparent,rgba(98,221,255,.32),rgba(160,110,255,.28),transparent);
+  opacity:.75;
+}
+button,input,select,textarea{border-radius:16px !important;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease !important}
+button:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(35,150,255,.18)}
+button:not(:disabled):active{transform:translateY(0) scale(.985)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ht-cyan) !important;outline-offset:2px;box-shadow:0 0 0 5px rgba(88,231,255,.10) !important}
+input,select,textarea{background:rgba(4,14,27,.88) !important;border-color:rgba(119,196,255,.20) !important;color:#f8fcff !important}
+input::placeholder,textarea::placeholder{color:#7890a8 !important}
+.hero,.dashHero{
+  border-radius:30px !important;
+  border:1px solid rgba(109,206,255,.28) !important;
+  box-shadow:0 30px 80px rgba(0,0,0,.34),0 0 70px rgba(57,110,255,.08) !important;
+}
+.compactHero{position:relative;overflow:hidden}
+.compactHero:after,.dashHero:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(110deg,transparent 18%,rgba(90,224,255,.06) 48%,transparent 76%);
+  transform:translateX(-100%);animation:htSweep 7s ease-in-out infinite;
+}
+.heroIcon,.dashLogo,.dashAvatar,.avatar,.moduleIcon,.featureIcon,.quick i,.featureRibbon b,.maintenanceTile span,.kpiIcon,.royalIcon{
+  position:relative;isolation:isolate;
+}
+.heroIcon:after,.dashLogo:after,.avatar:after,.moduleIcon:after,.quick i:after,.maintenanceTile span:after,.kpiIcon:after,.royalIcon:after{
+  content:"";position:absolute;inset:-5px;border-radius:inherit;z-index:-1;background:radial-gradient(circle,rgba(82,214,255,.28),transparent 68%);filter:blur(6px);opacity:.8;
+}
+.dashTopline{padding:20px 22px !important}
+.dashLogo{width:48px !important;height:48px !important;border-radius:16px !important;background:linear-gradient(145deg,#129eff,#713cff) !important;border:1px solid rgba(255,255,255,.24);box-shadow:0 14px 36px rgba(31,133,255,.30) !important}
+.dashBrand b{font-size:21px !important;letter-spacing:.2px}
+.dashActions .iconBtn,.iconBtn{border-radius:16px !important;background:rgba(5,17,31,.70) !important;border:1px solid rgba(126,213,255,.24) !important;backdrop-filter:blur(14px)}
+.dashWelcome{padding:120px 30px 40px !important}
+.dashAvatar{width:72px !important;height:72px !important;border-radius:22px !important;border:1px solid rgba(255,255,255,.30) !important;background:linear-gradient(145deg,#0d8cff,#8b36ef) !important;box-shadow:0 18px 45px rgba(79,71,255,.26) !important}
+.dashWelcome h1{font-size:clamp(32px,5vw,52px) !important;letter-spacing:-1.5px !important}
+.eyebrow{color:#73ddff !important;letter-spacing:2px !important}
+.kpiGrid{gap:16px !important}
+.dashKpi{border-radius:22px !important;min-height:152px !important;border-color:rgba(255,255,255,.16) !important;box-shadow:0 20px 42px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.15) !important}
+.dashKpi .kpiIcon{width:50px !important;height:50px !important;border-radius:16px !important;border:1px solid rgba(255,255,255,.22)}
+.dashKpi strong{font-size:38px !important}
+.quickGrid{gap:13px !important}
+.quick{min-height:126px !important;border-radius:20px !important;background:linear-gradient(145deg,rgba(12,31,52,.96),rgba(10,18,34,.94)) !important;border-color:rgba(112,193,255,.16) !important;position:relative;overflow:hidden}
+.quick:after{content:"";position:absolute;width:100px;height:100px;right:-30px;bottom:-40px;border-radius:50%;background:radial-gradient(circle,rgba(86,196,255,.18),transparent 68%)}
+.quick i{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:rgba(51,143,255,.12);border:1px solid rgba(91,201,255,.20);font-size:24px !important}
+.featureRibbon{gap:13px !important}
+.featureRibbon button{min-height:132px !important;border-radius:20px !important;background:linear-gradient(145deg,rgba(10,28,49,.96),rgba(12,17,35,.95)) !important;border-color:rgba(104,205,255,.18) !important}
+.featureRibbon b{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,rgba(38,149,255,.18),rgba(142,72,255,.16));border:1px solid rgba(113,214,255,.18)}
+.maintenanceGrid{gap:13px !important}
+.maintenanceTile{border-radius:21px !important;min-height:124px !important;position:relative;overflow:hidden}
+.maintenanceTile span{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:rgba(4,15,28,.28);border:1px solid rgba(255,255,255,.20);font-size:25px !important}
+.recentList{gap:12px !important}
+.recentItem{border-radius:18px !important;padding:15px !important;background:linear-gradient(145deg,rgba(11,27,47,.90),rgba(9,17,32,.88)) !important;border-color:rgba(112,193,255,.13) !important}
+.recentItem .stripe{height:64px !important;width:5px !important;box-shadow:0 0 18px currentColor}
+.recentStatus{border-radius:999px !important;border:1px solid rgba(255,255,255,.08)}
+/* Premium page navigation */
+#globalPageNav.globalPageNav{
+  border-radius:22px !important;padding:9px !important;gap:9px !important;
+  background:linear-gradient(105deg,rgba(8,31,59,.96),rgba(43,36,111,.95) 50%,rgba(105,31,116,.94)) !important;
+  border:1px solid rgba(114,221,255,.42) !important;
+  box-shadow:0 18px 48px rgba(37,34,126,.30),inset 0 1px 0 rgba(255,255,255,.18) !important;
+  backdrop-filter:blur(18px) saturate(135%);
+}
+#globalPageNav.globalPageNav .royalNavBtn{
+  height:50px !important;min-width:112px !important;border-radius:17px !important;
+  background:linear-gradient(145deg,rgba(24,83,139,.92),rgba(77,42,156,.92)) !important;
+  border:1px solid rgba(154,226,255,.34) !important;
+  box-shadow:0 10px 24px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.15) !important;
+}
+#globalPageNav.globalPageNav .royalNavBtn.home{background:linear-gradient(145deg,#2659a1,#7c36a7 58%,#c04389) !important}
+#globalPageNav .royalIcon{width:32px;height:32px;display:grid;place-items:center;border-radius:11px;background:rgba(255,255,255,.10);font-size:22px !important}
+#globalPageNav .royalNavTitle{letter-spacing:.4px !important}
+/* Bottom navigation */
+.bottomNav{
+  width:min(720px,calc(100vw - 22px)) !important;padding:9px !important;border-radius:24px !important;
+  background:linear-gradient(145deg,rgba(5,18,34,.94),rgba(14,18,42,.94)) !important;
+  border:1px solid rgba(123,210,255,.20) !important;box-shadow:0 25px 65px rgba(0,0,0,.50),inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(22px) saturate(140%) !important;
+}
+.bottomNav button{border-radius:17px !important;min-height:60px !important;position:relative}
+.bottomNav button:hover{background:rgba(61,142,255,.10) !important}
+.bottomNav button.active{background:linear-gradient(145deg,rgba(35,122,255,.18),rgba(120,55,255,.13)) !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.bottomNav b{width:36px;height:36px;margin:0 auto 4px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.055);font-size:18px !important;border:1px solid rgba(255,255,255,.08)}
+.bottomNav .active b{background:linear-gradient(145deg,rgba(44,160,255,.22),rgba(130,80,255,.24));border-color:rgba(104,209,255,.20)}
+/* Jobs / details */
+.jobCard{border-radius:22px !important}
+.jobSummaryButton{padding:17px 7px !important;border-radius:17px !important}
+.jobCollapsedTitle{font-size:17px !important;color:#f8fcff !important}
+.jobCollapsedMeta{gap:7px !important}
+.pill{border-radius:999px !important;border:1px solid rgba(112,211,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.jobCardReadable{border-radius:24px !important;box-shadow:0 25px 55px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07) !important}
+.jobDetailSection,.jobDetailItem,.jobNote{border-radius:17px !important}
+/* Menus */
+#menu.menu{
+  width:min(330px,calc(100vw - 20px)) !important;border-radius:24px !important;padding:10px !important;
+  background:linear-gradient(145deg,rgba(5,17,31,.98),rgba(18,18,45,.98)) !important;
+  border:1px solid rgba(116,215,255,.28) !important;box-shadow:0 28px 80px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(24px) saturate(150%) !important;
+}
+#menu.menu button{min-height:46px !important;border-radius:14px !important;padding:10px 12px !important;color:#effaff !important}
+#menu.menu button:hover{background:linear-gradient(90deg,rgba(47,147,255,.14),rgba(157,77,255,.10)) !important}
+.menuGroupTitle{color:#66e2ff !important;letter-spacing:1.6px !important}
+/* Tables and forms */
+.table{border-radius:20px;overflow:auto;border:1px solid rgba(111,193,255,.12)}
+.table th{background:rgba(24,61,94,.35);color:#aeeeff !important}
+.table td{color:#edf8ff !important}
+.analyticsKpi{border-radius:20px !important}
+/* subtle motion */
+@keyframes htSweep{0%,55%{transform:translateX(-100%)}75%,100%{transform:translateX(100%)}}
+@keyframes htPulse{0%,100%{box-shadow:0 0 0 rgba(88,231,255,0)}50%{box-shadow:0 0 28px rgba(88,231,255,.10)}}
+.dashLogo,.moduleIcon{animation:htPulse 4s ease-in-out infinite}
+@media(max-width:800px){
+  .dashHero{min-height:340px !important}.dashWelcome{padding:100px 22px 34px !important}.dashWelcome h1{font-size:34px !important}
+  .kpiGrid.four{grid-template-columns:1fr 1fr}.featureRibbon{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){
+  .wrap{padding:0 10px 105px !important}.card,.panel,.jobCard,.stat{border-radius:20px !important}
+  .dashTopline{padding:15px !important}.dashHero{min-height:310px !important;border-radius:24px !important}.dashWelcome{gap:12px;padding:86px 17px 28px !important}.dashAvatar{width:58px !important;height:58px !important;border-radius:18px !important}.dashWelcome h1{font-size:29px !important}
+  .dashKpi{min-height:128px !important;padding:14px !important;border-radius:19px !important}.dashKpi strong{font-size:30px !important}.dashKpi .kpiIcon{width:42px !important;height:42px !important}
+  .quick{min-height:112px !important;padding:13px !important}.featureRibbon button{min-height:116px !important}
+  #globalPageNav.globalPageNav .royalNavBtn{height:46px !important;min-width:90px !important;border-radius:15px !important;padding:0 10px !important}.bottomNav{bottom:8px !important}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
