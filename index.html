@@ -606,7 +606,7 @@ img{border-radius:14px}
 
 <style id="v29-maintenance-ui">
 .maintenanceCenter{margin-top:14px;background:linear-gradient(135deg,rgba(8,29,49,.98),rgba(29,20,58,.96));border:1px solid rgba(116,190,255,.24)}
-.maintenanceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}.maintenanceTile.tower{background:linear-gradient(135deg,#283c87,#6b2f9c)!important}.maintenanceTile.wiring{background:linear-gradient(135deg,#8a3a19,#8d1f4b)!important}.maintenanceTile.renovation{background:linear-gradient(135deg,#4e2d7f,#9b2c72)!important}
+.maintenanceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}.maintenanceTile.tower{background:linear-gradient(135deg,#283c87,#6b2f9c)!important}.maintenanceTile.wiring{background:linear-gradient(135deg,#8a3a19,#8d1f4b)!important}.maintenanceTile.renovation{background:linear-gradient(135deg,#4e2d7f,#9b2c72)!important}
 .menu{max-height:calc(100vh - 76px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}.menu button{display:block!important;visibility:visible!important;min-height:42px!important;color:#edf8ff!important}.menuGroupTitle,.menuTitle{color:#fff!important}
 @media(max-width:600px){.maintenanceGrid{grid-template-columns:1fr 1fr}.maintenanceTile{min-height:96px!important}}
 @media(max-width:380px){.maintenanceGrid{grid-template-columns:1fr}.maintenanceTile{min-height:82px!important}}
@@ -876,6 +876,102 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
+
+<style id="v42-clean-dashboard">
+/* Clean white Field Operations dashboard */
+#home {
+  background:#fff !important;
+  color:#111 !important;
+  min-height:calc(100dvh - 70px);
+  margin:0 -16px;
+  padding:0 16px 120px;
+}
+#home .roleDashboard {
+  max-width:900px;
+  margin:0 auto;
+  padding:18px 0 120px;
+}
+#fieldOperationsHero { display:none !important; }
+#home .dashHero {
+  background:#fff !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  min-height:0 !important;
+}
+#home .dashHeroArt, #home .dashTopline, #home .dashWelcome { display:none !important; }
+#home .rolePane { color:#111 !important; }
+#home .cleanKpis {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px !important;
+  margin-top:18px;
+}
+#home .cleanKpis .dashKpi {
+  min-height:150px !important;
+  background:#fff !important;
+  color:#111 !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:20px !important;
+  box-shadow:0 5px 18px rgba(15,23,42,.07) !important;
+}
+#home .cleanKpis .dashKpi strong { font-size:38px !important; margin-top:18px; }
+#home .cleanKpis .dashKpi small { color:#6b7280 !important; font-size:14px; }
+#home .cleanKpis .dashKpi .kpiIcon {
+  background:#f3f4f6 !important;
+  border:0 !important;
+}
+#home .dashboardShortcuts { display:grid; gap:14px; margin-top:20px; }
+#home .dashboardShortcut {
+  width:100%;
+  display:grid;
+  grid-template-columns:52px 1fr 24px;
+  align-items:center;
+  gap:14px;
+  text-align:left;
+  margin:0 !important;
+  padding:18px !important;
+  background:#fff !important;
+  color:#111 !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:18px !important;
+  box-shadow:0 5px 18px rgba(15,23,42,.06) !important;
+}
+#home .dashboardShortcut .shortcutIcon {
+  width:52px; height:52px; display:grid; place-items:center;
+  border-radius:15px; font-size:25px;
+  background:#eef4ff; color:#1769e0;
+}
+#home .dashboardShortcut .techIcon { background:#f2edff; color:#6338c6; }
+#home .dashboardShortcut b { display:block; font-size:16px; margin-bottom:4px; }
+#home .dashboardShortcut small { display:block; color:#6b7280; font-size:12px; }
+#home .dashboardShortcut > strong { font-size:28px; color:#4b5563; font-weight:400; }
+#home .maintenanceCenter { display:none !important; }
+#home .bottomNav {
+  background:#fff !important;
+  border:1px solid #e5e7eb !important;
+  box-shadow:0 10px 30px rgba(15,23,42,.12) !important;
+}
+#home .bottomNav button { color:#334155 !important; }
+#home .bottomNav button.active { color:#1769e0 !important; }
+#globalPageNav {
+  background:#fff !important;
+  color:#111 !important;
+  border-bottom:1px solid #e5e7eb !important;
+  box-shadow:0 2px 10px rgba(15,23,42,.04) !important;
+}
+#globalPageNav .royalNavBtn {
+  background:#fff !important; color:#111 !important;
+  border:1px solid #e5e7eb !important; box-shadow:none !important;
+}
+#globalPageNav .royalNavTitle { color:#111 !important; }
+@media(max-width:520px){
+  #home { margin:0 -10px; padding-left:10px; padding-right:10px; }
+  #home .cleanKpis { gap:14px !important; }
+  #home .cleanKpis .dashKpi { min-height:145px !important; }
+  #home .dashboardShortcut { padding:16px !important; }
+}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -910,6 +1006,8 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
     <button onclick="navigate('street')">💡 Street Light Survey</button>
     <button onclick="navigate('battery')">🔋 Battery Maintenance</button>
     <button onclick="navigate('earth')">🌍 Earth Pit Maintenance</button>
+    <button onclick="navigate('tower')">📡 Telecom Tower</button>
+    <button onclick="navigate('wiring')">⚡ Wiring Fault</button>
     <button onclick="navigate('renovation')">🛠️ Renovation</button>
   </div>
   <div class="menuDivider"></div>
@@ -1003,32 +1101,37 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
         </div>
       </div>
 
-      <div class="panel maintenanceCenter" id="maintenanceCenter">
-        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery, earth pit and renovation work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
+      <div class="panel maintenanceCenter hidden" id="maintenanceCenter">
+        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery, earth pit, tower and electrical work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
         <div class="maintenanceGrid">
           <button class="maintenanceTile street" onclick="navigate('street')"><span>💡</span><b>Street Light</b><small>Survey & faults</small></button>
           <button class="maintenanceTile battery" onclick="navigate('battery')"><span>🔋</span><b>Battery</b><small>Maintenance & due dates</small></button>
           <button class="maintenanceTile earth" onclick="navigate('earth')"><span>🌍</span><b>Earth Pit</b><small>Resistance & condition</small></button>
+          <button class="maintenanceTile tower" onclick="navigate('tower')"><span>📡</span><b>Telecom Tower</b><small>Tower field work</small></button>
+          <button class="maintenanceTile wiring" onclick="navigate('wiring')"><span>⚡</span><b>Wiring Fault</b><small>Electrical faults</small></button>
           <button class="maintenanceTile renovation" onclick="navigate('renovation')"><span>🛠️</span><b>Renovation</b><small>Repair & upgrade work</small></button>
         </div>
       </div>
 
       <div id="engineerDashboard" class="rolePane hidden">
-        <div class="kpiGrid four">
+        <div class="kpiGrid four cleanKpis">
           <button class="dashKpi blue" onclick="openJobsFiltered('all')"><span class="kpiIcon">▣</span><strong id="engJobs">0</strong><small>Total Jobs</small></button>
           <button class="dashKpi orange" onclick="openJobsFiltered('pending')"><span class="kpiIcon">◷</span><strong id="engPending">0</strong><small>Pending</small></button>
           <button class="dashKpi green" onclick="openJobsFiltered('completed')"><span class="kpiIcon">✓</span><strong id="engDone">0</strong><small>Completed</small></button>
           <button class="dashKpi red" onclick="openJobsFiltered('not_completed')"><span class="kpiIcon">!</span><strong id="engNotDone">0</strong><small>Not Completed</small></button>
         </div>
-        <div class="featureRibbon">
-          <button onclick="navigate('jobs')"><b>＋</b><span>Create New Job</span><small>Create and assign a new job</small></button>
-          <button onclick="navigate('jobs')"><b>♙</b><span>Assign Technicians</span><small>Assign work to your team</small></button>
-          <button onclick="navigate('success')"><b>▥</b><span>Track Progress</span><small>Monitor job performance</small></button>
-          <button onclick="navigate('backup')"><b>▤</b><span>View Reports</span><small>Job history and reports</small></button>
-        </div>
-        <div class="panel">
-          <div class="panelHead"><h2>Today's Jobs</h2><button class="textBtn" onclick="navigate('jobs')">View All</button></div>
-          <div id="homeRecentJobsEng" class="recentList"></div>
+
+        <div class="dashboardShortcuts">
+          <button class="dashboardShortcut" onclick="navigate('jobs')">
+            <span class="shortcutIcon jobIcon">▣</span>
+            <span><b>Job List</b><small>View all jobs and their current status</small></span>
+            <strong>›</strong>
+          </button>
+          <button class="dashboardShortcut" onclick="navigate('success')">
+            <span class="shortcutIcon techIcon">♙</span>
+            <span><b>Technician Performance</b><small>Track and evaluate technician performance</small></span>
+            <strong>›</strong>
+          </button>
         </div>
       </div>
 
