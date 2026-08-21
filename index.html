@@ -221,6 +221,33 @@ document.addEventListener('keydown', function(e){
 </style>
 
 
+
+<style id="royal-global-navigation">
+.globalPageNav{
+  display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:45;
+  margin:0 0 12px;padding:9px 10px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(8,20,38,.97),rgba(31,19,61,.96) 52%,rgba(10,42,61,.97));
+  border:1px solid rgba(155,117,255,.42);
+  box-shadow:0 14px 38px rgba(43,20,95,.24),inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+.globalPageNav:before{content:"";position:absolute;inset:1px;border-radius:19px;pointer-events:none;background:linear-gradient(90deg,rgba(73,175,255,.10),transparent 35%,rgba(190,91,255,.10));}
+.globalPageNav>*{position:relative;z-index:1}
+.royalNavBtn{width:auto!important;min-width:96px;height:44px!important;margin:0!important;padding:0 14px!important;display:flex;align-items:center;justify-content:center;gap:7px;border-radius:14px!important;font-weight:900;letter-spacing:.2px;border:1px solid rgba(126,198,255,.34)!important;background:linear-gradient(135deg,#123e68,#2b286c 58%,#552878)!important;box-shadow:0 8px 22px rgba(18,91,170,.20),inset 0 1px 0 rgba(255,255,255,.10)!important;color:#e9f7ff!important}
+.royalNavBtn.home{background:linear-gradient(135deg,#174c75,#3a2a82 52%,#7a2c79)!important;border-color:rgba(189,132,255,.45)!important}
+.royalNavBtn:active{transform:scale(.97)}
+.royalIcon{font-size:22px;line-height:1;color:#9ee9ff;text-shadow:0 0 14px rgba(72,208,255,.30)}
+.royalNavBtn.home .royalIcon{color:#ffd66e;text-shadow:0 0 15px rgba(255,198,74,.30)}
+.royalNavTitle{flex:1;min-width:0;text-align:center;color:#f4f2ff;font-size:13px;font-weight:900;letter-spacing:.7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.royalNavTitle .crown{display:inline-block;margin-right:6px;color:#ffd45d;text-shadow:0 0 13px rgba(255,193,48,.35)}
+.pageNav{display:none!important}
+@media(max-width:600px){
+  .globalPageNav{gap:7px;padding:8px;border-radius:18px;margin-bottom:10px}
+  .royalNavBtn{min-width:88px;height:42px!important;padding:0 11px!important;border-radius:13px!important;font-size:13px}
+  .royalNavTitle{font-size:11px}
+}
+</style>
+
 <script id="navigation-guard">
 window.addEventListener("error",function(e){
   const active=document.querySelector(".view:not(.hidden)");
@@ -535,6 +562,11 @@ img{border-radius:14px}
 <section id="app" class="hidden">
   <div class="card hero compactHero"><div class="heroIcon">🛰️</div><div class="teamInfo"><h2>Field Operations</h2><p class="muted">Jobs • Maintenance • Surveys • Performance</p></div><span id="rolePill" class="pill"></span></div>
 
+  <nav id="globalPageNav" class="globalPageNav" aria-label="Page navigation">
+    <button class="royalNavBtn back" onclick="goBack()" aria-label="Back"><span class="royalIcon">‹</span><span>Back</span></button>
+    <div class="royalNavTitle"><span class="crown">♛</span><span id="globalPageTitle">Field Operations</span></div>
+    <button class="royalNavBtn home" onclick="navigate('home')" aria-label="Home"><span class="royalIcon">⌂</span><span>Home</span></button>
+  </nav>
 
   <div id="home" class="view">
     <section class="roleDashboard" id="dashboardShell">
@@ -1275,6 +1307,13 @@ function showView(id){
   if(!el) return false;
   document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
   el.classList.remove("hidden");
+  const nav=document.getElementById("globalPageNav");
+  if(nav) nav.classList.remove("hidden");
+  const title=document.getElementById("globalPageTitle");
+  if(title){
+    const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",tower:"Telecom Tower",wiring:"Wiring Fault",renovation:"Renovation",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
+    title.textContent=titles[id]||"Field Operations";
+  }
   closeMenu();
   if(id==="notifications")loadNotifications().catch?.(()=>{});
   if(id==="team")loadTeam().catch?.(()=>{});
