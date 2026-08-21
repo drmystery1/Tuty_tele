@@ -5,6 +5,8 @@
 <meta name="theme-color" content="#07111f"><link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="tele-tuty-logo.png"><title>Tele Tuty</title>
 <style>
+/* V34 render guard: style elements must never become visible text */
+style{display:none!important}
 :root{--bg:#06101c;--panel:#0c1b2c;--panel2:#10253b;--line:#1c3853;--text:#eff8ff;--muted:#8fa9c0;--blue:#269fff;--cyan:#32e1d2;--green:#31d58a;--orange:#ffb648;--red:#ff5d6d}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#12345c 0,#06101c 42%,#030911 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}.top{height:64px;position:sticky;top:0;z-index:30;display:flex;align-items:center;padding:0 16px;background:#061321e8;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{font-weight:900;font-size:20px}.topspace{flex:1}.menuBtn{width:44px!important;height:44px;margin:0!important;border-radius:13px!important;background:#102b47!important;font-size:23px!important}.wrap{max-width:1180px;margin:auto;padding:16px}.auth{max-width:440px;margin:7vh auto}.loginHero{text-align:center;padding:24px}.loginHero img{width:min(230px,70vw);border-radius:28px;box-shadow:0 20px 60px #0007}.card{background:linear-gradient(180deg,#0d1e31f7,#091728f7);border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 18px 45px #0005}.hero{display:flex;align-items:center;gap:18px;padding:22px;background:linear-gradient(135deg,#0e2b49,#0a1b2d)}.heroIcon{font-size:42px}.muted{color:var(--muted);font-size:13px}.row{display:flex;gap:9px;align-items:center}.row>*{flex:1}.spacer{flex:1}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#103b66,#0b2037);color:#7eeaff;font-weight:900;border:1px solid #285e86;flex:none}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.homeKpis{margin-top:4px}.homeKpis .stat{min-height:112px}.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:12px}.sectionTitle h3{margin:0}.viewHeader{display:flex;align-items:center;gap:8px;margin:0 0 12px;position:sticky;top:64px;z-index:20;padding:7px 0;background:linear-gradient(180deg,#06101cf5,#06101cd9,transparent)}.viewHeader .navBtn{box-shadow:0 8px 20px #0004}.menuGroup{padding:5px 4px}.menuGroupTitle{padding:10px 10px 6px;color:#6fdfff;font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}.menu button{font-size:14px}.menu .bad{color:#ffd9de;background:rgba(216,59,81,.12)}.stat{padding:15px;border:1px solid var(--line);border-radius:16px;background:#081727}
 /* Distinct dashboard KPI colors */
@@ -598,8 +600,8 @@ img{border-radius:14px}
 .jobTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.jobTop span{display:block}.jobBody{display:grid;gap:5px;margin-top:10px}.jobActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.jobActions input{grid-column:1/-1}.approvalRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(126,198,255,.22);border-radius:16px;background:rgba(8,24,43,.72)}.approvalActions{display:flex;gap:7px}.approvalActions button{margin:0!important;padding:9px 11px!important}.royalNavBtn[disabled]{opacity:.42;filter:grayscale(.5);pointer-events:none}@media(max-width:520px){.approvalRow{align-items:flex-start;flex-direction:column}.approvalActions{width:100%}.approvalActions button{flex:1}.jobActions{grid-template-columns:1fr}.jobActions input{grid-column:auto}}
 </style>
 
-<style id="v32-settings-fix">
-.settingsHero{background:linear-gradient(135deg,#0b2440,#211044)!important}
+<style id="v34-settings-fix">
+#settings .settingsHero{background:linear-gradient(135deg,#0b2440,#211044)!important}
 #settings .card{border-color:rgba(105,190,255,.22)}
 #settings h3{margin-top:0}
 </style>
