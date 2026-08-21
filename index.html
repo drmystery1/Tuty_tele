@@ -586,6 +586,13 @@ img{border-radius:14px}
 }
 </style>
 
+<style id="v29-maintenance-ui">
+.maintenanceCenter{margin-top:14px;background:linear-gradient(135deg,rgba(8,29,49,.98),rgba(29,20,58,.96));border:1px solid rgba(116,190,255,.24)}
+.maintenanceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}.maintenanceTile.tower{background:linear-gradient(135deg,#283c87,#6b2f9c)!important}.maintenanceTile.wiring{background:linear-gradient(135deg,#8a3a19,#8d1f4b)!important}.maintenanceTile.renovation{background:linear-gradient(135deg,#4e2d7f,#9b2c72)!important}
+.menu{max-height:calc(100vh - 76px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}.menu button{display:block!important;visibility:visible!important;min-height:42px!important;color:#edf8ff!important}.menuGroupTitle,.menuTitle{color:#fff!important}
+@media(max-width:600px){.maintenanceGrid{grid-template-columns:1fr 1fr}.maintenanceTile{min-height:96px!important}}
+@media(max-width:380px){.maintenanceGrid{grid-template-columns:1fr}.maintenanceTile{min-height:82px!important}}
+</style>
 <style id="v28-stability-ui">
 .jobCard{padding:15px;margin:10px 0;border:1px solid rgba(126,198,255,.24);border-radius:18px;background:linear-gradient(135deg,rgba(13,31,53,.96),rgba(35,24,66,.94));box-shadow:0 8px 22px rgba(0,0,0,.14)}
 .jobTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.jobTop span{display:block}.jobBody{display:grid;gap:5px;margin-top:10px}.jobActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.jobActions input{grid-column:1/-1}.approvalRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(126,198,255,.22);border-radius:16px;background:rgba(8,24,43,.72)}.approvalActions{display:flex;gap:7px}.approvalActions button{margin:0!important;padding:9px 11px!important}.royalNavBtn[disabled]{opacity:.42;filter:grayscale(.5);pointer-events:none}@media(max-width:520px){.approvalRow{align-items:flex-start;flex-direction:column}.approvalActions{width:100%}.approvalActions button{flex:1}.jobActions{grid-template-columns:1fr}.jobActions input{grid-column:auto}}
@@ -692,6 +699,18 @@ img{border-radius:14px}
         <div class="panel">
           <div class="panelHead"><h2>Users Management</h2><button class="textBtn" onclick="navigate('team')">View All Users</button></div>
           <div id="homeUsers" class="miniUsers"></div>
+        </div>
+      </div>
+
+      <div class="panel maintenanceCenter" id="maintenanceCenter">
+        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery, earth pit, tower and electrical work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
+        <div class="maintenanceGrid">
+          <button class="maintenanceTile street" onclick="navigate('street')"><span>💡</span><b>Street Light</b><small>Survey & faults</small></button>
+          <button class="maintenanceTile battery" onclick="navigate('battery')"><span>🔋</span><b>Battery</b><small>Maintenance & due dates</small></button>
+          <button class="maintenanceTile earth" onclick="navigate('earth')"><span>🌍</span><b>Earth Pit</b><small>Resistance & condition</small></button>
+          <button class="maintenanceTile tower" onclick="navigate('tower')"><span>📡</span><b>Telecom Tower</b><small>Tower field work</small></button>
+          <button class="maintenanceTile wiring" onclick="navigate('wiring')"><span>⚡</span><b>Wiring Fault</b><small>Electrical faults</small></button>
+          <button class="maintenanceTile renovation" onclick="navigate('renovation')"><span>🛠️</span><b>Renovation</b><small>Repair & upgrade work</small></button>
         </div>
       </div>
 
@@ -981,26 +1000,32 @@ async function loadTeam(){
 async function removeUser(userId,name,button){
   if(profile?.role!=="admin") return alert("Admin access required");
   if(!userId || userId===user?.id) return alert("You cannot remove your own account.");
-  const ok=confirm(`Remove ${name}?\n\nThis permanently deletes the user's login account. This action cannot be undone.`);
-  if(!ok) return;
-  const btn=button||null;
-  const oldText=btn?.textContent||"Remove";
+  if(!confirm(`Remove ${name}?\n\nThe user will lose app access immediately.`)) return;
+  const btn=button||null, oldText=btn?.textContent||"Remove";
   try{
-    if(btn){ btn.disabled=true; btn.textContent="Removing…"; }
-    const r=await db.functions.invoke("admin-remove-user",{body:{user_id:userId}});
+    if(btn){btn.disabled=true;btn.textContent="Removing…";}
+    const sr=await db.auth.getSession(), token=sr.data?.session?.access_token;
+    if(!token) throw new Error("Your login session expired. Please login again.");
+    const r=await db.functions.invoke("admin-remove-user",{body:{user_id:userId},headers:{Authorization:`Bearer ${token}`}});
     const serverError=r?.data?.error || r?.error?.message || null;
-    if(serverError) throw new Error(serverError);
-    if(!r?.data?.ok) throw new Error("The server did not confirm the removal.");
-    alert(`${name} removed successfully.`);
+    if(serverError || !r?.data?.ok){
+      const fb=await db.from("profiles").update({active:false,approval_status:"rejected"}).eq("id",userId);
+      if(fb.error) throw new Error(serverError || fb.error.message);
+      await Promise.all([loadTeam(),loadHome()]);
+      alert(`${name} removed from app access. Backend account cleanup still needs to complete.`);
+      return;
+    }
     await Promise.all([loadTeam(),loadHome()]);
+    alert(`${name} removed successfully.`);
   }catch(e){
     console.error("Remove user error",e);
     alert("Could not remove user: "+(e?.message||e));
     await loadTeam();
   }finally{
-    if(btn){ btn.disabled=false; btn.textContent=oldText; }
+    if(btn){btn.disabled=false;btn.textContent=oldText;}
   }
 }
+
 async function loadJobs(){
   const box=$("jobsList");
   if(!box) return;
@@ -1413,8 +1438,12 @@ function closeMenu(){
 }
 function toggleMenu(){
   const m=document.getElementById("menu");
-  if(m) m.classList.toggle("hidden");
+  if(!m)return;
+  const opening=m.classList.contains("hidden");
+  m.classList.toggle("hidden",!opening);
+  if(opening){m.scrollTop=0;setTimeout(()=>m.querySelector("button:not([disabled])")?.focus({preventScroll:true}),0);}
 }
+document.addEventListener("click",(ev)=>{const m=document.getElementById("menu");if(!m||m.classList.contains("hidden"))return;if(!m.contains(ev.target)&&!ev.target.closest(".iconBtn")&&!ev.target.closest("#menuBtn"))closeMenu();});
 function currentView(){
   return navHistory[navHistory.length-1] || "home";
 }
