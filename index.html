@@ -689,62 +689,25 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 </style>
 
 </head><body><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
 <script id="persistent-session-fix">
-/*
- * Tele Tuty persistent Supabase session.
- * Supabase stores and refreshes the session; we only restore it on startup.
- */
-(function () {
-  let sessionBooted = false;
-
-  async function restoreSupabaseSession() {
-    if (sessionBooted) return;
-    sessionBooted = true;
-
-    try {
-      if (!window.supabase || !supabase.auth) return;
-
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        console.warn("Session restore:", error.message);
-        return;
-      }
-
-      if (data && data.session) {
-        window.__teleTutySession = data.session;
-        if (typeof load === "function") {
-          await load(data.session);
-        }
-      }
-    } catch (e) {
-      console.warn("Session restore failed:", e);
-    }
-  }
-
-  window.addEventListener("load", restoreSupabaseSession);
-
-  document.addEventListener("visibilitychange", function () {
-    if (!document.hidden && window.supabase && supabase.auth) {
-      supabase.auth.getSession().then(({data}) => {
-        if (data && data.session) window.__teleTutySession = data.session;
-      }).catch(() => {});
-    }
-  });
-})();
-</script>
-
-
-<script id="navigation-session-guard">
 (function(){
-  window.addEventListener("popstate", function(){
-    try {
-      if (window.__teleTutySession && typeof load === "function") {
-        load(window.__teleTutySession);
+  async function restoreSupabaseSession(){
+    try{
+      if(!window.db && typeof db==="undefined") return;
+      const {data,error}=await db.auth.getSession();
+      if(error){ console.warn("Session restore:",error.message); return; }
+      if(data?.session){
+        window.__teleTutySession=data.session;
+        user=data.session.user;
+        if(typeof load==="function") await load();
       }
-    } catch(e) {}
-  });
+    }catch(e){ console.warn("Session restore failed:",e); }
+  }
+  window.addEventListener("load",restoreSupabaseSession);
 })();
 </script>
+
 
 </body></html>`);
   w.document.close();
@@ -765,6 +728,69 @@ async function loadBackupSummary(){
     ].map(x=>`<div class="stat"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
   }catch(e){}
 }
+
+
+/* ---- Authentication / session controls ---- */
+let signingOut = false;
+async function logout(){
+  if(signingOut) return;
+  signingOut = true;
+  closeMenu();
+
+  try{
+    const {error}=await db.auth.signOut({scope:"local"});
+    if(error) console.warn("Logout error:", error.message);
+  }catch(err){
+    console.warn("Logout exception:", err);
+  }finally{
+    user=null;
+    profile=null;
+    navHistory=["home"];
+    window.__teleTutySession=null;
+
+    const menuBtn=document.getElementById("menuBtn");
+    if(menuBtn) menuBtn.classList.add("hidden");
+
+    ["login","pending","app"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.classList.add("hidden");
+    });
+    const login=document.getElementById("login");
+    if(login) login.classList.remove("hidden");
+
+    const msg=document.getElementById("loginMsg");
+    if(msg) msg.textContent="Logged out successfully. Sign in again to continue.";
+
+    const pass=document.getElementById("password");
+    if(pass) pass.value="";
+    signingOut=false;
+  }
+}
+
+db.auth.onAuthStateChange((event, session)=>{
+  if(event==="SIGNED_OUT"){
+    user=null;
+    profile=null;
+    navHistory=["home"];
+    closeMenu();
+    const menuBtn=document.getElementById("menuBtn");
+    if(menuBtn) menuBtn.classList.add("hidden");
+    if(!signingOut){
+      ["pending","app"].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.classList.add("hidden");
+      });
+      const login=document.getElementById("login");
+      if(login) login.classList.remove("hidden");
+    }
+  }else if(session && (event==="SIGNED_IN" || event==="TOKEN_REFRESHED")){
+    window.__teleTutySession=session;
+    if(event==="SIGNED_IN" && !signingOut){
+      user=session.user;
+      if(typeof load==="function") load();
+    }
+  }
+});
 
 /* ---- Stable app router ---- */
 function closeMenu(){
