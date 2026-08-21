@@ -989,7 +989,7 @@ async function loadTeam(){
       return `<div class="teamUser cardMini">
         <div class="avatar">${esc((x.full_name||"U").charAt(0).toUpperCase())}</div>
         <div class="teamUserInfo"><b>${esc(x.full_name||"User")}</b><span>${esc(role)} • ${esc(status)}</span><small>${esc(x.phone||"No phone added")}</small></div>
-        <div class="teamUserActions">${isSelf?`<span class="pill">You</span>`:`<button class="bad removeUserBtn" onclick="removeUser('${esc(x.id)}',${JSON.stringify(x.full_name||"User")})">Remove</button>`}</div>
+        <div class="teamUserActions">${isSelf?`<span class="pill">You</span>`:`<button class="bad removeUserBtn" onclick="removeUser('${esc(x.id)}',${JSON.stringify(x.full_name||"User")},this)">Remove</button>`}</div>
       </div>`;
     }).join("");
   }catch(e){
@@ -997,24 +997,27 @@ async function loadTeam(){
     box.innerHTML=`<div class="empty">Could not load users: ${esc(e?.message||e)}</div>`;
   }
 }
-async function removeUser(userId,name){
+async function removeUser(userId,name,button){
   if(profile?.role!=="admin") return alert("Admin access required");
   if(!userId || userId===user?.id) return alert("You cannot remove your own account.");
   const ok=confirm(`Remove ${name}?\n\nThis permanently deletes the user's login account. This action cannot be undone.`);
   if(!ok) return;
-  const box=$("teamList");
+  const btn=button||null;
+  const oldText=btn?.textContent||"Remove";
   try{
-    document.querySelectorAll(".removeUserBtn").forEach(b=>b.disabled=true);
+    if(btn){ btn.disabled=true; btn.textContent="Removing…"; }
     const r=await db.functions.invoke("admin-remove-user",{body:{user_id:userId}});
-    if(r.error) throw new Error(r.error.message||"Remove request failed");
-    if(r.data?.error) throw new Error(r.data.error);
+    const serverError=r?.data?.error || r?.error?.message || null;
+    if(serverError) throw new Error(serverError);
+    if(!r?.data?.ok) throw new Error("The server did not confirm the removal.");
     alert(`${name} removed successfully.`);
-    await loadTeam();
-    await loadHome();
+    await Promise.all([loadTeam(),loadHome()]);
   }catch(e){
     console.error("Remove user error",e);
     alert("Could not remove user: "+(e?.message||e));
     await loadTeam();
+  }finally{
+    if(btn){ btn.disabled=false; btn.textContent=oldText; }
   }
 }
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
