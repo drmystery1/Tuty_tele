@@ -96,6 +96,88 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .sectionTitle h3,h2,h3{ text-shadow:0 0 18px rgba(103,199,255,.08)}
 @media(max-width:520px){.card{box-shadow:0 13px 30px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)}}
 </style>
+
+<style id="module-color-themes-v8">
+/* V8 — colorful module themes */
+#adminTools .card:first-of-type{
+  background:linear-gradient(135deg,#102d55 0%,#3a1d73 48%,#6b234f 100%);
+  border-color:#8d6cff;box-shadow:0 18px 48px rgba(119,75,255,.22),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#adminTools .card:nth-of-type(2){
+  background:linear-gradient(135deg,#102b42,#173b57 48%,#24305e);
+  border-color:#4b9edb
+}
+#success .card{
+  background:linear-gradient(135deg,#0b3150 0%,#183b78 46%,#54246f 100%);
+  border-color:#6ea8ff;box-shadow:0 18px 48px rgba(62,126,255,.22)
+}
+#battery .card{
+  background:linear-gradient(135deg,#083b37 0%,#087b63 45%,#1455a3 100%);
+  border-color:#35d6b1;box-shadow:0 18px 48px rgba(18,211,170,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#earth .card{
+  background:linear-gradient(135deg,#3c2a0b 0%,#72510f 42%,#145b49 100%);
+  border-color:#d8b44a;box-shadow:0 18px 48px rgba(221,173,43,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#tower .card{
+  background:linear-gradient(135deg,#102b4e 0%,#174d78 46%,#42277d 100%);
+  border-color:#58b8ff;box-shadow:0 18px 48px rgba(48,156,255,.20),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#street .card{
+  background:linear-gradient(135deg,#14375a 0%,#0d6d86 44%,#5b2c82 100%);
+  border-color:#4bc9e9;box-shadow:0 18px 48px rgba(46,201,233,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#wiring .card{
+  background:linear-gradient(135deg,#47140f 0%,#8b3517 42%,#54206f 100%);
+  border-color:#ff8751;box-shadow:0 18px 48px rgba(255,101,50,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#renovation .card{
+  background:linear-gradient(135deg,#332052 0%,#65307b 45%,#a04645 100%);
+  border-color:#d878c5;box-shadow:0 18px 48px rgba(193,87,201,.20),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#team .card{
+  background:linear-gradient(135deg,#0c3c55,#126c75 45%,#304b9a);
+  border-color:#54c9d8
+}
+#jobs .card{
+  background:linear-gradient(135deg,#142e54,#284a82 48%,#613b89);
+  border-color:#739fff
+}
+#notifications .card{
+  background:linear-gradient(135deg,#4a2a0b,#845117 45%,#6a285d);
+  border-color:#e4a844
+}
+#profile .card{
+  background:linear-gradient(135deg,#102f54,#273a79 48%,#542d78);
+  border-color:#7ea8ff
+}
+#settings .card{
+  background:linear-gradient(135deg,#172b48,#244d68 48%,#394275);
+  border-color:#65b8d7
+}
+/* subtle premium texture on every themed module */
+#adminTools .card:after,#success .card:after,#battery .card:after,#earth .card:after,
+#tower .card:after,#street .card:after,#wiring .card:after,#renovation .card:after,
+#team .card:after,#jobs .card:after,#notifications .card:after,#profile .card:after,#settings .card:after{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
+ background-image:radial-gradient(rgba(255,255,255,.28) .65px,transparent .65px),linear-gradient(125deg,rgba(255,255,255,.05),transparent 34%,rgba(255,255,255,.025) 65%,transparent);
+ background-size:9px 9px,100% 100%;mix-blend-mode:screen
+}
+/* theme buttons inside each module */
+#battery button:not(.secondary){background:linear-gradient(135deg,#00a878,#20d6a5,#2478e8)}
+#earth button:not(.secondary){background:linear-gradient(135deg,#b57b08,#e4bd43,#2d9c72)}
+#tower button:not(.secondary){background:linear-gradient(135deg,#147bd1,#24bce5,#7656e8)}
+#street button:not(.secondary){background:linear-gradient(135deg,#168fc4,#2bd7d0,#8356df)}
+#wiring button:not(.secondary){background:linear-gradient(135deg,#d4471e,#ff8b35,#9a3fbb)}
+#renovation button:not(.secondary){background:linear-gradient(135deg,#7b45c8,#d257ad,#e87858)}
+#adminTools button:not(.secondary){background:linear-gradient(135deg,#277dff,#8a55ed,#db4d8d)}
+#success button:not(.secondary){background:linear-gradient(135deg,#287cff,#6556e8,#b84fd4)}
+/* colorful labels */
+#battery h2{color:#7fffe2}#earth h2{color:#ffe39a}#tower h2{color:#9bdcff}
+#street h2{color:#9af4ff}#wiring h2{color:#ffc19e}#renovation h2{color:#ffc4f2}
+#adminTools h2{color:#d7c4ff}#success h2{color:#b9caff}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -465,6 +547,88 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 .sectionTitle h3,h2,h3{ text-shadow:0 0 18px rgba(103,199,255,.08)}
 @media(max-width:520px){.card{box-shadow:0 13px 30px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)}}
 </style>
+
+<style id="module-color-themes-v8">
+/* V8 — colorful module themes */
+#adminTools .card:first-of-type{
+  background:linear-gradient(135deg,#102d55 0%,#3a1d73 48%,#6b234f 100%);
+  border-color:#8d6cff;box-shadow:0 18px 48px rgba(119,75,255,.22),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#adminTools .card:nth-of-type(2){
+  background:linear-gradient(135deg,#102b42,#173b57 48%,#24305e);
+  border-color:#4b9edb
+}
+#success .card{
+  background:linear-gradient(135deg,#0b3150 0%,#183b78 46%,#54246f 100%);
+  border-color:#6ea8ff;box-shadow:0 18px 48px rgba(62,126,255,.22)
+}
+#battery .card{
+  background:linear-gradient(135deg,#083b37 0%,#087b63 45%,#1455a3 100%);
+  border-color:#35d6b1;box-shadow:0 18px 48px rgba(18,211,170,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#earth .card{
+  background:linear-gradient(135deg,#3c2a0b 0%,#72510f 42%,#145b49 100%);
+  border-color:#d8b44a;box-shadow:0 18px 48px rgba(221,173,43,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#tower .card{
+  background:linear-gradient(135deg,#102b4e 0%,#174d78 46%,#42277d 100%);
+  border-color:#58b8ff;box-shadow:0 18px 48px rgba(48,156,255,.20),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#street .card{
+  background:linear-gradient(135deg,#14375a 0%,#0d6d86 44%,#5b2c82 100%);
+  border-color:#4bc9e9;box-shadow:0 18px 48px rgba(46,201,233,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#wiring .card{
+  background:linear-gradient(135deg,#47140f 0%,#8b3517 42%,#54206f 100%);
+  border-color:#ff8751;box-shadow:0 18px 48px rgba(255,101,50,.18),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#renovation .card{
+  background:linear-gradient(135deg,#332052 0%,#65307b 45%,#a04645 100%);
+  border-color:#d878c5;box-shadow:0 18px 48px rgba(193,87,201,.20),inset 0 1px 0 rgba(255,255,255,.08)
+}
+#team .card{
+  background:linear-gradient(135deg,#0c3c55,#126c75 45%,#304b9a);
+  border-color:#54c9d8
+}
+#jobs .card{
+  background:linear-gradient(135deg,#142e54,#284a82 48%,#613b89);
+  border-color:#739fff
+}
+#notifications .card{
+  background:linear-gradient(135deg,#4a2a0b,#845117 45%,#6a285d);
+  border-color:#e4a844
+}
+#profile .card{
+  background:linear-gradient(135deg,#102f54,#273a79 48%,#542d78);
+  border-color:#7ea8ff
+}
+#settings .card{
+  background:linear-gradient(135deg,#172b48,#244d68 48%,#394275);
+  border-color:#65b8d7
+}
+/* subtle premium texture on every themed module */
+#adminTools .card:after,#success .card:after,#battery .card:after,#earth .card:after,
+#tower .card:after,#street .card:after,#wiring .card:after,#renovation .card:after,
+#team .card:after,#jobs .card:after,#notifications .card:after,#profile .card:after,#settings .card:after{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
+ background-image:radial-gradient(rgba(255,255,255,.28) .65px,transparent .65px),linear-gradient(125deg,rgba(255,255,255,.05),transparent 34%,rgba(255,255,255,.025) 65%,transparent);
+ background-size:9px 9px,100% 100%;mix-blend-mode:screen
+}
+/* theme buttons inside each module */
+#battery button:not(.secondary){background:linear-gradient(135deg,#00a878,#20d6a5,#2478e8)}
+#earth button:not(.secondary){background:linear-gradient(135deg,#b57b08,#e4bd43,#2d9c72)}
+#tower button:not(.secondary){background:linear-gradient(135deg,#147bd1,#24bce5,#7656e8)}
+#street button:not(.secondary){background:linear-gradient(135deg,#168fc4,#2bd7d0,#8356df)}
+#wiring button:not(.secondary){background:linear-gradient(135deg,#d4471e,#ff8b35,#9a3fbb)}
+#renovation button:not(.secondary){background:linear-gradient(135deg,#7b45c8,#d257ad,#e87858)}
+#adminTools button:not(.secondary){background:linear-gradient(135deg,#277dff,#8a55ed,#db4d8d)}
+#success button:not(.secondary){background:linear-gradient(135deg,#287cff,#6556e8,#b84fd4)}
+/* colorful labels */
+#battery h2{color:#7fffe2}#earth h2{color:#ffe39a}#tower h2{color:#9bdcff}
+#street h2{color:#9af4ff}#wiring h2{color:#ffc19e}#renovation h2{color:#ffc4f2}
+#adminTools h2{color:#d7c4ff}#success h2{color:#b9caff}
+</style>
+
 </head><body><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></body></html>`);
   w.document.close();
 }
