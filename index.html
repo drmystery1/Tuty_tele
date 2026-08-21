@@ -238,6 +238,11 @@ window.addEventListener("error",function(e){
 #sessionStatus{font-size:12px;margin-top:8px}
 </style>
 
+<style id="white-page-background">
+html,body{background:#ffffff!important;background-image:none!important;color:#142033!important}
+body:before{display:none!important}
+.viewHeader{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.94),transparent)!important}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -689,26 +694,6 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 </style>
 
 </head><body><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button>
-
-<script id="persistent-session-fix">
-(function(){
-  async function restoreSupabaseSession(){
-    try{
-      if(!window.db && typeof db==="undefined") return;
-      const {data,error}=await db.auth.getSession();
-      if(error){ console.warn("Session restore:",error.message); return; }
-      if(data?.session){
-        window.__teleTutySession=data.session;
-        user=data.session.user;
-        if(typeof load==="function") await load();
-      }
-    }catch(e){ console.warn("Session restore failed:",e); }
-  }
-  window.addEventListener("load",restoreSupabaseSession);
-})();
-</script>
-
-
 </body></html>`);
   w.document.close();
 }
@@ -852,8 +837,3 @@ window.addEventListener("keydown",function(e){
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
 </body></html>
-<style id="white-page-background">
-html,body{background:#ffffff!important;background-image:none!important;color:#142033!important}
-body:before{display:none!important}
-.viewHeader{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.94),transparent)!important}
-</style>
