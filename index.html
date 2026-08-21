@@ -162,6 +162,18 @@ const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co","sb_pu
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
 function toggleMenu(){ $("menu").classList.toggle("hidden") } function closeMenu(){ $("menu").classList.add("hidden") }
+async function login(){
+ const e=$("email").value.trim(), p=$("password").value;
+ const msg=$("loginMsg");
+ if(!e||!p){ if(msg) msg.textContent="Enter email and password"; return; }
+ if(msg) msg.textContent="Signing in...";
+ try{
+   const r=await db.auth.signInWithPassword({email:e,password:p});
+   if(r.error){ if(msg) msg.textContent=r.error.message; return; }
+   user=r.data.user;
+   await load();
+ }catch(err){ if(msg) msg.textContent=err?.message||"Login failed"; }
+}
 function showView(id){
  document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
  const el=document.getElementById(id); if(el)el.classList.remove("hidden");
