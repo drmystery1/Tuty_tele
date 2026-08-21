@@ -178,6 +178,34 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 #adminTools h2{color:#d7c4ff}#success h2{color:#b9caff}
 </style>
 
+
+<style id="clickable-stats">
+.stat-click{
+  cursor:pointer;
+  position:relative;
+  transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+}
+.stat-click:hover,.stat-click:focus{
+  transform:translateY(-3px);
+  filter:brightness(1.08);
+  outline:none;
+}
+.stat-click:active{transform:scale(.98)}
+.stat-click small{
+  display:block;
+  margin-top:8px;
+  color:rgba(255,255,255,.72);
+  font-size:11px;
+}
+</style>
+<script>
+document.addEventListener('keydown', function(e){
+  if((e.key==='Enter'||e.key===' ') && e.target.classList.contains('stat-click')){
+    e.preventDefault(); e.target.click();
+  }
+});
+</script>
+
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -224,7 +252,7 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
   <div id="home" class="view">
     <div class="card"><div class="row"><div id="myAvatar" class="avatar">A</div><div><b id="hello"></b><div id="role" class="muted"></div></div><div class="spacer"></div><button class="secondary" style="width:auto" onclick="navigate('notifications')">🔔 <span id="notifCount">0</span></button></div></div>
     <div id="adminHome" class="hidden">
-      <div class="grid homeKpis"><div class="stat"><span>Team Users</span><b id="users">0</b></div><div class="stat"><span>Total Jobs</span><b id="jobs">0</b></div><div class="stat"><span>Pending</span><b id="pend">0</b></div><div class="stat"><span>Completed</span><b id="done">0</b></div></div>
+      <div class="grid homeKpis"><div class="stat stat-click" onclick="navigate('team')" role="button" tabindex="0"><span>Team Users</span><b id="users">0</b><small>Tap to view team →</small></div><div class="stat stat-click" onclick="navigate('jobs')" role="button" tabindex="0"><span>Total Jobs</span><b id="jobs">0</b><small>Tap to view jobs →</small></div><div class="stat stat-click" onclick="navigate('jobs')" role="button" tabindex="0"><span>Pending</span><b id="pend">0</b><small>Tap to view pending →</small></div><div class="stat stat-click" onclick="navigate('jobs')" role="button" tabindex="0"><span>Completed</span><b id="done">0</b><small>Tap to view completed →</small></div></div>
     </div>
     <div id="techKpi" class="hidden">
       <div class="grid homeKpis"><div class="stat"><span>My Jobs</span><b id="myJobs">0</b></div><div class="stat"><span>Completed</span><b id="myDone">0</b></div><div class="stat"><span>Pending</span><b id="myPending">0</b></div><div class="stat"><span>Success Rate</span><b id="myRate">0%</b></div></div>
