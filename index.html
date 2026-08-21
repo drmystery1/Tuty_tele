@@ -249,6 +249,62 @@ body:before{display:none!important}
 .universalViewNav .navBtn{width:auto!important;flex:0 0 auto!important;margin:0!important}
 </style>
 
+
+<style id="nav-hard-fix-v20">
+/* Only the active view may show navigation. */
+.view.hidden .navBar,
+#app > .navBar,
+#app > .viewHeader + .navBar,
+.view:not(.hidden) .navBar ~ .navBar{display:none!important}
+</style>
+<script id="nav-hard-fix-script-v20">
+(function(){
+  function cleanNavigation(){
+    const app=document.getElementById("app");
+    if(!app) return;
+
+    // Hide every navigation row that is not inside the active view.
+    app.querySelectorAll(".navBar").forEach(n=>{
+      const owner=n.closest(".view");
+      const active=owner && !owner.classList.contains("hidden");
+      n.style.display=active ? "" : "none";
+    });
+
+    // Active view: keep exactly one navigation row.
+    const active=app.querySelector(".view:not(.hidden)");
+    if(!active) return;
+
+    const rows=[...active.querySelectorAll(".navBar")];
+    rows.slice(1).forEach(n=>n.remove());
+
+    let nav=rows[0];
+    if(!nav && active.id!=="home"){
+      nav=document.createElement("div");
+      nav.className="navBar universalViewNav";
+      nav.innerHTML='<button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate(\'home\')">🏠 Home</button>';
+      active.insertBefore(nav,active.firstElementChild);
+    }
+
+    if(nav && active.id!=="home"){
+      nav.innerHTML='<button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate(\'home\')">🏠 Home</button>';
+      nav.style.display="";
+    }
+  }
+
+  window.teleTutyCleanNavigation=cleanNavigation;
+  document.addEventListener("DOMContentLoaded",cleanNavigation);
+
+  const oldShowView=window.showView;
+  if(typeof oldShowView==="function"){
+    window.showView=function(id){
+      const result=oldShowView(id);
+      setTimeout(cleanNavigation,0);
+      return result;
+    };
+  }
+})();
+</script>
+
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
