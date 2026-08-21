@@ -227,6 +227,12 @@ window.addEventListener("error",function(e){
   if(active && e?.message) console.warn("Tele Tuty UI:",e.message);
 });
 </script>
+
+<style id="single-nav-fix">
+.universalViewNav{display:flex!important;gap:8px!important;margin:0 0 10px!important}
+.universalViewNav .navBtn{width:auto!important;flex:0 0 auto!important}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
