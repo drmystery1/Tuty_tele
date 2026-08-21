@@ -765,7 +765,7 @@ img{border-radius:14px}
         <div class="kpiGrid four">
           <button class="dashKpi blue" onclick="navigate('team')"><span class="kpiIcon">♙</span><strong id="users">0</strong><small>Total Users</small></button>
           <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="totalJobsCount">0</strong><small>Total Jobs</small></button>
-          <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="done">0</strong><small>Completed</small></button>
+          <button class="dashKpi green" onclick="openJobsFiltered('completed')"><span class="kpiIcon">✓</span><strong id="done">0</strong><small>Completed</small></button>
           <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="pend">0</strong><small>Pending / Open</small></button>
         </div>
 
@@ -807,10 +807,10 @@ img{border-radius:14px}
 
       <div id="engineerDashboard" class="rolePane hidden">
         <div class="kpiGrid four">
-          <button class="dashKpi blue" onclick="navigate('jobs')"><span class="kpiIcon">▣</span><strong id="engJobs">0</strong><small>Total Jobs</small></button>
-          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="engPending">0</strong><small>Pending</small></button>
-          <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="engDone">0</strong><small>Completed</small></button>
-          <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="engNotDone">0</strong><small>Not Completed</small></button>
+          <button class="dashKpi blue" onclick="openJobsFiltered('all')"><span class="kpiIcon">▣</span><strong id="engJobs">0</strong><small>Total Jobs</small></button>
+          <button class="dashKpi orange" onclick="openJobsFiltered('pending')"><span class="kpiIcon">◷</span><strong id="engPending">0</strong><small>Pending</small></button>
+          <button class="dashKpi green" onclick="openJobsFiltered('completed')"><span class="kpiIcon">✓</span><strong id="engDone">0</strong><small>Completed</small></button>
+          <button class="dashKpi red" onclick="openJobsFiltered('not_completed')"><span class="kpiIcon">!</span><strong id="engNotDone">0</strong><small>Not Completed</small></button>
         </div>
         <div class="featureRibbon">
           <button onclick="navigate('jobs')"><b>＋</b><span>Create New Job</span><small>Create and assign a new job</small></button>
@@ -826,9 +826,9 @@ img{border-radius:14px}
 
       <div id="technicianDashboard" class="rolePane hidden">
         <div class="kpiGrid four">
-          <button class="dashKpi blue" onclick="navigate('jobs')"><span class="kpiIcon">▣</span><strong id="myJobs">0</strong><small>Assigned Jobs</small></button>
-          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="myPending">0</strong><small>Pending</small></button>
-          <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="myDone">0</strong><small>Completed</small></button>
+          <button class="dashKpi blue" onclick="openJobsFiltered('all')"><span class="kpiIcon">▣</span><strong id="myJobs">0</strong><small>Assigned Jobs</small></button>
+          <button class="dashKpi orange" onclick="openJobsFiltered('pending')"><span class="kpiIcon">◷</span><strong id="myPending">0</strong><small>Pending</small></button>
+          <button class="dashKpi green" onclick="openJobsFiltered('completed')"><span class="kpiIcon">✓</span><strong id="myDone">0</strong><small>Completed</small></button>
           <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="myRate">0%</strong><small>Success Rate</small></button>
         </div>
         <div class="panel">
@@ -915,7 +915,7 @@ img{border-radius:14px}
       <div class="row"><button id="createJobBtn" onclick="engineerCreateJob()">＋ Create & Assign Job</button><button class="secondary" onclick="clearEngineerJobForm()">Clear</button></div>
       <p id="engineerJobMsg" class="muted"></p>
     </div>
-    <div class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div id="jobsList"></div></div>
+    <div class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" onclick="setJobFilter('all')">All Jobs</button><button type="button" data-status="pending" onclick="setJobFilter('pending')">Pending</button><button type="button" data-status="completed" onclick="setJobFilter('completed')">Completed</button><button type="button" data-status="not_completed" onclick="setJobFilter('not_completed')">Not Completed</button><button type="button" data-status="in_progress" onclick="setJobFilter('in_progress')">In Progress</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
   </div>
 
   <div id="success" class="view hidden">
@@ -1158,10 +1158,16 @@ function technicianOptions(selected="") {
   return `<option value="">Unassigned</option>` + engineerTechCache.map(x=>`<option value="${esc(x.id)}" ${x.id===selected?"selected":""}>${esc(x.full_name||"Technician")}${x.phone?` • ${esc(x.phone)}`:""}</option>`).join("");
 }
 
+let currentJobFilter="all";
+function setJobFilter(status="all"){ currentJobFilter=status; document.querySelectorAll("#jobStatusTabs button").forEach(b=>b.classList.toggle("active",b.dataset.status===status)); loadJobs(); }
+function openJobsFiltered(status="all"){ currentJobFilter=status; navigate("jobs"); setTimeout(()=>setJobFilter(status),0); }
+function applyJobFilter(rows){ if(currentJobFilter==="all") return rows; return rows.filter(j=>String(j.status||"pending")==currentJobFilter); }
+function labelFilter(s){ return String(s||"all").replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase()); }
+
 async function loadJobs(){
   const box=$("jobsList");
   if(!box) return;
-  box.innerHTML=`<div class="empty">Loading jobs…</div>`;
+  box.innerHTML=`<div class="empty">Loading jobs…</div>`; document.querySelectorAll("#jobStatusTabs button").forEach(b=>b.classList.toggle("active",b.dataset.status===currentJobFilter));
   try{
     if(["engineer","admin"].includes(profile?.role) && !engineerTechCache.length) await loadEngineerTechnicians();
     let q=db.from("jobs").select("id,job_code,job_term,work_description,location,status,assigned_worker,assigned_engineer,created_by,customer_id,created_at,scheduled_date,scheduled_time,worker_remarks,pending_reason").order("created_at",{ascending:false}).limit(100);
@@ -1169,7 +1175,8 @@ async function loadJobs(){
     else if(profile?.role==="engineer") q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);
     const r=await q;
     if(r.error) throw r.error;
-    const rows=r.data||[];
+    const rows=applyJobFilter(r.data||[]);
+    if($("jobsFilterLabel")) $("jobsFilterLabel").textContent = currentJobFilter==="all" ? "Showing all jobs" : `Showing ${labelFilter(currentJobFilter)} jobs only`;
     if(!rows.length){box.innerHTML=`<div class="empty">No jobs found.</div>`;return;}
 
     const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))];
