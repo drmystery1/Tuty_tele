@@ -698,7 +698,7 @@ img{border-radius:14px}
   <div id="team" class="view hidden">
 <div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team</h1><div id="teamList"></div></div></div>
+<div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Manage technicians and engineers. Removing a user permanently removes their login account.</p></div><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
 <div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
 
@@ -870,6 +870,55 @@ function renderRecentJobs(rows){
  }).join("");
 }
 async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
+async function loadTeam(){
+  const box=$("teamList");
+  if(!box) return;
+  if(profile?.role!=="admin"){
+    box.innerHTML=`<div class="empty">Admin access required.</div>`;
+    return;
+  }
+  box.innerHTML=`<div class="empty">Loading users…</div>`;
+  try{
+    const r=await db.from("profiles").select("id,full_name,role,phone,approval_status,active,created_at").order("created_at",{ascending:false});
+    if(r.error) throw r.error;
+    const users=r.data||[];
+    if(!users.length){box.innerHTML=`<div class="empty">No users found.</div>`;return;}
+    box.innerHTML=users.map(x=>{
+      const role=x.role==="worker"?"Technician":(x.role||"User");
+      const active=x.active!==false && String(x.approval_status||"approved").toLowerCase()==="approved";
+      const status=active?"Active":"Inactive / Pending";
+      const isSelf=x.id===user.id;
+      return `<div class="teamUser cardMini">
+        <div class="avatar">${esc((x.full_name||"U").charAt(0).toUpperCase())}</div>
+        <div class="teamUserInfo"><b>${esc(x.full_name||"User")}</b><span>${esc(role)} • ${esc(status)}</span><small>${esc(x.phone||"No phone added")}</small></div>
+        <div class="teamUserActions">${isSelf?`<span class="pill">You</span>`:`<button class="bad removeUserBtn" onclick="removeUser('${esc(x.id)}',${JSON.stringify(x.full_name||"User")})">Remove</button>`}</div>
+      </div>`;
+    }).join("");
+  }catch(e){
+    console.error("Team load error",e);
+    box.innerHTML=`<div class="empty">Could not load users: ${esc(e?.message||e)}</div>`;
+  }
+}
+async function removeUser(userId,name){
+  if(profile?.role!=="admin") return alert("Admin access required");
+  if(!userId || userId===user?.id) return alert("You cannot remove your own account.");
+  const ok=confirm(`Remove ${name}?\n\nThis permanently deletes the user's login account. This action cannot be undone.`);
+  if(!ok) return;
+  const box=$("teamList");
+  try{
+    document.querySelectorAll(".removeUserBtn").forEach(b=>b.disabled=true);
+    const r=await db.functions.invoke("admin-remove-user",{body:{user_id:userId}});
+    if(r.error) throw new Error(r.error.message||"Remove request failed");
+    if(r.data?.error) throw new Error(r.data.error);
+    alert(`${name} removed successfully.`);
+    await loadTeam();
+    await loadHome();
+  }catch(e){
+    console.error("Remove user error",e);
+    alert("Could not remove user: "+(e?.message||e));
+    await loadTeam();
+  }
+}
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
 let successCache=[];
 async function loadSuccessRate(){
@@ -1123,6 +1172,9 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 #battery h2{color:#7fffe2}#earth h2{color:#ffe39a}#tower h2{color:#9bdcff}
 #street h2{color:#9af4ff}#wiring h2{color:#ffc19e}#renovation h2{color:#ffc4f2}
 #adminTools h2{color:#d7c4ff}#success h2{color:#b9caff}
+
+.teamUser{display:flex;align-items:center;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(88,160,255,.22);border-radius:16px;background:linear-gradient(135deg,rgba(18,43,70,.95),rgba(37,23,69,.92));box-shadow:0 8px 24px rgba(0,0,0,.14)}
+.cardMini{width:100%;box-sizing:border-box}.teamUserInfo{flex:1;min-width:0}.teamUserInfo b{display:block;font-size:16px}.teamUserInfo span,.teamUserInfo small{display:block;color:var(--muted);margin-top:3px}.teamUserInfo small{font-size:12px;overflow:hidden;text-overflow:ellipsis}.teamUserActions{width:100px}.teamUserActions .pill{display:block;text-align:center}.removeUserBtn{margin:0!important;padding:9px 8px!important;font-size:12px!important;background:linear-gradient(135deg,#d83b51,#ff5c6c)!important}.removeUserBtn:disabled{opacity:.55;cursor:wait}@media(max-width:520px){.teamUser{align-items:flex-start}.teamUserActions{width:84px}.teamUserActions .removeUserBtn{font-size:11px!important}}
 </style>
 
 </head><body><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button>
