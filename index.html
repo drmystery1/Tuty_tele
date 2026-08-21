@@ -249,61 +249,135 @@ body:before{display:none!important}
 .universalViewNav .navBtn{width:auto!important;flex:0 0 auto!important;margin:0!important}
 </style>
 
-
-<style id="nav-hard-fix-v20">
-/* Only the active view may show navigation. */
-.view.hidden .navBar,
-#app > .navBar,
-#app > .viewHeader + .navBar,
-.view:not(.hidden) .navBar ~ .navBar{display:none!important}
+<style id="premium-v21">
+:root{
+  --glass:rgba(11,24,42,.78);
+  --glass2:rgba(17,32,54,.82);
+  --stroke:rgba(130,196,255,.22);
+  --glow:rgba(61,168,255,.18);
+}
+body{letter-spacing:.01em}
+.wrap{max-width:1120px;padding:18px 16px 42px}
+.top{height:66px;padding:0 18px}
+.brand{font-size:19px;letter-spacing:.4px}
+.menuBtn{width:46px!important;height:46px!important;border-radius:15px!important}
+.card{
+  border-radius:22px;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-color:var(--stroke);
+  box-shadow:0 18px 45px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.055);
+}
+.hero.compactHero{
+  min-height:112px;
+  flex-direction:row;
+  padding:18px 20px;
+  border-radius:24px;
+}
+.compactHero .heroIcon{font-size:34px}
+.compactHero h2{font-size:21px;margin:0}
+.compactHero .muted{margin:4px 0 0}
+#home>.card:first-child{
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(10,33,56,.92),rgba(29,21,55,.88));
+}
+.homeKpis{gap:13px}
+.homeKpis .stat{
+  min-height:118px;
+  padding:17px;
+  border-radius:19px;
+  overflow:hidden;
+}
+.homeKpis .stat b{font-size:30px}
+.homeKpis .stat small{opacity:.72}
+#home .card[style*="PERFORMANCE"]{
+  border-radius:24px!important;
+  padding:20px;
+  background:linear-gradient(135deg,rgba(9,42,70,.96),rgba(20,34,72,.94),rgba(69,28,82,.88))!important;
+  border-color:rgba(114,186,255,.32);
+}
+.navBar.universalViewNav{
+  position:sticky;
+  top:66px;
+  z-index:22;
+  display:flex!important;
+  gap:9px!important;
+  padding:7px 0 12px;
+  margin:0 0 4px!important;
+  background:linear-gradient(180deg,rgba(5,12,23,.96),rgba(5,12,23,.72),transparent);
+}
+.navBar.universalViewNav .navBtn{
+  min-width:92px;
+  min-height:42px;
+  border-radius:13px!important;
+}
+.viewHeader{display:none!important}
+.featureGrid{gap:14px}
+.feature{
+  min-height:165px;
+  border-radius:20px!important;
+  transform:translateZ(0);
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
+}
+.feature:active{transform:scale(.985)}
+.menu{
+  width:258px;
+  border-radius:19px;
+  padding:9px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.menu button{min-height:42px;border-radius:12px!important}
+input,select,textarea{
+  min-height:46px;
+  border-radius:14px;
+}
+textarea{min-height:100px}
+button{
+  min-height:44px;
+  border-radius:14px;
+  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease;
+}
+button:active{transform:scale(.985)}
+.person{
+  padding:13px 5px;
+}
+.empty{
+  padding:28px 18px;
+  border:1px dashed rgba(123,186,231,.25);
+}
+.progress{height:10px}
+#adminTools .card:first-of-type,
+#success .card,
+#battery .card,
+#earth .card,
+#tower .card,
+#street .card,
+#wiring .card,
+#renovation .card,
+#team .card,
+#jobs .card,
+#notifications .card,
+#profile .card,
+#settings .card{
+  border-radius:22px;
+}
+@media(max-width:600px){
+  .wrap{padding:10px 10px 32px}
+  .top{height:60px;padding:0 12px}
+  .compactHero{min-height:104px!important}
+  .compactHero .heroIcon{font-size:30px}
+  .compactHero h2{font-size:19px}
+  .homeKpis{gap:10px}
+  .homeKpis .stat{min-height:104px;padding:14px}
+  .homeKpis .stat b{font-size:27px}
+  .navBar.universalViewNav{top:60px}
+  .navBar.universalViewNav .navBtn{min-width:86px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+}
 </style>
-<script id="nav-hard-fix-script-v20">
-(function(){
-  function cleanNavigation(){
-    const app=document.getElementById("app");
-    if(!app) return;
-
-    // Hide every navigation row that is not inside the active view.
-    app.querySelectorAll(".navBar").forEach(n=>{
-      const owner=n.closest(".view");
-      const active=owner && !owner.classList.contains("hidden");
-      n.style.display=active ? "" : "none";
-    });
-
-    // Active view: keep exactly one navigation row.
-    const active=app.querySelector(".view:not(.hidden)");
-    if(!active) return;
-
-    const rows=[...active.querySelectorAll(".navBar")];
-    rows.slice(1).forEach(n=>n.remove());
-
-    let nav=rows[0];
-    if(!nav && active.id!=="home"){
-      nav=document.createElement("div");
-      nav.className="navBar universalViewNav";
-      nav.innerHTML='<button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate(\'home\')">🏠 Home</button>';
-      active.insertBefore(nav,active.firstElementChild);
-    }
-
-    if(nav && active.id!=="home"){
-      nav.innerHTML='<button class="secondary navBtn" onclick="goBack()">← Back</button><button class="secondary navBtn" onclick="navigate(\'home\')">🏠 Home</button>';
-      nav.style.display="";
-    }
-  }
-
-  window.teleTutyCleanNavigation=cleanNavigation;
-  document.addEventListener("DOMContentLoaded",cleanNavigation);
-
-  const oldShowView=window.showView;
-  if(typeof oldShowView==="function"){
-    window.showView=function(id){
-      const result=oldShowView(id);
-      setTimeout(cleanNavigation,0);
-      return result;
-    };
-  }
-})();
-</script>
 
 </head>
 <body>
@@ -569,31 +643,33 @@ async function login(){
    await load();
  }catch(err){ if(msg) msg.textContent=err?.message||"Login failed"; }
 }
-function showView(id){
- document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
- const el=document.getElementById(id); if(el)el.classList.remove("hidden");
- closeMenu();
- if(id==="notifications")loadNotifications();
- if(id==="team")loadTeam();
- if(id==="jobs")loadJobs();
- if(id==="success")loadSuccessRate();
- if(id==="street")loadStreet();
- if(id==="battery")loadBattery();
- if(id==="earth")loadEarth();
- if(id==="renovation")loadRenovation();
- if(id==="backup" && typeof loadBackupSummary==="function")loadBackupSummary();
- window.scrollTo(0,0);
-}
 async function loadHome(){
  const j=await db.from("jobs").select("id,status,assigned_worker");const rows=j.data||[];
  $("jobs").textContent=rows.length;$("pend").textContent=rows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;$("done").textContent=rows.filter(x=>x.status==="completed").length;
  const p=await db.from("profiles").select("id");$("users").textContent=(p.data||[]).length;
- if(profile.role==="worker"){ $("techKpi").classList.remove("hidden");const mine=rows.filter(x=>x.assigned_worker===user.id);const d=mine.filter(x=>x.status==="completed").length;$("myJobs").textContent=mine.length;$("myDone").textContent=d;$("myPending").textContent=mine.length-d;$("myRate").textContent=mine.length?Math.round(d/mine.length*100)+"%":"0%"; }
+ if(profile.role==="worker"){
+   $("techKpi").classList.remove("hidden");
+   const mine=rows.filter(x=>x.assigned_worker===user.id);
+   const d=mine.filter(x=>x.status==="completed").length;
+   const rate=mine.length?Math.round(d/mine.length*100):0;
+   $("myJobs").textContent=mine.length;
+   $("myDone").textContent=d;
+   $("myPending").textContent=mine.length-d;
+   $("myRate").textContent=rate+"%";
+   $("homeRate").textContent=rate+"%";
+   $("homeRateBar").style.width=rate+"%";
+ } else {
+   const techJobs=rows.filter(x=>x.assigned_worker);
+   const d=techJobs.filter(x=>x.status==="completed").length;
+   const rate=techJobs.length?Math.round(d/techJobs.length*100):0;
+   $("homeRate").textContent=rate+"%";
+   $("homeRateBar").style.width=rate+"%";
+ }
  if(profile.role==="admin")$("adminHome").classList.remove("hidden");
  $("rolePanel").innerHTML=profile.role==="admin"?`<h3>Admin Command Center</h3><p class="muted">Use ⋮ for Admin Controls, Team, Jobs and Technician Success Rate.</p>`:profile.role==="engineer"?`<h3>Engineer Workspace</h3><p class="muted">Use modules above for surveys and maintenance, and ⋮ → Jobs for job management.</p>`:`<h3>Technician Workspace</h3><p class="muted">Use ⋮ → Jobs to update assigned work and ⋮ → Success Rate to see performance.</p>`;
  if(profile.role==="admin")$("adminTools").classList.remove("hidden");
 }
-async function loadNotifications(){const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="avatar">🔔</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}
+async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="avatar">🔔</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}
 async function loadTeam(){const r=await db.from("profiles").select("id,full_name,role,approval_status,active,phone").order("created_at",{ascending:false});const a=r.data||[];$("teamList").innerHTML=a.map(x=>`<div class="person"><div class="avatar">${esc((x.full_name||"?")[0])}</div><div><b>${esc(x.full_name)}</b><div class="muted">${x.role==="worker"?"Technician":x.role} • ${x.approval_status}</div></div></div>`).join("")||`<div class="empty">No team members.</div>`}
 async function loadJobs(){let q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);if(profile.role==="worker")q=q.eq("assigned_worker",user.id);else if(profile.role==="engineer")q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);const r=await q;$("jobsList").innerHTML=(r.data||[]).map(j=>`<div class="card job ${j.status==="completed"?"done":"pending"}"><div class="row"><div><b>${esc(j.job_term||j.job_code)}</b><h3>${esc(j.work_description)}</h3><div class="muted">📍 ${esc(j.location||"")}</div></div><div class="spacer"></div><span class="pill">${esc(j.status)}</span></div>${j.status!=="completed"&&profile.role==="worker"?`<textarea id="rm${j.id}" placeholder="Remarks"></textarea><textarea id="pr${j.id}" placeholder="Pending reason if not completed"></textarea><div class="row"><button class="ok" onclick="updateJob(${j.id},'completed')">✓ Completed</button><button class="warn" onclick="updateJob(${j.id},'not_completed')">⏳ Pending</button></div>`:""}${j.worker_remarks?`<p><b>Remarks:</b> ${esc(j.worker_remarks)}</p>`:""}${j.pending_reason?`<p><b>Pending:</b> ${esc(j.pending_reason)}</p>`:""}</div>`).join("")||`<div class="empty">No jobs found.</div>`}
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
@@ -623,7 +699,7 @@ async function fetchBackupData(){
     out.tables[t]=r.data||[];
   }
   return out;
-}
+  }catch(e){const el=$("notificationsList");if(el)el.innerHTML=`<div class="empty">Unable to load data. $Please retry.</div>`;console.warn("loadNotifications",e)}}
 async function downloadBackup(){
   if(!user)return alert("Login required");
   try{
@@ -903,10 +979,7 @@ db.auth.onAuthStateChange((event, session)=>{
     }
   }else if(session && (event==="SIGNED_IN" || event==="TOKEN_REFRESHED")){
     window.__teleTutySession=session;
-    if(event==="SIGNED_IN" && !signingOut){
-      user=session.user;
-      if(typeof load==="function") load();
-    }
+    user=session.user;
   }
 });
 
