@@ -233,6 +233,11 @@ window.addEventListener("error",function(e){
 .universalViewNav .navBtn{width:auto!important;flex:0 0 auto!important}
 </style>
 
+
+<style id="session-stability">
+#sessionStatus{font-size:12px;margin-top:8px}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -359,7 +364,7 @@ window.addEventListener("error",function(e){
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co","sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe");
+const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 let navHistory=["home"], routerBusy=false;
 function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
@@ -683,7 +688,65 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 #adminTools h2{color:#d7c4ff}#success h2{color:#b9caff}
 </style>
 
-</head><body><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></body></html>`);
+</head><body><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button>
+<script id="persistent-session-fix">
+/*
+ * Tele Tuty persistent Supabase session.
+ * Supabase stores and refreshes the session; we only restore it on startup.
+ */
+(function () {
+  let sessionBooted = false;
+
+  async function restoreSupabaseSession() {
+    if (sessionBooted) return;
+    sessionBooted = true;
+
+    try {
+      if (!window.supabase || !supabase.auth) return;
+
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.warn("Session restore:", error.message);
+        return;
+      }
+
+      if (data && data.session) {
+        window.__teleTutySession = data.session;
+        if (typeof load === "function") {
+          await load(data.session);
+        }
+      }
+    } catch (e) {
+      console.warn("Session restore failed:", e);
+    }
+  }
+
+  window.addEventListener("load", restoreSupabaseSession);
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && window.supabase && supabase.auth) {
+      supabase.auth.getSession().then(({data}) => {
+        if (data && data.session) window.__teleTutySession = data.session;
+      }).catch(() => {});
+    }
+  });
+})();
+</script>
+
+
+<script id="navigation-session-guard">
+(function(){
+  window.addEventListener("popstate", function(){
+    try {
+      if (window.__teleTutySession && typeof load === "function") {
+        load(window.__teleTutySession);
+      }
+    } catch(e) {}
+  });
+})();
+</script>
+
+</body></html>`);
   w.document.close();
 }
 async function loadBackupSummary(){
