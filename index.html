@@ -219,7 +219,7 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 <section id="pending" class="auth hidden"><div class="card" style="text-align:center"><div style="font-size:50px">⏳</div><h2>Approval Pending</h2><p class="muted">Your account is waiting for Admin approval.</p><button class="secondary" onclick="load()">Check Approval</button><button class="secondary" onclick="logout()">Logout</button></div></section>
 
 <section id="app" class="hidden">
-  <div class="card hero"><div class="heroIcon">🛰️</div><div><h2 style="margin:0">Field Operations Center</h2><p class="muted" style="margin:5px 0">Live jobs, maintenance, surveys and technician performance</p></div><div class="spacer"></div><span id="rolePill" class="pill"></span></div>
+  <div class="card hero compactHero"><div class="heroIcon">🛰️</div><div class="teamInfo"><h2>Field Operations</h2><p class="muted">Jobs • Maintenance • Surveys • Performance</p></div><span id="rolePill" class="pill"></span></div>
 
   <div id="home" class="view">
     <div class="card"><div class="row"><div id="myAvatar" class="avatar">A</div><div><b id="hello"></b><div id="role" class="muted"></div></div><div class="spacer"></div><button class="secondary" style="width:auto" onclick="navigate('notifications')">🔔 <span id="notifCount">0</span></button></div></div>
@@ -689,3 +689,8 @@ document.addEventListener("click",function(e){
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
 </body></html>
+<style id="white-page-background">
+html,body{background:#ffffff!important;background-image:none!important;color:#142033!important}
+body:before{display:none!important}
+.viewHeader{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.94),transparent)!important}
+</style>
