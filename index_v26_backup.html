@@ -5,8 +5,6 @@
 <meta name="theme-color" content="#07111f"><link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="tele-tuty-logo.png"><title>Tele Tuty</title>
 <style>
-/* V34 render guard: style elements must never become visible text */
-style{display:none!important}
 :root{--bg:#06101c;--panel:#0c1b2c;--panel2:#10253b;--line:#1c3853;--text:#eff8ff;--muted:#8fa9c0;--blue:#269fff;--cyan:#32e1d2;--green:#31d58a;--orange:#ffb648;--red:#ff5d6d}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#12345c 0,#06101c 42%,#030911 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}.top{height:64px;position:sticky;top:0;z-index:30;display:flex;align-items:center;padding:0 16px;background:#061321e8;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{font-weight:900;font-size:20px}.topspace{flex:1}.menuBtn{width:44px!important;height:44px;margin:0!important;border-radius:13px!important;background:#102b47!important;font-size:23px!important}.wrap{max-width:1180px;margin:auto;padding:16px}.auth{max-width:440px;margin:7vh auto}.loginHero{text-align:center;padding:24px}.loginHero img{width:min(230px,70vw);border-radius:28px;box-shadow:0 20px 60px #0007}.card{background:linear-gradient(180deg,#0d1e31f7,#091728f7);border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 18px 45px #0005}.hero{display:flex;align-items:center;gap:18px;padding:22px;background:linear-gradient(135deg,#0e2b49,#0a1b2d)}.heroIcon{font-size:42px}.muted{color:var(--muted);font-size:13px}.row{display:flex;gap:9px;align-items:center}.row>*{flex:1}.spacer{flex:1}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#103b66,#0b2037);color:#7eeaff;font-weight:900;border:1px solid #285e86;flex:none}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.homeKpis{margin-top:4px}.homeKpis .stat{min-height:112px}.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:12px}.sectionTitle h3{margin:0}.viewHeader{display:flex;align-items:center;gap:8px;margin:0 0 12px;position:sticky;top:64px;z-index:20;padding:7px 0;background:linear-gradient(180deg,#06101cf5,#06101cd9,transparent)}.viewHeader .navBtn{box-shadow:0 8px 20px #0004}.menuGroup{padding:5px 4px}.menuGroupTitle{padding:10px 10px 6px;color:#6fdfff;font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}.menu button{font-size:14px}.menu .bad{color:#ffd9de;background:rgba(216,59,81,.12)}.stat{padding:15px;border:1px solid var(--line);border-radius:16px;background:#081727}
 /* Distinct dashboard KPI colors */
@@ -521,90 +519,6 @@ img{border-radius:14px}
 }
 </style>
 
-
-<style id="v26-royal-nav-hard-fix">
-/* V26: navigation must always be visible and must not depend on page/router state */
-#globalPageNav.globalPageNav{
-  display:flex!important;
-  visibility:visible!important;
-  opacity:1!important;
-  position:sticky!important;
-  top:10px!important;
-  z-index:999!important;
-  width:100%!important;
-  min-height:62px!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  gap:10px!important;
-  margin:10px 0 16px!important;
-  padding:8px 10px!important;
-  border-radius:20px!important;
-  background:linear-gradient(135deg,#0b2140 0%,#27347a 48%,#6a267d 100%)!important;
-  border:1px solid rgba(133,205,255,.55)!important;
-  box-shadow:0 12px 32px rgba(50,35,125,.28),inset 0 1px 0 rgba(255,255,255,.16)!important;
-}
-#globalPageNav.globalPageNav .royalNavBtn{
-  display:flex!important;
-  visibility:visible!important;
-  opacity:1!important;
-  flex:0 0 auto!important;
-  width:auto!important;
-  min-width:104px!important;
-  height:46px!important;
-  margin:0!important;
-  padding:0 16px!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:8px!important;
-  border-radius:15px!important;
-  color:#fff!important;
-  font-size:14px!important;
-  font-weight:900!important;
-  background:linear-gradient(135deg,#164d83,#4b2b9b)!important;
-  border:1px solid rgba(165,224,255,.45)!important;
-  box-shadow:0 7px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.15)!important;
-}
-#globalPageNav.globalPageNav .royalNavBtn.home{
-  background:linear-gradient(135deg,#234f8e,#7132a4 60%,#b33c83)!important;
-  border-color:rgba(255,192,246,.5)!important;
-}
-#globalPageNav.globalPageNav .royalIcon{font-size:25px!important;color:#b9efff!important}
-#globalPageNav.globalPageNav .home .royalIcon{color:#ffe27a!important}
-#globalPageNav.globalPageNav .royalNavTitle{
-  display:block!important;visibility:visible!important;opacity:1!important;
-  flex:1 1 auto!important;min-width:0!important;text-align:center!important;
-  color:#fff!important;font-size:14px!important;font-weight:900!important;
-  text-shadow:0 2px 12px rgba(0,0,0,.35)!important;
-}
-#globalPageNav.globalPageNav .crown{color:#ffd85c!important}
-/* never let a hidden-class accidentally kill the global navigation */
-#globalPageNav.globalPageNav.hidden{display:flex!important}
-.compactHero h2,.compactHero .muted,.compactHero .teamInfo{color:#fff!important}
-@media(max-width:520px){
-  #globalPageNav.globalPageNav{top:6px!important;min-height:58px!important;padding:7px!important;margin:8px 0 14px!important;border-radius:17px!important}
-  #globalPageNav.globalPageNav .royalNavBtn{min-width:88px!important;height:44px!important;padding:0 11px!important;font-size:13px!important}
-  #globalPageNav.globalPageNav .royalNavTitle{font-size:11px!important}
-  #globalPageNav.globalPageNav .royalIcon{font-size:23px!important}
-}
-</style>
-
-<style id="v29-maintenance-ui">
-.maintenanceCenter{margin-top:14px;background:linear-gradient(135deg,rgba(8,29,49,.98),rgba(29,20,58,.96));border:1px solid rgba(116,190,255,.24)}
-.maintenanceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}.maintenanceTile.tower{background:linear-gradient(135deg,#283c87,#6b2f9c)!important}.maintenanceTile.wiring{background:linear-gradient(135deg,#8a3a19,#8d1f4b)!important}.maintenanceTile.renovation{background:linear-gradient(135deg,#4e2d7f,#9b2c72)!important}
-.menu{max-height:calc(100vh - 76px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}.menu button{display:block!important;visibility:visible!important;min-height:42px!important;color:#edf8ff!important}.menuGroupTitle,.menuTitle{color:#fff!important}
-@media(max-width:600px){.maintenanceGrid{grid-template-columns:1fr 1fr}.maintenanceTile{min-height:96px!important}}
-@media(max-width:380px){.maintenanceGrid{grid-template-columns:1fr}.maintenanceTile{min-height:82px!important}}
-</style>
-<style id="v28-stability-ui">
-.jobCard{padding:15px;margin:10px 0;border:1px solid rgba(126,198,255,.24);border-radius:18px;background:linear-gradient(135deg,rgba(13,31,53,.96),rgba(35,24,66,.94));box-shadow:0 8px 22px rgba(0,0,0,.14)}
-.jobTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.jobTop span{display:block}.jobBody{display:grid;gap:5px;margin-top:10px}.jobActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.jobActions input{grid-column:1/-1}.approvalRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(126,198,255,.22);border-radius:16px;background:rgba(8,24,43,.72)}.approvalActions{display:flex;gap:7px}.approvalActions button{margin:0!important;padding:9px 11px!important}.royalNavBtn[disabled]{opacity:.42;filter:grayscale(.5);pointer-events:none}@media(max-width:520px){.approvalRow{align-items:flex-start;flex-direction:column}.approvalActions{width:100%}.approvalActions button{flex:1}.jobActions{grid-template-columns:1fr}.jobActions input{grid-column:auto}}
-</style>
-
-<style id="v34-settings-fix">
-#settings .settingsHero{background:linear-gradient(135deg,#0b2440,#211044)!important}
-#settings .card{border-color:rgba(105,190,255,.22)}
-#settings h3{margin-top:0}
-</style>
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -625,10 +539,8 @@ img{border-radius:14px}
   <button onclick="navigate('jobs')">📋 Jobs</button>
   <button onclick="navigate('success')">🏆 Technician Success Rate</button>
   <button onclick="navigate('notifications')">🔔 Notifications</button>
-  <div class="menuDivider"></div>
-  <div class="menuGroupTitle">Account</div>
   <button onclick="navigate('profile')">👤 Profile</button>
-  <button onclick="navigate('settings')">⚙️ Settings & Password</button>
+  <button onclick="navigate('settings')">⚙️ Settings</button>
   <button onclick="navigate('backup')">💾 Backup & PDF</button>
   <div id="adminMenu" class="hidden">
     <div class="menuDivider"></div>
@@ -682,8 +594,8 @@ img{border-radius:14px}
 
       <div id="adminDashboard" class="rolePane hidden">
         <div class="kpiGrid four">
-          <button class="dashKpi blue" onclick="navigate('team')"><span class="kpiIcon">♙</span><strong id="users">0</strong><small>Total Users</small></button>
-          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="totalJobsCount">0</strong><small>Total Jobs</small></button>
+          <button class="dashKpi blue" onclick="navigate('jobs')"><span class="kpiIcon">▣</span><strong id="users">0</strong><small>Total Users</small></button>
+          <button class="dashKpi orange" onclick="navigate('jobs')"><span class="kpiIcon">◷</span><strong id="jobs">0</strong><small>Total Jobs</small></button>
           <button class="dashKpi green" onclick="navigate('jobs')"><span class="kpiIcon">✓</span><strong id="done">0</strong><small>Completed</small></button>
           <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="pend">0</strong><small>Pending / Open</small></button>
         </div>
@@ -709,18 +621,6 @@ img{border-radius:14px}
         <div class="panel">
           <div class="panelHead"><h2>Users Management</h2><button class="textBtn" onclick="navigate('team')">View All Users</button></div>
           <div id="homeUsers" class="miniUsers"></div>
-        </div>
-      </div>
-
-      <div class="panel maintenanceCenter" id="maintenanceCenter">
-        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery, earth pit, tower and electrical work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
-        <div class="maintenanceGrid">
-          <button class="maintenanceTile street" onclick="navigate('street')"><span>💡</span><b>Street Light</b><small>Survey & faults</small></button>
-          <button class="maintenanceTile battery" onclick="navigate('battery')"><span>🔋</span><b>Battery</b><small>Maintenance & due dates</small></button>
-          <button class="maintenanceTile earth" onclick="navigate('earth')"><span>🌍</span><b>Earth Pit</b><small>Resistance & condition</small></button>
-          <button class="maintenanceTile tower" onclick="navigate('tower')"><span>📡</span><b>Telecom Tower</b><small>Tower field work</small></button>
-          <button class="maintenanceTile wiring" onclick="navigate('wiring')"><span>⚡</span><b>Wiring Fault</b><small>Electrical faults</small></button>
-          <button class="maintenanceTile renovation" onclick="navigate('renovation')"><span>🛠️</span><b>Renovation</b><small>Repair & upgrade work</small></button>
         </div>
       </div>
 
@@ -767,13 +667,16 @@ img{border-radius:14px}
         <button onclick="navigate('jobs')"><b>▣</b><span>Jobs</span></button>
         <button onclick="navigate('team')"><b>♙</b><span id="workersNav">Workers</span></button>
         <button onclick="navigate('success')"><b>▥</b><span>Reports</span></button>
-        <button data-menu-toggle="true" onclick="toggleMenu()"><b>•••</b><span>More</span></button>
+        <button onclick="toggleMenu()"><b>•••</b><span>More</span></button>
       </div>
     </section>
   </div>
 
   <div id="street" class="view hidden">
-<div class="card"><div class="row"><div><h1 class="moduleTitle"><span class="moduleIcon streetIcon">✦</span> Street Light Survey</h1><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
+
+    <div class="card"><div class="row"><div><h1 class="moduleTitle"><span class="moduleIcon streetIcon">✦</span> Street Light Survey</h1><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div>
 </div>
       <div class="grid"><div><label>Area Name</label><input id="slArea" placeholder="Area / street"></div><div><label>Total Lights</label><input id="slTotal" type="number" min="0" value="0"></div><div><label>Working Lights</label><input id="slWorking" type="number" min="0" value="0"></div><div><label>Fault Lights</label><input id="slFault" type="number" min="0" value="0"></div></div>
       <label>Fault Details</label><textarea id="slFaultDetails" placeholder="Not working / dim / flickering / damaged pole / wiring issue..."></textarea>
@@ -785,40 +688,57 @@ img{border-radius:14px}
   </div>
 
   <div id="tower" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon towerIcon">⌁</span> Telecom Tower</h1><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
 
   <div id="battery" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon batteryIcon">▣</span> Battery Maintenance</h1><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
 
   <div id="earth" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon earthIcon">◉</span> Earth Pit Maintenance</h1><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
 
   <div id="wiring" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon wiringIcon">ϟ</span> Wiring Fault</h1><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
 
   <div id="renovation" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon renovationIcon">⌁</span> Renovation</h1><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
 
   <div id="profile" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">◉</span> My Profile</h1><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
   <div id="settings" class="view hidden">
-<div class="card settingsHero"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><p class="muted">Manage your account, security and app preferences.</p></div>
-<div class="card"><h3>🔐 Change Password</h3><p class="muted">Enter your current password and choose a new password.</p><input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password"><input id="newPassword" type="password" autocomplete="new-password" placeholder="New password (8+ characters)"><input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirm new password"><button onclick="changePassword()">🔒 Change Password</button><p id="passwordMsg" class="muted"></p></div>
-<div class="card"><h3>⚙️ App Preferences</h3><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">👤 Profile & Photo</button></div>
-<div class="card"><h3>🚪 Session</h3><p class="muted">Signed in as <b id="settingsEmail">—</b></p><button class="bad" onclick="logout()">Logout</button></div>
-</div>
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">Profile & Photo</button><button class="bad" onclick="logout()">Logout</button></div></div>
 
   <div id="notifications" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">●</span> Notifications</h1><div id="notificationsList"></div></div></div>
 
   <div id="team" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Manage technicians and engineers. Removing a user permanently removes their login account.</p></div><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><div id="jobsList"></div></div></div>
 
   <div id="success" class="view hidden">
-<div class="analyticsHead">
+    <div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Technician Success Rate</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+    <div class="analyticsHead">
       <div><h1>Technician Success Rate</h1><p class="muted">Performance overview of all technicians</p></div>
       <div class="dateChip">▣ <span>Current period</span>⌄</div>
     </div>
@@ -834,10 +754,15 @@ img{border-radius:14px}
   </div>
 
   <div id="adminTools" class="view hidden">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
 
   <div id="backup" class="view hidden">
-<div class="card">
+<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
+
+
+    <div class="card">
       <h2>💾 Backup & Reports</h2>
       <p class="muted">Backup your application data or create printable PDF reports.</p>
       <div class="row">
@@ -869,7 +794,6 @@ img{border-radius:14px}
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
@@ -897,7 +821,6 @@ async function load(){
     if($("role"))$("role").textContent=(role==="worker"?"Technician":(profile.role||"User"))+" • "+(user.email||"");
     if($("profileName"))$("profileName").textContent=profile.full_name||user.email||"User";
     if($("profileRole"))$("profileRole").textContent=role==="worker"?"Technician":(profile.role||"User");
-    if($("settingsEmail"))$("settingsEmail").textContent=user.email||"—";
     if($("myAvatar"))$("myAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
     if($("profileAvatar"))$("profileAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
     if($("adminMenu"))$("adminMenu").classList.toggle("hidden",role!=="admin");
@@ -930,14 +853,10 @@ async function login(){
 }
 
 async function loadHome(){
- const [q,p]=await Promise.all([
-   db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,created_at").order("created_at",{ascending:false}).limit(40),
-   db.from("profiles").select("id,full_name,role,approval_status,active").order("created_at",{ascending:false}).limit(9)
- ]);
- if(q.error) console.warn("Jobs summary error",q.error);
- if(p.error) console.warn("Users summary error",p.error);
+ const q=await db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,created_at").order("created_at",{ascending:false}).limit(40);
  const rows=q.data||[];
  const total=rows.length, completed=rows.filter(x=>x.status==="completed").length, open=rows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
+ const p=await db.from("profiles").select("id,full_name,role,approval_status,active").order("created_at",{ascending:false}).limit(9);
  const users=p.data||[];
  const role=profile.role;
  $("dashRoleLabel").textContent=role==="admin"?"Admin Dashboard":role==="engineer"?"Engineer Dashboard":"Technician Dashboard";
@@ -949,7 +868,7 @@ async function loadHome(){
 
  if(role==="admin"){
    $("users").textContent=users.length;
-   $("totalJobsCount").textContent=total;
+   $("jobs").textContent=total;
    $("done").textContent=completed;
    $("pend").textContent=open;
    $("homeRecentJobs").innerHTML=renderRecentJobs(rows.slice(0,6));
@@ -982,7 +901,7 @@ function renderRecentJobs(rows){
    return `<div class="recentItem"><span class="stripe ${st}"></span><div><b>${esc(j.job_term||j.job_code||"JOB")}</b><div>${esc(j.work_description||"Field maintenance job")}</div><div class="muted">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
  }).join("");
 }
-async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];const unread=n.filter(x=>!x.read_at).length;const badge=$("notifCount");if(badge)badge.textContent=unread;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
+async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];$("notifCount").textContent=n.filter(x=>!x.read_at).length;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
 async function loadTeam(){
   const box=$("teamList");
   if(!box) return;
@@ -1004,7 +923,7 @@ async function loadTeam(){
       return `<div class="teamUser cardMini">
         <div class="avatar">${esc((x.full_name||"U").charAt(0).toUpperCase())}</div>
         <div class="teamUserInfo"><b>${esc(x.full_name||"User")}</b><span>${esc(role)} • ${esc(status)}</span><small>${esc(x.phone||"No phone added")}</small></div>
-        <div class="teamUserActions">${isSelf?`<span class="pill">You</span>`:`<button type="button" class="bad removeUserBtn" data-user-id="${esc(x.id)}" data-user-name="${esc(x.full_name||"User")}">Remove</button>`}</div>
+        <div class="teamUserActions">${isSelf?`<span class="pill">You</span>`:`<button class="bad removeUserBtn" onclick="removeUser('${esc(x.id)}',${JSON.stringify(x.full_name||"User")})">Remove</button>`}</div>
       </div>`;
     }).join("");
   }catch(e){
@@ -1012,81 +931,31 @@ async function loadTeam(){
     box.innerHTML=`<div class="empty">Could not load users: ${esc(e?.message||e)}</div>`;
   }
 }
-document.addEventListener("click",(ev)=>{
-  const btn=ev.target.closest?.(".removeUserBtn");
-  if(!btn) return;
-  ev.preventDefault();
-  ev.stopPropagation();
-  const userId=btn.dataset.userId;
-  const name=btn.dataset.userName||"User";
-  if(userId) removeUser(userId,name,btn);
-});
-
-async function removeUser(userId,name,button){
+async function removeUser(userId,name){
   if(profile?.role!=="admin") return alert("Admin access required");
   if(!userId || userId===user?.id) return alert("You cannot remove your own account.");
-  if(!confirm(`Remove ${name}?\n\nThe user will lose app access immediately.`)) return;
-  const btn=button||null, oldText=btn?.textContent||"Remove";
+  const ok=confirm(`Remove ${name}?\n\nThis permanently deletes the user's login account. This action cannot be undone.`);
+  if(!ok) return;
+  const box=$("teamList");
   try{
-    if(btn){btn.disabled=true;btn.textContent="Removing…";}
-    const sr=await db.auth.getSession(), token=sr.data?.session?.access_token;
-    if(!token) throw new Error("Your login session expired. Please login again.");
-    const r=await db.functions.invoke("admin-remove-user",{body:{user_id:userId},headers:{Authorization:`Bearer ${token}`}});
-    const serverError=r?.data?.error || r?.error?.message || null;
-    if(serverError || !r?.data?.ok){
-      const fb=await db.from("profiles").update({active:false,approval_status:"rejected"}).eq("id",userId);
-      if(fb.error) throw new Error(serverError || fb.error.message);
-      await Promise.all([loadTeam(),loadHome()]);
-      alert(`${name} removed from app access. Backend account cleanup still needs to complete.`);
-      return;
-    }
-    await Promise.all([loadTeam(),loadHome()]);
+    document.querySelectorAll(".removeUserBtn").forEach(b=>b.disabled=true);
+    const r=await db.functions.invoke("admin-remove-user",{body:{user_id:userId}});
+    if(r.error) throw new Error(r.error.message||"Remove request failed");
+    if(r.data?.error) throw new Error(r.data.error);
     alert(`${name} removed successfully.`);
+    await loadTeam();
+    await loadHome();
   }catch(e){
     console.error("Remove user error",e);
     alert("Could not remove user: "+(e?.message||e));
     await loadTeam();
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent=oldText;}
   }
 }
-
-async function loadJobs(){
-  const box=$("jobsList");
-  if(!box) return;
-  box.innerHTML=`<div class="empty">Loading jobs…</div>`;
-  try{
-    let q=db.from("jobs").select("id,job_code,job_term,work_description,location,status,assigned_worker,assigned_engineer,created_at,scheduled_date,scheduled_time,worker_remarks,pending_reason").order("created_at",{ascending:false}).limit(100);
-    if(profile?.role==="worker") q=q.eq("assigned_worker",user.id);
-    else if(profile?.role==="engineer") q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);
-    const r=await q;
-    if(r.error) throw r.error;
-    const rows=r.data||[];
-    if(!rows.length){box.innerHTML=`<div class="empty">No jobs found.</div>`;return;}
-    box.innerHTML=rows.map(j=>{
-      const st=String(j.status||"pending");
-      const label=st.replaceAll("_"," ");
-      const when=[j.scheduled_date,j.scheduled_time].filter(Boolean).join(" • ");
-      const canUpdate=profile?.role==="worker" && j.assigned_worker===user.id && !["completed"].includes(st);
-      return `<article class="jobCard cardMini">
-        <div class="jobTop"><div><b>${esc(j.job_code||j.job_term||"JOB")}</b><span class="muted">${esc(j.job_term||"Field Job")}</span></div><span class="recentStatus ${esc(st)}">${esc(label)}</span></div>
-        <div class="jobBody"><b>${esc(j.work_description||"No description")}</b><div class="muted">📍 ${esc(j.location||"No location")}</div>${when?`<div class="muted">🗓️ ${esc(when)}</div>`:""}${j.worker_remarks?`<div class="muted">Remark: ${esc(j.worker_remarks)}</div>`:""}${j.pending_reason?`<div class="muted">Reason: ${esc(j.pending_reason)}</div>`:""}</div>
-        ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks"><input id="pr${j.id}" placeholder="Pending reason"><button class="secondary" onclick="updateJob(${j.id},'in_progress')">In Progress</button><button onclick="updateJob(${j.id},'completed')">Complete</button><button class="bad" onclick="updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
-      </article>`;
-    }).join("");
-  }catch(e){
-    console.error("Jobs load error",e);
-    box.innerHTML=`<div class="empty">Could not load jobs: ${esc(e?.message||e)}</div>`;
-  }
-}
-
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
 let successCache=[];
 async function loadSuccessRate(){
- const [p,j]=await Promise.all([
-   db.from("profiles").select("id,full_name,role,active").eq("role","worker"),
-   db.from("jobs").select("assigned_worker,status")
- ]);
+ const p=await db.from("profiles").select("id,full_name,role,active").eq("role","worker");
+ const j=await db.from("jobs").select("assigned_worker,status");
  const js=j.data||[];
  const people=p.data||[];
  let assigned=0,completed=0,pending=0,notDone=0;
@@ -1110,50 +979,15 @@ function filterSuccess(){
  renderSuccessRows(successCache.filter(x=>(x.full_name||"").toLowerCase().includes(q)));
 }
 async function loadStreet(){const r=await db.from("street_light_surveys").select("*").order("created_at",{ascending:false}).limit(30);$("streetList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon streetIcon">✦</div><div><b>${esc(x.area_name)}</b><div class="muted">Total ${x.total_lights} • Working ${x.working_lights} • Fault ${x.fault_lights}</div><div>${esc(x.fault_details||"")}</div></div></div>`).join("")||`<div class="empty">No surveys yet.</div>`}
-async function saveStreetSurvey(){const payload={area_name:$("slArea").value.trim(),total_lights:+$("slTotal").value||0,working_lights:+$("slWorking").value||0,fault_lights:+$("slFault").value||0,fault_details:$("slFaultDetails").value.trim()||null,remarks:$("slRemarks").value.trim()||null,created_by:user.id};if(!payload.area_name)return alert("Area name required");if(payload.working_lights+payload.fault_lights>payload.total_lights)return alert("Working + Fault lights cannot exceed Total lights");const btn=document.querySelector('button[onclick="saveStreetSurvey()"]');if(btn)btn.disabled=true;try{const r=await db.from("street_light_surveys").insert(payload);if(r.error)throw r.error;$("slMsg").textContent="Survey saved successfully.";await loadStreet()}catch(e){alert(e?.message||e)}finally{if(btn)btn.disabled=false}}
+async function saveStreetSurvey(){const payload={area_name:$("slArea").value.trim(),total_lights:+$("slTotal").value||0,working_lights:+$("slWorking").value||0,fault_lights:+$("slFault").value||0,fault_details:$("slFaultDetails").value.trim()||null,remarks:$("slRemarks").value.trim()||null,created_by:user.id};if(!payload.area_name)return alert("Area name required");const r=await db.from("street_light_surveys").insert(payload);if(r.error)return alert(r.error.message);$("slMsg").textContent="Survey saved successfully.";loadStreet()}
 async function loadBattery(){const r=await db.from("battery_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("batteryList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon batteryIcon">▣</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.battery_status||"")} • Due ${esc(x.next_due_date||"-")}</div><div>${esc(x.condition||"")}</div></div></div>`).join("")||`<div class="empty">No battery records yet.</div>`}
-async function saveBattery(){const p={area_name:$("batArea").value.trim(),battery_status:$("batStatus").value,condition:$("batCondition").value.trim()||null,remarks:$("batRemarks").value.trim()||null,next_due_date:$("batDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("battery_maintenance").insert(p);if(r.error)return alert(r.error.message);$("batMsg").textContent="Battery record saved.";await loadBattery()}
+async function saveBattery(){const p={area_name:$("batArea").value.trim(),battery_status:$("batStatus").value,condition:$("batCondition").value.trim()||null,remarks:$("batRemarks").value.trim()||null,next_due_date:$("batDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("battery_maintenance").insert(p);if(r.error)return alert(r.error.message);$("batMsg").textContent="Battery record saved.";loadBattery()}
 async function loadEarth(){const r=await db.from("earthpit_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("earthList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon earthIcon">◉</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.condition||"")} • Resistance ${esc(x.resistance||"-")}</div><div>${esc(x.remarks||"")}</div></div></div>`).join("")||`<div class="empty">No earth pit records yet.</div>`}
-async function saveEarth(){const p={area_name:$("earthArea").value.trim(),condition:$("earthCondition").value,resistance:$("earthResistance").value.trim()||null,remarks:$("earthRemarks").value.trim()||null,next_due_date:$("earthDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("earthpit_maintenance").insert(p);if(r.error)return alert(r.error.message);$("earthMsg").textContent="Earth pit record saved.";await loadEarth()}
+async function saveEarth(){const p={area_name:$("earthArea").value.trim(),condition:$("earthCondition").value,resistance:$("earthResistance").value.trim()||null,remarks:$("earthRemarks").value.trim()||null,next_due_date:$("earthDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("earthpit_maintenance").insert(p);if(r.error)return alert(r.error.message);$("earthMsg").textContent="Earth pit record saved.";loadEarth()}
 async function loadRenovation(){const r=await db.from("renovations").select("*").order("created_at",{ascending:false}).limit(30);$("renoList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon renovationIcon">⌁</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.status)}</div><div>${esc(x.work_description)}</div></div></div>`).join("")||`<div class="empty">No renovation records.</div>`}
-async function saveRenovation(){const p={area_name:$("renoArea").value.trim(),work_description:$("renoWork").value.trim(),created_by:user.id};if(!p.area_name||!p.work_description)return alert("Area and work details required");p.status="pending";const r=await db.from("renovations").insert(p);if(r.error)return alert(r.error.message);$("renoMsg").textContent="Renovation created.";await loadRenovation()}
-async function createModuleJob(type){
-  const area=type==="tower"?$("towerArea").value.trim():$("wireArea").value.trim();
-  const work=type==="tower"?$("towerWork").value.trim():$("wireWork").value.trim();
-  if(!area||!work)return alert("Location and work details required");
-  try{
-    const c=await db.from("customers").insert({name:area,address:area}).select("id").single();
-    if(c.error)throw c.error;
-    const p={customer_id:c.data.id,work_description:(type==="tower"?"Tower: ":"Wiring Fault: ")+work,location:area,assigned_engineer:profile.role==="engineer"?user.id:null,created_by:user.id,job_term:type==="tower"?"TOWER":"WIRING",status:"pending"};
-    const r=await db.from("jobs").insert(p);
-    if(r.error){await db.from("customers").delete().eq("id",c.data.id);throw r.error;}
-    alert("Job created successfully");
-    $(type==="tower"?"towerArea":"wireArea").value="";
-    $(type==="tower"?"towerWork":"wireWork").value="";
-    navigate("jobs");
-  }catch(e){alert("Could not create job: "+(e?.message||e));}
-}
-
-async function loadApprovals(){
-  const box=$("approvals"); if(!box||profile?.role!=="admin") return;
-  box.innerHTML=`<div class="empty">Loading approvals…</div>`;
-  try{
-    const r=await db.from("profiles").select("id,full_name,role,phone,approval_status,active,created_at").eq("approval_status","pending").order("created_at",{ascending:false});
-    if(r.error)throw r.error;
-    const rows=r.data||[];
-    box.innerHTML=rows.length?rows.map(x=>`<div class="approvalRow"><div><b>${esc(x.full_name||"User")}</b><div class="muted">${esc(x.role||"User")} • ${esc(x.phone||"No phone")}</div></div><div class="approvalActions"><button onclick="approveUser('${esc(x.id)}')">Approve</button><button class="bad" onclick="rejectUser('${esc(x.id)}')">Reject</button></div></div>`).join(""): `<div class="empty">No pending approvals.</div>`;
-  }catch(e){box.innerHTML=`<div class="empty">Could not load approvals: ${esc(e?.message||e)}</div>`;}
-}
-async function setApproval(id,status,active){
-  if(profile?.role!=="admin")return alert("Admin access required");
-  const r=await db.from("profiles").update({approval_status:status,active}).eq("id",id);
-  if(r.error)return alert(r.error.message);
-  await Promise.all([loadApprovals(),loadTeam(),loadHome()]);
-}
-async function approveUser(id){await setApproval(id,"approved",true)}
-async function rejectUser(id){if(!confirm("Reject this user request?"))return;await setApproval(id,"rejected",false)}
-
-async function adminCreateUser(){const full_name=$("newname").value.trim(),email=$("newemail").value.trim(),password=$("newpass").value,role=$("newrole").value;if(!full_name||!email||password.length<8)return alert("Enter name, email and 8+ character password");$("createResult").textContent="Creating...";const r=await db.functions.invoke("admin-create-user-v2",{body:{full_name,email,password,role}});if(r.error)return alert(r.error.message);if(r.data?.error)return alert(r.data.error);$("createResult").textContent="User created successfully.";["newname","newemail","newpass"].forEach(id=>$(id).value="");await Promise.all([loadTeam(),loadHome(),loadApprovals()])}
+async function saveRenovation(){const p={area_name:$("renoArea").value.trim(),work_description:$("renoWork").value.trim(),created_by:user.id};if(!p.area_name||!p.work_description)return alert("Area and work details required");const r=await db.from("renovations").insert(p);if(r.error)return alert(r.error.message);$("renoMsg").textContent="Renovation created.";loadRenovation()}
+async function createModuleJob(type){const area=type==="tower"?$("towerArea").value.trim():$("wireArea").value.trim(),work=type==="tower"?$("towerWork").value.trim():$("wireWork").value.trim();if(!area||!work)return alert("Location and work details required");const c=await db.from("customers").insert({name:area,address:area}).select("id").single();if(c.error)return alert(c.error.message);const p={customer_id:c.data.id,work_description:(type==="tower"?"Tower: ":"Wiring Fault: ")+work,location:area,assigned_engineer:profile.role==="engineer"?user.id:null,created_by:user.id,job_term:type==="tower"?"TOWER":"WIRING"};const r=await db.from("jobs").insert(p);if(r.error)return alert(r.error.message);alert("Job created");showView("jobs");loadJobs()}
+async function adminCreateUser(){const full_name=$("newname").value.trim(),email=$("newemail").value.trim(),password=$("newpass").value,role=$("newrole").value;if(!full_name||!email||password.length<8)return alert("Enter name, email and 8+ character password");$("createResult").textContent="Creating...";const r=await db.functions.invoke("admin-create-user-v2",{body:{full_name,email,password,role}});if(r.error)return alert(r.error.message);if(r.data?.error)return alert(r.data.error);$("createResult").textContent="User created successfully.";loadTeam();loadHome()}
 async function uploadAvatar(){const f=$("avatarFile").files?.[0];if(!f||!user)return;if(f.size>2*1024*1024)return alert("Photo must be under 2 MB");const rd=new FileReader();rd.onload=()=>{localStorage.setItem("tele_tuty_avatar_"+user.id,rd.result);setAvatar(rd.result)};rd.readAsDataURL(f)}
 function setAvatar(src){$("myAvatar").innerHTML=`<img src="${src}" style="width:44px;height:44px;border-radius:50%;object-fit:cover">`;$("profileAvatar").innerHTML=`<img src="${src}" style="width:44px;height:44px;border-radius:50%;object-fit:cover">`}
 function toggleCompact(){document.body.classList.toggle("compact");alert("Dashboard view toggled")}
@@ -1397,35 +1231,6 @@ async function loadBackupSummary(){
 }
 
 
-/* ---- Account security ---- */
-async function changePassword(){
-  if(!user?.email) return alert("Please login again.");
-  const current=$("currentPassword")?.value||"";
-  const next=$("newPassword")?.value||"";
-  const confirm=$("confirmPassword")?.value||"";
-  const msg=$("passwordMsg");
-  if(msg) msg.textContent="";
-  if(!current || !next || !confirm) { if(msg) msg.textContent="Fill all password fields."; return; }
-  if(next.length<8){ if(msg) msg.textContent="New password must be at least 8 characters."; return; }
-  if(next!==confirm){ if(msg) msg.textContent="New passwords do not match."; return; }
-  if(current===next){ if(msg) msg.textContent="New password must be different from current password."; return; }
-  const btn=document.querySelector('#settings button[onclick="changePassword()"]');
-  try{
-    if(btn){btn.disabled=true;btn.textContent="Changing…";}
-    const check=await db.auth.signInWithPassword({email:user.email,password:current});
-    if(check.error) throw new Error("Current password is incorrect.");
-    const r=await db.auth.updateUser({password:next});
-    if(r.error) throw r.error;
-    ["currentPassword","newPassword","confirmPassword"].forEach(id=>{const el=$(id);if(el)el.value=""});
-    if(msg) msg.textContent="Password changed successfully.";
-  }catch(e){
-    console.error("Change password error",e);
-    if(msg) msg.textContent=e?.message||"Could not change password.";
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent="🔒 Change Password";}
-  }
-}
-
 /* ---- Authentication / session controls ---- */
 let signingOut = false;
 async function logout(){
@@ -1492,12 +1297,8 @@ function closeMenu(){
 }
 function toggleMenu(){
   const m=document.getElementById("menu");
-  if(!m)return;
-  const opening=m.classList.contains("hidden");
-  m.classList.toggle("hidden",!opening);
-  if(opening){m.scrollTop=0;setTimeout(()=>m.querySelector("button:not([disabled])")?.focus({preventScroll:true}),0);}
+  if(m) m.classList.toggle("hidden");
 }
-document.addEventListener("click",(ev)=>{const m=document.getElementById("menu");if(!m||m.classList.contains("hidden"))return;if(!m.contains(ev.target)&&!ev.target.closest(".iconBtn")&&!ev.target.closest("#menuBtn")&&!ev.target.closest("[data-menu-toggle]"))closeMenu();});
 function currentView(){
   return navHistory[navHistory.length-1] || "home";
 }
@@ -1507,7 +1308,7 @@ function showView(id){
   document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
   el.classList.remove("hidden");
   const nav=document.getElementById("globalPageNav");
-  if(nav){ nav.classList.remove("hidden"); nav.style.display="flex"; nav.style.visibility="visible"; nav.style.opacity="1"; }
+  if(nav) nav.classList.remove("hidden");
   const title=document.getElementById("globalPageTitle");
   if(title){
     const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",tower:"Telecom Tower",wiring:"Wiring Fault",renovation:"Renovation",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
@@ -1516,7 +1317,6 @@ function showView(id){
   closeMenu();
   if(id==="notifications")loadNotifications().catch?.(()=>{});
   if(id==="team")loadTeam().catch?.(()=>{});
-  if(id==="adminTools"){loadApprovals().catch?.(()=>{});}
   if(id==="jobs")loadJobs().catch?.(()=>{});
   if(id==="success")loadSuccessRate().catch?.(()=>{});
   if(id==="street")loadStreet().catch?.(()=>{});
@@ -1524,53 +1324,36 @@ function showView(id){
   if(id==="earth")loadEarth().catch?.(()=>{});
   if(id==="renovation")loadRenovation().catch?.(()=>{});
   if(id==="backup" && typeof loadBackupSummary==="function")loadBackupSummary();
-  setNavButtonState();
   window.scrollTo({top:0,behavior:"instant"});
   return true;
-}
-function setNavButtonState(){
-  const b=document.querySelector('#globalPageNav .back');
-  if(b) b.disabled=currentView()==="home";
 }
 function navigate(id){
   if(!user || !document.getElementById(id)) return;
   closeMenu();
   if(id==="home"){
     navHistory=["home"];
-    history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
     showView("home");
-    setNavButtonState();
     return;
   }
   if(currentView()===id) return;
   navHistory.push(id);
-  history.pushState({teleTutyView:id},"",location.pathname+location.search);
   showView(id);
-  setNavButtonState();
 }
 function goBack(){
   if(!user) return;
   closeMenu();
-  if(navHistory.length>1) history.back();
-  else showView("home");
-  setNavButtonState();
+  if(navHistory.length>1) navHistory.pop();
+  if(!navHistory.length) navHistory=["home"];
+  showView(currentView());
 }
-window.addEventListener("popstate",function(e){
-  if(!user)return;
-  const id=e.state?.teleTutyView||"home";
-  if(id==="home") navHistory=["home"];
-  else {navHistory=navHistory.slice(0,Math.max(1,navHistory.indexOf(id)+1)); if(navHistory[navHistory.length-1]!==id)navHistory.push(id);}
-  showView(id); setNavButtonState();
-});
 document.addEventListener("click",function(e){
   const m=document.getElementById("menu"), b=document.getElementById("menuBtn");
-  if(m && !m.classList.contains("hidden") && !m.contains(e.target) && e.target!==b && !e.target.closest("[data-menu-toggle]")) closeMenu();
+  if(m && !m.classList.contains("hidden") && !m.contains(e.target) && e.target!==b) closeMenu();
 });
 window.addEventListener("keydown",function(e){
   if(e.key==="Escape") closeMenu();
 });
 
-history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
 </body></html>

@@ -1,9 +1,13 @@
 {
-  "name":"Tele Tuty",
-  "short_name":"Tele Tuty",
-  "start_url":".",
-  "display":"standalone",
-  "background_color":"#f4f7fb",
-  "theme_color":"#1266f1",
-  "icons":[{"src":"tele-tuty-logo.png","sizes":"1024x1024","type":"image/png","purpose":"any maskable"}]
+  "name": "Tele Tuty Field Operations",
+  "short_name": "Tele Tuty",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "description": "Field jobs, maintenance, surveys and technician performance.",
+  "icons": [
+    {"src":"tele-tuty-logo.png","sizes":"192x192","type":"image/png"},
+    {"src":"tele-tuty-logo.png","sizes":"512x512","type":"image/png"}
+  ]
 }
