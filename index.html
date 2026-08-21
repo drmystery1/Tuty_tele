@@ -585,6 +585,11 @@ img{border-radius:14px}
   #globalPageNav.globalPageNav .royalIcon{font-size:23px!important}
 }
 </style>
+
+<style id="v28-stability-ui">
+.jobCard{padding:15px;margin:10px 0;border:1px solid rgba(126,198,255,.24);border-radius:18px;background:linear-gradient(135deg,rgba(13,31,53,.96),rgba(35,24,66,.94));box-shadow:0 8px 22px rgba(0,0,0,.14)}
+.jobTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.jobTop span{display:block}.jobBody{display:grid;gap:5px;margin-top:10px}.jobActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.jobActions input{grid-column:1/-1}.approvalRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(126,198,255,.22);border-radius:16px;background:rgba(8,24,43,.72)}.approvalActions{display:flex;gap:7px}.approvalActions button{margin:0!important;padding:9px 11px!important}.royalNavBtn[disabled]{opacity:.42;filter:grayscale(.5);pointer-events:none}@media(max-width:520px){.approvalRow{align-items:flex-start;flex-direction:column}.approvalActions{width:100%}.approvalActions button{flex:1}.jobActions{grid-template-columns:1fr}.jobActions input{grid-column:auto}}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
@@ -739,10 +744,7 @@ img{border-radius:14px}
   </div>
 
   <div id="street" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
-
-    <div class="card"><div class="row"><div><h1 class="moduleTitle"><span class="moduleIcon streetIcon">✦</span> Street Light Survey</h1><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div>
+<div class="card"><div class="row"><div><h1 class="moduleTitle"><span class="moduleIcon streetIcon">✦</span> Street Light Survey</h1><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div>
 </div>
       <div class="grid"><div><label>Area Name</label><input id="slArea" placeholder="Area / street"></div><div><label>Total Lights</label><input id="slTotal" type="number" min="0" value="0"></div><div><label>Working Lights</label><input id="slWorking" type="number" min="0" value="0"></div><div><label>Fault Lights</label><input id="slFault" type="number" min="0" value="0"></div></div>
       <label>Fault Details</label><textarea id="slFaultDetails" placeholder="Not working / dim / flickering / damaged pole / wiring issue..."></textarea>
@@ -754,57 +756,36 @@ img{border-radius:14px}
   </div>
 
   <div id="tower" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon towerIcon">⌁</span> Telecom Tower</h1><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
 
   <div id="battery" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon batteryIcon">▣</span> Battery Maintenance</h1><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
 
   <div id="earth" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon earthIcon">◉</span> Earth Pit Maintenance</h1><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
 
   <div id="wiring" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon wiringIcon">ϟ</span> Wiring Fault</h1><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
 
   <div id="renovation" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon renovationIcon">⌁</span> Renovation</h1><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
 
   <div id="profile" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">◉</span> My Profile</h1><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
   <div id="settings" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">Profile & Photo</button><button class="bad" onclick="logout()">Logout</button></div></div>
 
   <div id="notifications" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">●</span> Notifications</h1><div id="notificationsList"></div></div></div>
 
   <div id="team" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Manage technicians and engineers. Removing a user permanently removes their login account.</p></div><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><div id="jobsList"></div></div></div>
 
   <div id="success" class="view hidden">
-    <div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Technician Success Rate</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-    <div class="analyticsHead">
+<div class="analyticsHead">
       <div><h1>Technician Success Rate</h1><p class="muted">Performance overview of all technicians</p></div>
       <div class="dateChip">▣ <span>Current period</span>⌄</div>
     </div>
@@ -820,15 +801,10 @@ img{border-radius:14px}
   </div>
 
   <div id="adminTools" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
 
   <div id="backup" class="view hidden">
-<div class="pageNav"><button class="backBtn" onclick="goBack()">←</button><span class="pageNavTitle">Field Operations</span><button class="homeBtn" onclick="navigate('home')">⌂</button></div>
-
-
-    <div class="card">
+<div class="card">
       <h2>💾 Backup & Reports</h2>
       <p class="muted">Backup your application data or create printable PDF reports.</p>
       <div class="row">
@@ -860,6 +836,7 @@ img{border-radius:14px}
 </section>
 </main>
 
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
@@ -919,10 +896,14 @@ async function login(){
 }
 
 async function loadHome(){
- const q=await db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,created_at").order("created_at",{ascending:false}).limit(40);
+ const [q,p]=await Promise.all([
+   db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,created_at").order("created_at",{ascending:false}).limit(40),
+   db.from("profiles").select("id,full_name,role,approval_status,active").order("created_at",{ascending:false}).limit(9)
+ ]);
+ if(q.error) console.warn("Jobs summary error",q.error);
+ if(p.error) console.warn("Users summary error",p.error);
  const rows=q.data||[];
  const total=rows.length, completed=rows.filter(x=>x.status==="completed").length, open=rows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
- const p=await db.from("profiles").select("id,full_name,role,approval_status,active").order("created_at",{ascending:false}).limit(9);
  const users=p.data||[];
  const role=profile.role;
  $("dashRoleLabel").textContent=role==="admin"?"Admin Dashboard":role==="engineer"?"Engineer Dashboard":"Technician Dashboard";
@@ -1020,11 +1001,42 @@ async function removeUser(userId,name,button){
     if(btn){ btn.disabled=false; btn.textContent=oldText; }
   }
 }
+async function loadJobs(){
+  const box=$("jobsList");
+  if(!box) return;
+  box.innerHTML=`<div class="empty">Loading jobs…</div>`;
+  try{
+    let q=db.from("jobs").select("id,job_code,job_term,work_description,location,status,assigned_worker,assigned_engineer,created_at,scheduled_date,scheduled_time,worker_remarks,pending_reason").order("created_at",{ascending:false}).limit(100);
+    if(profile?.role==="worker") q=q.eq("assigned_worker",user.id);
+    else if(profile?.role==="engineer") q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);
+    const r=await q;
+    if(r.error) throw r.error;
+    const rows=r.data||[];
+    if(!rows.length){box.innerHTML=`<div class="empty">No jobs found.</div>`;return;}
+    box.innerHTML=rows.map(j=>{
+      const st=String(j.status||"pending");
+      const label=st.replaceAll("_"," ");
+      const when=[j.scheduled_date,j.scheduled_time].filter(Boolean).join(" • ");
+      const canUpdate=profile?.role==="worker" && j.assigned_worker===user.id && !["completed"].includes(st);
+      return `<article class="jobCard cardMini">
+        <div class="jobTop"><div><b>${esc(j.job_code||j.job_term||"JOB")}</b><span class="muted">${esc(j.job_term||"Field Job")}</span></div><span class="recentStatus ${esc(st)}">${esc(label)}</span></div>
+        <div class="jobBody"><b>${esc(j.work_description||"No description")}</b><div class="muted">📍 ${esc(j.location||"No location")}</div>${when?`<div class="muted">🗓️ ${esc(when)}</div>`:""}${j.worker_remarks?`<div class="muted">Remark: ${esc(j.worker_remarks)}</div>`:""}${j.pending_reason?`<div class="muted">Reason: ${esc(j.pending_reason)}</div>`:""}</div>
+        ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks"><input id="pr${j.id}" placeholder="Pending reason"><button class="secondary" onclick="updateJob(${j.id},'in_progress')">In Progress</button><button onclick="updateJob(${j.id},'completed')">Complete</button><button class="bad" onclick="updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
+      </article>`;
+    }).join("");
+  }catch(e){
+    console.error("Jobs load error",e);
+    box.innerHTML=`<div class="empty">Could not load jobs: ${esc(e?.message||e)}</div>`;
+  }
+}
+
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
 let successCache=[];
 async function loadSuccessRate(){
- const p=await db.from("profiles").select("id,full_name,role,active").eq("role","worker");
- const j=await db.from("jobs").select("assigned_worker,status");
+ const [p,j]=await Promise.all([
+   db.from("profiles").select("id,full_name,role,active").eq("role","worker"),
+   db.from("jobs").select("assigned_worker,status")
+ ]);
  const js=j.data||[];
  const people=p.data||[];
  let assigned=0,completed=0,pending=0,notDone=0;
@@ -1048,15 +1060,50 @@ function filterSuccess(){
  renderSuccessRows(successCache.filter(x=>(x.full_name||"").toLowerCase().includes(q)));
 }
 async function loadStreet(){const r=await db.from("street_light_surveys").select("*").order("created_at",{ascending:false}).limit(30);$("streetList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon streetIcon">✦</div><div><b>${esc(x.area_name)}</b><div class="muted">Total ${x.total_lights} • Working ${x.working_lights} • Fault ${x.fault_lights}</div><div>${esc(x.fault_details||"")}</div></div></div>`).join("")||`<div class="empty">No surveys yet.</div>`}
-async function saveStreetSurvey(){const payload={area_name:$("slArea").value.trim(),total_lights:+$("slTotal").value||0,working_lights:+$("slWorking").value||0,fault_lights:+$("slFault").value||0,fault_details:$("slFaultDetails").value.trim()||null,remarks:$("slRemarks").value.trim()||null,created_by:user.id};if(!payload.area_name)return alert("Area name required");const r=await db.from("street_light_surveys").insert(payload);if(r.error)return alert(r.error.message);$("slMsg").textContent="Survey saved successfully.";loadStreet()}
+async function saveStreetSurvey(){const payload={area_name:$("slArea").value.trim(),total_lights:+$("slTotal").value||0,working_lights:+$("slWorking").value||0,fault_lights:+$("slFault").value||0,fault_details:$("slFaultDetails").value.trim()||null,remarks:$("slRemarks").value.trim()||null,created_by:user.id};if(!payload.area_name)return alert("Area name required");if(payload.working_lights+payload.fault_lights>payload.total_lights)return alert("Working + Fault lights cannot exceed Total lights");const btn=document.querySelector('button[onclick="saveStreetSurvey()"]');if(btn)btn.disabled=true;try{const r=await db.from("street_light_surveys").insert(payload);if(r.error)throw r.error;$("slMsg").textContent="Survey saved successfully.";await loadStreet()}catch(e){alert(e?.message||e)}finally{if(btn)btn.disabled=false}}
 async function loadBattery(){const r=await db.from("battery_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("batteryList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon batteryIcon">▣</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.battery_status||"")} • Due ${esc(x.next_due_date||"-")}</div><div>${esc(x.condition||"")}</div></div></div>`).join("")||`<div class="empty">No battery records yet.</div>`}
-async function saveBattery(){const p={area_name:$("batArea").value.trim(),battery_status:$("batStatus").value,condition:$("batCondition").value.trim()||null,remarks:$("batRemarks").value.trim()||null,next_due_date:$("batDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("battery_maintenance").insert(p);if(r.error)return alert(r.error.message);$("batMsg").textContent="Battery record saved.";loadBattery()}
+async function saveBattery(){const p={area_name:$("batArea").value.trim(),battery_status:$("batStatus").value,condition:$("batCondition").value.trim()||null,remarks:$("batRemarks").value.trim()||null,next_due_date:$("batDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("battery_maintenance").insert(p);if(r.error)return alert(r.error.message);$("batMsg").textContent="Battery record saved.";await loadBattery()}
 async function loadEarth(){const r=await db.from("earthpit_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("earthList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon earthIcon">◉</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.condition||"")} • Resistance ${esc(x.resistance||"-")}</div><div>${esc(x.remarks||"")}</div></div></div>`).join("")||`<div class="empty">No earth pit records yet.</div>`}
-async function saveEarth(){const p={area_name:$("earthArea").value.trim(),condition:$("earthCondition").value,resistance:$("earthResistance").value.trim()||null,remarks:$("earthRemarks").value.trim()||null,next_due_date:$("earthDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("earthpit_maintenance").insert(p);if(r.error)return alert(r.error.message);$("earthMsg").textContent="Earth pit record saved.";loadEarth()}
+async function saveEarth(){const p={area_name:$("earthArea").value.trim(),condition:$("earthCondition").value,resistance:$("earthResistance").value.trim()||null,remarks:$("earthRemarks").value.trim()||null,next_due_date:$("earthDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("earthpit_maintenance").insert(p);if(r.error)return alert(r.error.message);$("earthMsg").textContent="Earth pit record saved.";await loadEarth()}
 async function loadRenovation(){const r=await db.from("renovations").select("*").order("created_at",{ascending:false}).limit(30);$("renoList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon renovationIcon">⌁</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.status)}</div><div>${esc(x.work_description)}</div></div></div>`).join("")||`<div class="empty">No renovation records.</div>`}
-async function saveRenovation(){const p={area_name:$("renoArea").value.trim(),work_description:$("renoWork").value.trim(),created_by:user.id};if(!p.area_name||!p.work_description)return alert("Area and work details required");const r=await db.from("renovations").insert(p);if(r.error)return alert(r.error.message);$("renoMsg").textContent="Renovation created.";loadRenovation()}
-async function createModuleJob(type){const area=type==="tower"?$("towerArea").value.trim():$("wireArea").value.trim(),work=type==="tower"?$("towerWork").value.trim():$("wireWork").value.trim();if(!area||!work)return alert("Location and work details required");const c=await db.from("customers").insert({name:area,address:area}).select("id").single();if(c.error)return alert(c.error.message);const p={customer_id:c.data.id,work_description:(type==="tower"?"Tower: ":"Wiring Fault: ")+work,location:area,assigned_engineer:profile.role==="engineer"?user.id:null,created_by:user.id,job_term:type==="tower"?"TOWER":"WIRING"};const r=await db.from("jobs").insert(p);if(r.error)return alert(r.error.message);alert("Job created");showView("jobs");loadJobs()}
-async function adminCreateUser(){const full_name=$("newname").value.trim(),email=$("newemail").value.trim(),password=$("newpass").value,role=$("newrole").value;if(!full_name||!email||password.length<8)return alert("Enter name, email and 8+ character password");$("createResult").textContent="Creating...";const r=await db.functions.invoke("admin-create-user-v2",{body:{full_name,email,password,role}});if(r.error)return alert(r.error.message);if(r.data?.error)return alert(r.data.error);$("createResult").textContent="User created successfully.";loadTeam();loadHome()}
+async function saveRenovation(){const p={area_name:$("renoArea").value.trim(),work_description:$("renoWork").value.trim(),created_by:user.id};if(!p.area_name||!p.work_description)return alert("Area and work details required");p.status="pending";const r=await db.from("renovations").insert(p);if(r.error)return alert(r.error.message);$("renoMsg").textContent="Renovation created.";await loadRenovation()}
+async function createModuleJob(type){
+  const area=type==="tower"?$("towerArea").value.trim():$("wireArea").value.trim();
+  const work=type==="tower"?$("towerWork").value.trim():$("wireWork").value.trim();
+  if(!area||!work)return alert("Location and work details required");
+  try{
+    const c=await db.from("customers").insert({name:area,address:area}).select("id").single();
+    if(c.error)throw c.error;
+    const p={customer_id:c.data.id,work_description:(type==="tower"?"Tower: ":"Wiring Fault: ")+work,location:area,assigned_engineer:profile.role==="engineer"?user.id:null,created_by:user.id,job_term:type==="tower"?"TOWER":"WIRING",status:"pending"};
+    const r=await db.from("jobs").insert(p);
+    if(r.error){await db.from("customers").delete().eq("id",c.data.id);throw r.error;}
+    alert("Job created successfully");
+    $(type==="tower"?"towerArea":"wireArea").value="";
+    $(type==="tower"?"towerWork":"wireWork").value="";
+    navigate("jobs");
+  }catch(e){alert("Could not create job: "+(e?.message||e));}
+}
+
+async function loadApprovals(){
+  const box=$("approvals"); if(!box||profile?.role!=="admin") return;
+  box.innerHTML=`<div class="empty">Loading approvals…</div>`;
+  try{
+    const r=await db.from("profiles").select("id,full_name,role,phone,approval_status,active,created_at").eq("approval_status","pending").order("created_at",{ascending:false});
+    if(r.error)throw r.error;
+    const rows=r.data||[];
+    box.innerHTML=rows.length?rows.map(x=>`<div class="approvalRow"><div><b>${esc(x.full_name||"User")}</b><div class="muted">${esc(x.role||"User")} • ${esc(x.phone||"No phone")}</div></div><div class="approvalActions"><button onclick="approveUser('${esc(x.id)}')">Approve</button><button class="bad" onclick="rejectUser('${esc(x.id)}')">Reject</button></div></div>`).join(""): `<div class="empty">No pending approvals.</div>`;
+  }catch(e){box.innerHTML=`<div class="empty">Could not load approvals: ${esc(e?.message||e)}</div>`;}
+}
+async function setApproval(id,status,active){
+  if(profile?.role!=="admin")return alert("Admin access required");
+  const r=await db.from("profiles").update({approval_status:status,active}).eq("id",id);
+  if(r.error)return alert(r.error.message);
+  await Promise.all([loadApprovals(),loadTeam(),loadHome()]);
+}
+async function approveUser(id){await setApproval(id,"approved",true)}
+async function rejectUser(id){if(!confirm("Reject this user request?"))return;await setApproval(id,"rejected",false)}
+
+async function adminCreateUser(){const full_name=$("newname").value.trim(),email=$("newemail").value.trim(),password=$("newpass").value,role=$("newrole").value;if(!full_name||!email||password.length<8)return alert("Enter name, email and 8+ character password");$("createResult").textContent="Creating...";const r=await db.functions.invoke("admin-create-user-v2",{body:{full_name,email,password,role}});if(r.error)return alert(r.error.message);if(r.data?.error)return alert(r.data.error);$("createResult").textContent="User created successfully.";["newname","newemail","newpass"].forEach(id=>$(id).value="");await Promise.all([loadTeam(),loadHome(),loadApprovals()])}
 async function uploadAvatar(){const f=$("avatarFile").files?.[0];if(!f||!user)return;if(f.size>2*1024*1024)return alert("Photo must be under 2 MB");const rd=new FileReader();rd.onload=()=>{localStorage.setItem("tele_tuty_avatar_"+user.id,rd.result);setAvatar(rd.result)};rd.readAsDataURL(f)}
 function setAvatar(src){$("myAvatar").innerHTML=`<img src="${src}" style="width:44px;height:44px;border-radius:50%;object-fit:cover">`;$("profileAvatar").innerHTML=`<img src="${src}" style="width:44px;height:44px;border-radius:50%;object-fit:cover">`}
 function toggleCompact(){document.body.classList.toggle("compact");alert("Dashboard view toggled")}
@@ -1386,6 +1433,7 @@ function showView(id){
   closeMenu();
   if(id==="notifications")loadNotifications().catch?.(()=>{});
   if(id==="team")loadTeam().catch?.(()=>{});
+  if(id==="adminTools"){loadApprovals().catch?.(()=>{});}
   if(id==="jobs")loadJobs().catch?.(()=>{});
   if(id==="success")loadSuccessRate().catch?.(()=>{});
   if(id==="street")loadStreet().catch?.(()=>{});
@@ -1393,28 +1441,44 @@ function showView(id){
   if(id==="earth")loadEarth().catch?.(()=>{});
   if(id==="renovation")loadRenovation().catch?.(()=>{});
   if(id==="backup" && typeof loadBackupSummary==="function")loadBackupSummary();
+  setNavButtonState();
   window.scrollTo({top:0,behavior:"instant"});
   return true;
+}
+function setNavButtonState(){
+  const b=document.querySelector('#globalPageNav .back');
+  if(b) b.disabled=currentView()==="home";
 }
 function navigate(id){
   if(!user || !document.getElementById(id)) return;
   closeMenu();
   if(id==="home"){
     navHistory=["home"];
+    history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
     showView("home");
+    setNavButtonState();
     return;
   }
   if(currentView()===id) return;
   navHistory.push(id);
+  history.pushState({teleTutyView:id},"",location.pathname+location.search);
   showView(id);
+  setNavButtonState();
 }
 function goBack(){
   if(!user) return;
   closeMenu();
-  if(navHistory.length>1) navHistory.pop();
-  if(!navHistory.length) navHistory=["home"];
-  showView(currentView());
+  if(navHistory.length>1) history.back();
+  else showView("home");
+  setNavButtonState();
 }
+window.addEventListener("popstate",function(e){
+  if(!user)return;
+  const id=e.state?.teleTutyView||"home";
+  if(id==="home") navHistory=["home"];
+  else {navHistory=navHistory.slice(0,Math.max(1,navHistory.indexOf(id)+1)); if(navHistory[navHistory.length-1]!==id)navHistory.push(id);}
+  showView(id); setNavButtonState();
+});
 document.addEventListener("click",function(e){
   const m=document.getElementById("menu"), b=document.getElementById("menuBtn");
   if(m && !m.classList.contains("hidden") && !m.contains(e.target) && e.target!==b) closeMenu();
@@ -1423,6 +1487,7 @@ window.addEventListener("keydown",function(e){
   if(e.key==="Escape") closeMenu();
 });
 
+history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
 </body></html>
