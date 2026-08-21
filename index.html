@@ -612,6 +612,28 @@ img{border-radius:14px}
 #settings h3{margin-top:0}
 </style>
 </head>
+
+<style id="v37-menu-overlay-hard-fix">
+/* V37: More menu must always sit above every page layer, including the royal nav and dashboard hero. */
+#menu.menu{
+  position:fixed!important;
+  top:64px!important;
+  right:10px!important;
+  z-index:100000!important;
+  isolation:isolate!important;
+  max-height:calc(100dvh - 76px)!important;
+  overflow-y:auto!important;
+  pointer-events:auto!important;
+}
+#menu.menu.hidden{display:none!important}
+#menu.menu button{position:relative;z-index:1;pointer-events:auto!important}
+#globalPageNav.globalPageNav{z-index:500!important}
+#fieldOperationsHero{z-index:1!important}
+.bottomNav{z-index:400!important}
+@media(max-width:520px){
+  #menu.menu{top:60px!important;right:8px!important;width:min(300px,calc(100vw - 16px))!important;max-height:calc(100dvh - 70px)!important}
+}
+</style>
 <body>
 <header class="top"><div class="brand">📡 Tele Tuty</div><div class="topspace"></div><button id="menuBtn" class="menuBtn hidden" onclick="toggleMenu()">⋮</button></header>
 <div id="menu" class="menu hidden">
