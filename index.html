@@ -17,6 +17,15 @@ style{display:none!important}
 .homeKpis .stat:nth-child(1) span{color:#8bd5ff}.homeKpis .stat:nth-child(2) span{color:#d6b8ff}.homeKpis .stat:nth-child(3) span{color:#ffd08a}.homeKpis .stat:nth-child(4) span{color:#8ff0c2}
 .homeKpis .stat:nth-child(1) b{color:#b8e8ff}.homeKpis .stat:nth-child(2) b{color:#ead7ff}.homeKpis .stat:nth-child(3) b{color:#ffe1ad}.homeKpis .stat:nth-child(4) b{color:#b8ffdb}
 .stat span{display:block;color:var(--muted);font-size:12px}.stat b{display:block;font-size:28px;margin-top:4px}.hidden{display:none!important}input,select,textarea,button{width:100%;padding:12px 13px;border-radius:12px;border:1px solid #28445e;margin:6px 0;font-size:15px;background:#071523;color:var(--text)}textarea{min-height:86px;resize:vertical}button{background:linear-gradient(135deg,#1378ff,#19a9ff);border:0;font-weight:850;cursor:pointer}.secondary{background:#102b47;color:#b6e9ff;border:1px solid #285473}.ok{background:linear-gradient(135deg,#159d62,#2bd78e)}.warn{background:linear-gradient(135deg,#705016,#a8731c);color:#ffe8b0}.bad{background:linear-gradient(135deg,#d83b51,#ff5c6c)}.danger{color:#ff8c99}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#12314c;color:#aee7ff;font-size:12px}.tabs{display:flex;gap:8px;overflow:auto;padding:3px 0 10px}.tabs button{min-width:max-content;width:auto;margin:0;background:#0c2136}.tabs button.active{background:#168bff}.menu{position:fixed;right:15px;top:58px;z-index:100;width:240px;background:#0b1b2c;border:1px solid var(--line);border-radius:16px;padding:8px;box-shadow:0 25px 60px #0009}.menu button{background:transparent;text-align:left;margin:2px 0}.menu button:hover{background:#12314d}.featureGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.feature{min-height:155px;cursor:pointer;position:relative;overflow:hidden}.feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.2}.featureContent{position:relative;z-index:1}.featureIcon{font-size:32px}.job{border-left:4px solid var(--blue)}.done{border-left-color:var(--green)}.pending{border-left-color:var(--orange)}.person{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #193148}.progress{height:9px;border-radius:20px;background:#091523;overflow:hidden;border:1px solid var(--line)}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:20px}.kpi{font-size:34px;font-weight:900}.table{width:100%;overflow:auto}.table table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}.empty{padding:22px;text-align:center;color:var(--muted)}@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.featureGrid{grid-template-columns:1fr 1fr}.hero{flex-direction:column;align-items:flex-start}.row{flex-wrap:wrap}}@media(max-width:520px){.wrap{padding:10px}.grid{grid-template-columns:1fr 1fr}.featureGrid{grid-template-columns:1fr}.top{height:58px}.menu{top:54px;right:10px;width:min(290px,calc(100vw - 20px))}.viewHeader{top:58px}.homeKpis .stat{min-height:100px}.stat b{font-size:24px}}
+
+/* Engineer job creation */
+.engineerCreateCard{border:1px solid rgba(95,180,255,.35);box-shadow:0 18px 50px rgba(30,90,255,.12)}
+.engineerCreateCard .roleBadge{padding:8px 12px;border-radius:999px;background:linear-gradient(135deg,#1677ff,#a438ff);color:#fff;font-size:12px;font-weight:700}
+.engineerCreateCard .req{color:#ff6680}
+.engineerCreateCard .checkField{display:flex;align-items:flex-end;padding-bottom:10px}
+.engineerCreateCard .checkField label{display:flex;gap:9px;align-items:center}
+.engineerCreateCard .checkField input{width:20px;height:20px}
+
 </style>
 
 <style id="printStyles">
@@ -843,7 +852,27 @@ img{border-radius:14px}
   <div id="team" class="view hidden">
 <div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Manage technicians and engineers. Removing a user permanently removes their login account.</p></div><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><div id="jobsList"></div></div></div>
+    <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
+      <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
+      <div class="grid">
+        <div><label>Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
+        <div><label>Customer Phone</label><input id="jobPhone" type="tel" placeholder="Phone number"></div>
+        <div><label>Location / Address <b class="req">*</b></label><input id="jobLocation" placeholder="Site / address"></div>
+        <div><label>Job Type</label><select id="jobType"><option value="GENERAL">General Job</option><option value="TELECOM">Telecom</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option><option value="WIRING">Wiring Fault</option><option value="RENOVATION">Renovation</option></select></div>
+        <div><label>Preferred Date</label><input id="jobDate" type="date"></div>
+        <div><label>Preferred Time</label><input id="jobTime" type="time"></div>
+      </div>
+      <label>Work Description <b class="req">*</b></label>
+      <textarea id="jobDescription" placeholder="Describe the work, fault or requirement..."></textarea>
+      <div class="grid">
+        <div><label>Assign Technician</label><select id="jobTechnician"><option value="">Unassigned</option></select></div>
+        <div class="checkField"><label><input id="jobUrgent" type="checkbox"> Mark as urgent</label></div>
+      </div>
+      <div class="row"><button id="createJobBtn" onclick="engineerCreateJob()">＋ Create & Assign Job</button><button class="secondary" onclick="clearEngineerJobForm()">Clear</button></div>
+      <p id="engineerJobMsg" class="muted"></p>
+    </div>
+    <div class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div id="jobsList"></div></div>
+  </div>
 
   <div id="success" class="view hidden">
 <div class="analyticsHead">
@@ -1160,6 +1189,67 @@ async function createModuleJob(type){
     $(type==="tower"?"towerWork":"wireWork").value="";
     navigate("jobs");
   }catch(e){alert("Could not create job: "+(e?.message||e));}
+}
+
+async function loadEngineerTechnicians(){
+  const sel=$("jobTechnician");
+  if(!sel) return;
+  const current=sel.value;
+  sel.innerHTML=`<option value="">Unassigned</option>`;
+  try{
+    const r=await db.from("profiles").select("id,full_name,phone").eq("role","worker").eq("active",true).eq("approval_status","approved").order("full_name");
+    if(r.error) throw r.error;
+    (r.data||[]).forEach(x=>{
+      const o=document.createElement("option");
+      o.value=x.id;o.textContent=`${x.full_name||"Technician"}${x.phone?" • "+x.phone:""}`;sel.appendChild(o);
+    });
+    if(current && [...sel.options].some(o=>o.value===current)) sel.value=current;
+  }catch(e){
+    console.error("Technician list error",e);
+    const o=document.createElement("option");o.value="";o.textContent="Could not load technicians";sel.appendChild(o);
+  }
+}
+function focusEngineerJobForm(){
+  const card=$("engineerCreateJobCard");
+  if(!card)return;
+  card.classList.remove("hidden");
+  card.scrollIntoView({behavior:"smooth",block:"start"});
+  setTimeout(()=>$("jobCustomer")?.focus(),250);
+}
+function clearEngineerJobForm(){
+  ["jobCustomer","jobPhone","jobLocation","jobDescription","jobDate","jobTime"].forEach(id=>{if($(id))$(id).value=""});
+  if($("jobType"))$("jobType").value="GENERAL";
+  if($("jobTechnician"))$("jobTechnician").value="";
+  if($("jobUrgent"))$("jobUrgent").checked=false;
+  if($("engineerJobMsg"))$("engineerJobMsg").textContent="";
+}
+async function engineerCreateJob(){
+  if(!profile || !["engineer","admin"].includes(profile.role)) return alert("Only Engineer/Admin can create jobs.");
+  const customer=$("jobCustomer")?.value.trim(), phone=$("jobPhone")?.value.trim()||null, location=$("jobLocation")?.value.trim();
+  const work=$("jobDescription")?.value.trim(), type=$("jobType")?.value||"GENERAL", tech=$("jobTechnician")?.value||null;
+  const date=$("jobDate")?.value||null, time=$("jobTime")?.value||null, urgent=!!$("jobUrgent")?.checked;
+  if(!customer||!location||!work)return alert("Customer name, location and work description are required.");
+  const btn=$("createJobBtn"),msg=$("engineerJobMsg");
+  if(btn)btn.disabled=true;if(msg)msg.textContent="Creating job…";
+  let customerId=null;
+  try{
+    const c=await db.from("customers").insert({name:customer,phone,address:location}).select("id").single();
+    if(c.error)throw c.error;
+    customerId=c.data.id;
+    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:user.id,assigned_worker:tech,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent};
+    const r=await db.from("jobs").insert(payload).select("id,job_code").single();
+    if(r.error)throw r.error;
+    if(msg)msg.textContent=`Job ${r.data?.job_code||"created"} created successfully${tech?" and assigned":""}.`;
+    clearEngineerJobForm();
+    if(msg)msg.textContent=`Job ${r.data?.job_code||"created"} created successfully${tech?" and assigned":""}.`;
+    await loadJobs();
+    await loadHome();
+  }catch(e){
+    if(customerId) await db.from("customers").delete().eq("id",customerId);
+    console.error("Engineer create job error",e);
+    if(msg)msg.textContent="Could not create job.";
+    alert("Could not create job: "+(e?.message||e));
+  }finally{if(btn)btn.disabled=false;}
 }
 
 async function loadApprovals(){
@@ -1550,6 +1640,12 @@ function showView(id){
     title.textContent=titles[id]||"Field Operations";
   }
   closeMenu();
+  const createCard=document.getElementById("engineerCreateJobCard");
+  const newJobTopBtn=document.getElementById("newJobTopBtn");
+  const canCreate=profile?.role==="engineer" || profile?.role==="admin";
+  if(createCard) createCard.classList.toggle("hidden", !(id==="jobs" && canCreate));
+  if(newJobTopBtn) newJobTopBtn.classList.toggle("hidden", !(id==="jobs" && canCreate));
+  if(id==="jobs" && canCreate) loadEngineerTechnicians().catch?.(()=>{});
   if(id==="notifications")loadNotifications().catch?.(()=>{});
   if(id==="team")loadTeam().catch?.(()=>{});
   if(id==="adminTools"){loadApprovals().catch?.(()=>{});}
