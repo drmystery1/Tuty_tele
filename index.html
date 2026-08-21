@@ -620,7 +620,14 @@ img{border-radius:14px}
 #settings .card{border-color:rgba(105,190,255,.22)}
 #settings h3{margin-top:0}
 </style>
-</head>
+<style id="create-job-only-v39">
+.engineerCreateCard{margin-bottom:16px}
+.engineerCreateCard.hidden{display:none!important}
+.jobActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.jobActions button{width:auto!important;min-width:100px}
+.jobEditPanel{margin-top:12px;padding:14px;border:1px solid rgba(110,170,255,.16);border-radius:14px;background:#081727}
+#newJobTopBtn{display:block}
+</style></head>
 
 <style id="v37-menu-overlay-hard-fix">
 /* V37: More menu must always sit above every page layer, including the royal nav and dashboard hero. */
@@ -1108,26 +1115,42 @@ async function removeUser(userId,name,button){
   }
 }
 
+let engineerTechCache=[];
+
+function technicianOptions(selected="") {
+  return `<option value="">Unassigned</option>` + engineerTechCache.map(x=>`<option value="${esc(x.id)}" ${x.id===selected?"selected":""}>${esc(x.full_name||"Technician")}${x.phone?` • ${esc(x.phone)}`:""}</option>`).join("");
+}
+
 async function loadJobs(){
   const box=$("jobsList");
   if(!box) return;
   box.innerHTML=`<div class="empty">Loading jobs…</div>`;
   try{
-    let q=db.from("jobs").select("id,job_code,job_term,work_description,location,status,assigned_worker,assigned_engineer,created_at,scheduled_date,scheduled_time,worker_remarks,pending_reason").order("created_at",{ascending:false}).limit(100);
+    if(["engineer","admin"].includes(profile?.role) && !engineerTechCache.length) await loadEngineerTechnicians();
+    let q=db.from("jobs").select("id,job_code,job_term,work_description,location,status,assigned_worker,assigned_engineer,created_by,customer_id,created_at,scheduled_date,scheduled_time,worker_remarks,pending_reason").order("created_at",{ascending:false}).limit(100);
     if(profile?.role==="worker") q=q.eq("assigned_worker",user.id);
     else if(profile?.role==="engineer") q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);
     const r=await q;
     if(r.error) throw r.error;
     const rows=r.data||[];
     if(!rows.length){box.innerHTML=`<div class="empty">No jobs found.</div>`;return;}
+    let customerMap={};
+    const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))];
+    if(customerIds.length){
+      const cr=await db.from("customers").select("id,name,phone").in("id",customerIds);
+      if(!cr.error) (cr.data||[]).forEach(c=>customerMap[c.id]=c);
+    }
     box.innerHTML=rows.map(j=>{
       const st=String(j.status||"pending");
       const label=st.replaceAll("_"," ");
       const when=[j.scheduled_date,j.scheduled_time].filter(Boolean).join(" • ");
       const canUpdate=profile?.role==="worker" && j.assigned_worker===user.id && !["completed"].includes(st);
-      return `<article class="jobCard cardMini">
+      const canManage=["engineer","admin"].includes(profile?.role) && (profile?.role==="admin" || j.created_by===user.id || j.assigned_engineer===user.id);
+      const c=customerMap[j.customer_id]||{};
+      return `<article class="jobCard cardMini" id="jobCard${j.id}">
         <div class="jobTop"><div><b>${esc(j.job_code||j.job_term||"JOB")}</b><span class="muted">${esc(j.job_term||"Field Job")}</span></div><span class="recentStatus ${esc(st)}">${esc(label)}</span></div>
-        <div class="jobBody"><b>${esc(j.work_description||"No description")}</b><div class="muted">📍 ${esc(j.location||"No location")}</div>${when?`<div class="muted">🗓️ ${esc(when)}</div>`:""}${j.worker_remarks?`<div class="muted">Remark: ${esc(j.worker_remarks)}</div>`:""}${j.pending_reason?`<div class="muted">Reason: ${esc(j.pending_reason)}</div>`:""}</div>
+        <div class="jobBody"><b>${esc(c.name||"Customer not set")}</b>${c.phone?`<div class="muted">📞 ${esc(c.phone)}</div>`:""}<div><b>${esc(j.work_description||"No description")}</b></div><div class="muted">📍 ${esc(j.location||"No location")}</div>${when?`<div class="muted">🗓️ ${esc(when)}</div>`:""}${j.worker_remarks?`<div class="muted">Remark: ${esc(j.worker_remarks)}</div>`:""}${j.pending_reason?`<div class="muted">Reason: ${esc(j.pending_reason)}</div>`:""}</div>
+        ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","STREET_LIGHT","BATTERY","EARTH_PIT","TOWER","WIRING","RENOVATION"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
         ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks"><input id="pr${j.id}" placeholder="Pending reason"><button class="secondary" onclick="updateJob(${j.id},'in_progress')">In Progress</button><button onclick="updateJob(${j.id},'completed')">Complete</button><button class="bad" onclick="updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
       </article>`;
     }).join("");
@@ -1135,6 +1158,35 @@ async function loadJobs(){
     console.error("Jobs load error",e);
     box.innerHTML=`<div class="empty">Could not load jobs: ${esc(e?.message||e)}</div>`;
   }
+}
+
+function toggleJobEdit(id){$("editJob"+id)?.classList.toggle("hidden");}
+
+async function saveJobEdit(id,customerId){
+  if(!["engineer","admin"].includes(profile?.role)) return alert("Engineer/Admin access required");
+  const customer=$("jeCustomer"+id)?.value.trim(), phone=$("jePhone"+id)?.value.trim()||null, location=$("jeLocation"+id)?.value.trim(), work=$("jeDesc"+id)?.value.trim();
+  const job_term=$("jeType"+id)?.value||"GENERAL", assigned_worker=$("jeTech"+id)?.value||null, scheduled_date=$("jeDate"+id)?.value||null, scheduled_time=$("jeTime"+id)?.value||null;
+  if(!customer||!location||!work) return alert("Customer, location and work description are required.");
+  try{
+    if(customerId){ const cr=await db.from("customers").update({name:customer,phone,address:location}).eq("id",customerId); if(cr.error) throw cr.error; }
+    const r=await db.from("jobs").update({work_description:work,location,job_term,assigned_worker,scheduled_date,scheduled_time}).eq("id",id);
+    if(r.error) throw r.error;
+    alert("Job updated successfully.");
+    await Promise.all([loadJobs(),loadHome(),loadSuccessRate()]);
+  }catch(e){ console.error("Job edit error",e); alert("Could not update job: "+(e?.message||e)); }
+}
+
+async function deleteJob(id,code){
+  if(!["engineer","admin"].includes(profile?.role)) return alert("Engineer/Admin access required");
+  if(!confirm(`Delete ${code}?\n\nThis job will be permanently removed.`)) return;
+  try{
+    const r=await db.from("jobs").delete().eq("id",id);
+    if(r.error) throw r.error;
+    $("jobCard"+id)?.remove();
+    alert(`${code} deleted successfully.`);
+    await Promise.all([loadHome(),loadSuccessRate()]);
+    if(!$("jobsList")?.children.length) await loadJobs();
+  }catch(e){ console.error("Job delete error",e); alert("Could not delete job: "+(e?.message||e)); }
 }
 
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
@@ -1193,16 +1245,13 @@ async function createModuleJob(type){
 
 async function loadEngineerTechnicians(){
   const sel=$("jobTechnician");
-  if(!sel) return;
-  const current=sel.value;
-  sel.innerHTML=`<option value="">Unassigned</option>`;
   try{
     const r=await db.from("profiles").select("id,full_name,phone").eq("role","worker").eq("active",true).eq("approval_status","approved").order("full_name");
     if(r.error) throw r.error;
-    (r.data||[]).forEach(x=>{
-      const o=document.createElement("option");
-      o.value=x.id;o.textContent=`${x.full_name||"Technician"}${x.phone?" • "+x.phone:""}`;sel.appendChild(o);
-    });
+    engineerTechCache=r.data||[];
+    if(!sel) return;
+    const current=sel.value;
+    sel.innerHTML=technicianOptions(current);
     if(current && [...sel.options].some(o=>o.value===current)) sel.value=current;
   }catch(e){
     console.error("Technician list error",e);
@@ -1491,6 +1540,10 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 
 .teamUser{display:flex;align-items:center;gap:12px;padding:14px;margin:10px 0;border:1px solid rgba(88,160,255,.22);border-radius:16px;background:linear-gradient(135deg,rgba(18,43,70,.95),rgba(37,23,69,.92));box-shadow:0 8px 24px rgba(0,0,0,.14)}
 .cardMini{width:100%;box-sizing:border-box}.teamUserInfo{flex:1;min-width:0}.teamUserInfo b{display:block;font-size:16px}.teamUserInfo span,.teamUserInfo small{display:block;color:var(--muted);margin-top:3px}.teamUserInfo small{font-size:12px;overflow:hidden;text-overflow:ellipsis}.teamUserActions{width:100px}.teamUserActions .pill{display:block;text-align:center}.removeUserBtn{margin:0!important;padding:9px 8px!important;font-size:12px!important;background:linear-gradient(135deg,#d83b51,#ff5c6c)!important}.removeUserBtn:disabled{opacity:.55;cursor:wait}@media(max-width:520px){.teamUser{align-items:flex-start}.teamUserActions{width:84px}.teamUserActions .removeUserBtn{font-size:11px!important}}
+
+<style>
+.jobEditPanel{margin-top:12px;padding:14px;border:1px solid rgba(105,190,255,.28);border-radius:16px;background:rgba(7,20,43,.72);display:flex;flex-direction:column;gap:10px}.jobEditPanel.hidden{display:none}.jobEditPanel input,.jobEditPanel select,.jobEditPanel textarea{width:100%;box-sizing:border-box}.jobEditPanel textarea{min-height:80px;resize:vertical}.jobEditPanel .row{display:flex;gap:10px;flex-wrap:wrap}.jobEditPanel .row>*{flex:1;min-width:140px}.jobEditPanel button{min-width:120px}
+</style>
 </style>
 
 </head><body><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button>
@@ -1643,7 +1696,7 @@ function showView(id){
   const createCard=document.getElementById("engineerCreateJobCard");
   const newJobTopBtn=document.getElementById("newJobTopBtn");
   const canCreate=profile?.role==="engineer" || profile?.role==="admin";
-  if(createCard) createCard.classList.toggle("hidden", !(id==="jobs" && canCreate));
+  if(createCard) createCard.classList.add("hidden");
   if(newJobTopBtn) newJobTopBtn.classList.toggle("hidden", !(id==="jobs" && canCreate));
   if(id==="jobs" && canCreate) loadEngineerTechnicians().catch?.(()=>{});
   if(id==="notifications")loadNotifications().catch?.(()=>{});
