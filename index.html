@@ -474,6 +474,7 @@ body:before{opacity:.08}
 .recentItem{display:grid;grid-template-columns:8px 1fr auto;gap:12px;align-items:center;padding:14px;border:1px solid rgba(121,164,224,.12);border-radius:14px;background:rgba(11,23,39,.82)}
 .recentItem .stripe{width:4px;height:58px;border-radius:8px}.recentItem .stripe.pending{background:#f59e0b}.recentItem .stripe.completed{background:#22c55e}.recentItem .stripe.not_completed{background:#ef3b4f}.recentItem .stripe.in_progress{background:#3b82f6}
 .recentItem b{font-size:14px}.recentItem .muted{margin-top:3px}.recentStatus{padding:7px 10px;border-radius:9px;font-size:11px;font-weight:800}.recentStatus.pending{color:#ffbf45;background:rgba(245,158,11,.13)}.recentStatus.completed{color:#4be28b;background:rgba(34,197,94,.13)}.recentStatus.not_completed{color:#ff6d7c;background:rgba(239,59,79,.13)}.recentStatus.in_progress{color:#62b2ff;background:rgba(59,130,246,.13)}
+.jobSummaryButton{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin:0;padding:14px 4px;background:transparent;border:0;color:inherit;text-align:left;cursor:pointer;border-radius:12px}.jobSummaryButton:hover{background:rgba(255,255,255,.035)}.jobSummaryButton:focus-visible{outline:2px solid #5bbcff;outline-offset:2px}.jobCollapsedTitle{font-weight:850;font-size:16px}.jobCollapsedMeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}.jobExpandIcon{font-size:18px;transition:transform .18s ease}.jobCard.is-open .jobExpandIcon{transform:rotate(180deg)}.jobExpanded{padding-top:6px}.jobCard{cursor:default}
 .quickGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.quick{min-height:105px!important;border-radius:14px!important;background:#0b1a2d!important;border:1px solid rgba(255,255,255,.08)!important;text-align:left;padding:15px!important}.quick i{display:block;font-style:normal;font-size:25px;margin-bottom:9px}.quick span{display:block;font-weight:800}.quick.blue i{color:#4da8ff}.quick.red i{color:#ff6377}.quick.purple i{color:#a675ff}.quick.orange i{color:#ffb12e}.quick.green i{color:#47df8b}
 .quick small{display:block;color:#8fa1b7;margin-top:4px}
 .miniUsers{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.miniUser{padding:12px;border-radius:13px;background:#0b192b;border:1px solid rgba(255,255,255,.07)}.miniUser b{display:block}.miniUser span{color:#8195ab;font-size:11px}
@@ -1203,38 +1204,57 @@ async function loadJobs(){
       const when=[j.scheduled_date,j.scheduled_time].filter(Boolean).join(" • ");
       const canUpdate=profile?.role==="worker" && j.assigned_worker===user.id && st!=="completed";
       const canManage=["engineer","admin"].includes(profile?.role) && (profile?.role==="admin" || j.created_by===user.id || j.assigned_engineer===user.id);
+      const shortTitle=(j.job_term||j.work_description||j.job_code||"Field Job").replaceAll("_"," ");
       return `<article class="jobCard cardMini jobCardReadable" id="jobCard${j.id}">
-        <div class="jobTop jobTopReadable">
-          <div class="jobTitleBlock">
-            <div class="jobCodeReadable">${esc(j.job_code||"JOB")}</div>
-            <div class="jobTypeReadable">${esc((j.job_term||"Field Job").replaceAll("_"," "))}</div>
+        <button class="jobSummaryButton" type="button" aria-expanded="false" aria-controls="jobExpanded${j.id}" onclick="toggleJobDetails(${j.id})">
+          <span>
+            <span class="jobCollapsedTitle">${esc(shortTitle)}</span>
+            <span class="jobCollapsedMeta"><span class="pill">${esc(j.job_code||"JOB")}</span><span class="recentStatus ${esc(st)} jobStatusReadable">${esc(labelStatus(st))}</span></span>
+          </span>
+          <span class="jobExpandIcon" aria-hidden="true">⌄</span>
+        </button>
+        <div id="jobExpanded${j.id}" class="jobExpanded hidden">
+          <div class="jobTop jobTopReadable">
+            <div class="jobTitleBlock">
+              <div class="jobCodeReadable">${esc(j.job_code||"JOB")}</div>
+              <div class="jobTypeReadable">${esc((j.job_term||"Field Job").replaceAll("_"," "))}</div>
+            </div>
+            <span class="recentStatus ${esc(st)} jobStatusReadable">${esc(labelStatus(st))}</span>
           </div>
-          <span class="recentStatus ${esc(st)} jobStatusReadable">${esc(labelStatus(st))}</span>
+          <div class="jobDetailsReadable">
+            <section class="jobDetailSection primaryJobDetail">
+              <div class="detailLabel">📋 WORK TO DO</div>
+              <div class="jobWorkReadable">${esc(j.work_description||"No work description provided")}</div>
+            </section>
+            <section class="jobDetailGrid">
+              <div class="jobDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small>📞 ${esc(c.phone)}</small>`:""}</div>
+              <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
+              <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}</div>
+              <div class="jobDetailItem"><span>👷 Technician</span><strong>${esc(technician)}</strong>${rolePhone(j.assigned_worker)?`<small>📞 ${esc(rolePhone(j.assigned_worker))}</small>`:""}</div>
+              <div class="jobDetailItem"><span>🗓️ Schedule</span><strong>${esc(when||"Not scheduled")}</strong></div>
+              <div class="jobDetailItem"><span>🆔 Job ID</span><strong>${esc(j.job_code||String(j.id))}</strong></div>
+            </section>
+            ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong></section>`:""}
+            ${j.pending_reason?`<section class="jobNote pendingNote"><span>⚠️ Pending reason</span><strong>${esc(j.pending_reason)}</strong></section>`:""}
+          </div>
+          ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","STREET_LIGHT","BATTERY","EARTH_PIT","TOWER","WIRING","RENOVATION"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
+          ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks" onclick="event.stopPropagation()"><input id="pr${j.id}" placeholder="Pending reason" onclick="event.stopPropagation()"><button class="secondary" type="button" onclick="event.stopPropagation();updateJob(${j.id},'in_progress')">In Progress</button><button type="button" onclick="event.stopPropagation();updateJob(${j.id},'completed')">Complete</button><button class="bad" type="button" onclick="event.stopPropagation();updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
         </div>
-        <div class="jobDetailsReadable">
-          <section class="jobDetailSection primaryJobDetail">
-            <div class="detailLabel">📋 WORK TO DO</div>
-            <div class="jobWorkReadable">${esc(j.work_description||"No work description provided")}</div>
-          </section>
-          <section class="jobDetailGrid">
-            <div class="jobDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small>📞 ${esc(c.phone)}</small>`:""}</div>
-            <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
-            <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}</div>
-            <div class="jobDetailItem"><span>👷 Technician</span><strong>${esc(technician)}</strong>${rolePhone(j.assigned_worker)?`<small>📞 ${esc(rolePhone(j.assigned_worker))}</small>`:""}</div>
-            <div class="jobDetailItem"><span>🗓️ Schedule</span><strong>${esc(when||"Not scheduled")}</strong></div>
-            <div class="jobDetailItem"><span>🆔 Job ID</span><strong>${esc(j.job_code||String(j.id))}</strong></div>
-          </section>
-          ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong></section>`:""}
-          ${j.pending_reason?`<section class="jobNote pendingNote"><span>⚠️ Pending reason</span><strong>${esc(j.pending_reason)}</strong></section>`:""}
-        </div>
-        ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","STREET_LIGHT","BATTERY","EARTH_PIT","TOWER","WIRING","RENOVATION"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
-        ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks"><input id="pr${j.id}" placeholder="Pending reason"><button class="secondary" onclick="updateJob(${j.id},'in_progress')">In Progress</button><button onclick="updateJob(${j.id},'completed')">Complete</button><button class="bad" onclick="updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
       </article>`;
     }).join("");
   }catch(e){
     console.error("Jobs load error",e);
     box.innerHTML=`<div class="empty">Could not load jobs: ${esc(e?.message||e)}</div>`;
   }
+}
+
+function toggleJobDetails(id){
+  const panel=$("jobExpanded"+id), card=$("jobCard"+id);
+  if(!panel||!card)return;
+  const open=panel.classList.toggle("hidden");
+  card.classList.toggle("is-open",!open);
+  const btn=card.querySelector(".jobSummaryButton");
+  if(btn)btn.setAttribute("aria-expanded",String(!open));
 }
 
 async function saveJobEdit(id,customerId){
