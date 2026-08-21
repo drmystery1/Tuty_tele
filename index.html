@@ -162,6 +162,57 @@ const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co","sb_pu
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function show(id){["login","pending","app"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
 function toggleMenu(){ $("menu").classList.toggle("hidden") } function closeMenu(){ $("menu").classList.add("hidden") }
+async function load(){
+  try{
+    if(!user){
+      const session=await db.auth.getSession();
+      user=session.data?.session?.user||null;
+    }
+    if(!user){ show("login"); return; }
+
+    const r=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();
+    if(r.error){
+      console.error("Profile load error",r.error);
+      show("login");
+      $("loginMsg").textContent="Profile load failed: "+r.error.message;
+      return;
+    }
+    if(!r.data){
+      show("login");
+      $("loginMsg").textContent="No profile found for this account. Ask Admin to create/approve your profile.";
+      return;
+    }
+
+    profile=r.data;
+    const approved=String(profile.approval_status||"").toLowerCase()==="approved";
+    if(profile.active===false || !approved){
+      $("menuBtn").classList.add("hidden");
+      show("pending");
+      return;
+    }
+
+    show("app");
+    $("menuBtn").classList.remove("hidden");
+    $("rolePill").textContent=profile.role==="worker"?"Technician":(profile.role||"User");
+    $("hello").textContent="Welcome, "+(profile.full_name||user.email||"User");
+    $("role").textContent=(profile.role==="worker"?"Technician":(profile.role||"User"))+" • "+(user.email||"");
+    $("profileName").textContent=profile.full_name||user.email||"User";
+    $("profileRole").textContent=profile.role==="worker"?"Technician":(profile.role||"User");
+    $("myAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
+    $("profileAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
+    $("adminMenu").classList.toggle("hidden",profile.role!=="admin");
+    $("adminTools").classList.toggle("hidden",profile.role!=="admin");
+    navHistory=["home"];
+    showView("home");
+    await loadHome();
+    const savedAvatar=localStorage.getItem("tele_tuty_avatar_"+user.id);
+    if(savedAvatar) setAvatar(savedAvatar);
+  }catch(err){
+    console.error("Load error",err);
+    show("login");
+    $("loginMsg").textContent="Login succeeded, but profile loading failed: "+(err?.message||err);
+  }
+}
 async function login(){
  const e=$("email").value.trim(), p=$("password").value;
  const msg=$("loginMsg");
