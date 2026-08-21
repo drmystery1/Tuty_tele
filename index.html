@@ -1190,7 +1190,8 @@ async function loadJobs(){
     box.innerHTML=rows.map(j=>{
       const st=String(j.status||"pending");
       const c=customerMap[j.customer_id]||{};
-      const engineer=roleName(j.assigned_engineer);
+      const engineerId=j.assigned_engineer || (profileMap[j.created_by]?.role==="engineer" ? j.created_by : null);
+      const engineer=roleName(engineerId);
       const technician=roleName(j.assigned_worker);
       const when=[j.scheduled_date,j.scheduled_time].filter(Boolean).join(" • ");
       const canUpdate=profile?.role==="worker" && j.assigned_worker===user.id && st!=="completed";
@@ -1211,7 +1212,7 @@ async function loadJobs(){
           <section class="jobDetailGrid">
             <div class="jobDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small>📞 ${esc(c.phone)}</small>`:""}</div>
             <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
-            <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(j.assigned_engineer)?`<small>📞 ${esc(rolePhone(j.assigned_engineer))}</small>`:""}</div>
+            <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}</div>
             <div class="jobDetailItem"><span>👷 Technician</span><strong>${esc(technician)}</strong>${rolePhone(j.assigned_worker)?`<small>📞 ${esc(rolePhone(j.assigned_worker))}</small>`:""}</div>
             <div class="jobDetailItem"><span>🗓️ Schedule</span><strong>${esc(when||"Not scheduled")}</strong></div>
             <div class="jobDetailItem"><span>🆔 Job ID</span><strong>${esc(j.job_code||String(j.id))}</strong></div>
