@@ -363,6 +363,15 @@ document.addEventListener('keydown', function(e){
 
 
 
+
+<style id="home-directory-search-v91">
+.homeDirectorySearch{margin:12px 0 14px;background:#fff;border:1px solid #d7dee8;border-radius:18px;padding:14px;box-shadow:0 3px 14px rgba(15,23,42,.06)}
+.homeDirectoryHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.homeDirectoryHead h2{margin:0;font-size:18px;color:#172033}.homeDirectoryHead p{margin:3px 0 0;font-size:12px;color:#64748b}.homeDirectoryHead button{width:auto!important;margin:0!important;padding:8px 11px!important;font-size:12px!important}
+.homeDirectorySearchRow{display:flex;align-items:center;gap:7px;border:1px solid #cbd5e1;border-radius:14px;background:#f8fafc;padding:5px 7px}.homeDirectorySearchRow>span{font-size:20px;color:#2563eb}.homeDirectorySearchRow input{margin:0!important;flex:1;min-width:0;background:#fff!important;color:#172033!important;border:0!important;box-shadow:none!important}.homeDirectoryClear{width:32px!important;height:32px!important;min-width:32px!important;margin:0!important;padding:0!important;border-radius:9px!important;background:#f8fafc!important;color:#334155!important;border:1px solid #e2e8f0!important;font-size:20px!important}
+.homeDirectoryResults{margin-top:8px;display:grid;gap:7px}.homeDirectoryHint{font-size:12px;color:#64748b;padding:7px 4px}.homeDirResult{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc}.homeDirInfo{min-width:0}.homeDirName{font-weight:800;color:#172033;font-size:14px}.homeDirRole{font-size:12px;color:#475569;margin-top:2px}.homeDirPhone{font-weight:800;color:#2563eb;font-size:12px;white-space:nowrap}.homeDirOpen{width:auto!important;margin:0!important;padding:6px 9px!important;font-size:11px!important}
+@media(max-width:520px){.homeDirectoryHead{align-items:flex-start}.homeDirectoryHead button{padding:7px 8px!important}.homeDirResult{align-items:flex-start}.homeDirPhone{white-space:normal}}
+</style>
+
 <style id="royal-global-navigation">
 .globalPageNav{
   display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:45;
@@ -2158,6 +2167,19 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
         </div>
       </div>
 
+      <div id="homeDirectorySearch" class="homeDirectorySearch">
+        <div class="homeDirectoryHead">
+          <div><h2>☎ Directory Search</h2><p>Search a company telephone / extension number.</p></div>
+          <button type="button" onclick="navigate('directory')">Open Directory</button>
+        </div>
+        <div class="homeDirectorySearchRow">
+          <span>⌕</span>
+          <input id="homeDirectoryInput" type="search" inputmode="numeric" autocomplete="off" placeholder="Enter number / extension…" aria-label="Search telephone directory">
+          <button type="button" class="homeDirectoryClear" onclick="clearHomeDirectorySearch()" aria-label="Clear directory search">×</button>
+        </div>
+        <div id="homeDirectoryResults" class="homeDirectoryResults"><div class="homeDirectoryHint">Type a number to search the directory.</div></div>
+      </div>
+
       <div id="adminDashboard" class="rolePane hidden">
         <div class="kpiGrid four">
           <button class="dashKpi blue" onclick="navigate('team')"><span class="kpiIcon">♙</span><strong id="users">0</strong><small>Total Users</small></button>
@@ -3795,6 +3817,7 @@ function showView(id){
   document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
   el.classList.remove("hidden");
   if(id==="directory") setTimeout(()=>loadDirectory(),0);
+  if(id==="home") setTimeout(()=>{ if(!directoryLoaded) loadDirectory().then(renderHomeDirectoryResults).catch(()=>{}); else renderHomeDirectoryResults(); },0);
   // The Field Operations hero belongs to the dashboard only.
   // Never let it sit above / overlap a module view.
   const fieldHero=document.getElementById("fieldOperationsHero");
@@ -3877,8 +3900,25 @@ window.addEventListener("keydown",function(e){
 history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 
+
+function renderHomeDirectoryResults(){
+  const box=document.getElementById("homeDirectoryResults"); if(!box)return;
+  const input=document.getElementById("homeDirectoryInput"); const q=input?.value?.trim()||"";
+  if(!q){box.innerHTML='<div class="homeDirectoryHint">Type a number to search the directory.</div>';return;}
+  if(!directoryLoaded){box.innerHTML='<div class="homeDirectoryHint">Loading directory…</div>'; loadDirectory(true).then(renderHomeDirectoryResults).catch(()=>{}); return;}
+  const rows=directoryRows.filter(r=>directoryMatches(r,q)).slice(0,5);
+  if(!rows.length){box.innerHTML='<div class="homeDirectoryHint">No matching number found. Try another extension.</div>';return;}
+  box.innerHTML=rows.map(r=>{
+    const title=r.name||r.designation||"Directory entry";
+    const phones=(r.phone_numbers?.length?r.phone_numbers:[...directoryPhones(r.office_phone),...directoryPhones(r.residence_phone)]).filter((x,i,a)=>a.indexOf(x)===i);
+    return `<div class="homeDirResult"><div class="homeDirInfo"><div class="homeDirName">${esc(title)}</div>${r.designation?`<div class="homeDirRole">${esc(r.designation)}</div>`:""}<div class="homeDirRole">${esc(r.section||"General")}</div></div><div class="homeDirPhone">${phones.length?esc(phones[0]):"—"}</div></div>`;
+  }).join("");
+}
+function clearHomeDirectorySearch(){const i=document.getElementById("homeDirectoryInput");if(i){i.value="";i.focus();}renderHomeDirectoryResults();}
+
 /* V90 Telephone Directory */
 let directoryRows=[], directoryLoaded=false;
+document.addEventListener("DOMContentLoaded",()=>{const i=document.getElementById("homeDirectoryInput");if(i){i.addEventListener("input",renderHomeDirectoryResults);}});
 function directoryDigits(v){return String(v??"").replace(/\D/g,"");}
 function directoryPhones(v){return (String(v??"").match(/\d{3,15}/g)||[]).filter((x,i,a)=>a.indexOf(x)===i);}
 function directoryMatches(row,q){
