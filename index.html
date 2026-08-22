@@ -27,7 +27,7 @@ style{display:none!important}
 .engineerCreateCard .checkField input{width:20px;height:20px}
 
 
-/* V68 CLEAN WHITE THEME
+/* V69 CLEAN WHITE THEME
    Accessibility pass: remove legacy dark/gradient surfaces and enforce
    high-contrast text across every module. Login hero image is preserved. */
 :root{
@@ -1668,8 +1668,8 @@ html,body{background:#fff!important;color:#172033!important;}
 @media(max-width:600px){.teamUserActions{justify-content:stretch!important}.teamUserActions button{flex:1 1 100%!important;width:100%!important}}
 </style>
 
-<style id="v68-absolute-clean-white-theme">
-/* V68 — absolute clean white rebuild.  This block is intentionally last so
+<style id="v69-absolute-clean-white-theme">
+/* V69 — absolute clean white rebuild.  This block is intentionally last so
    every legacy royal/gradient theme loses the cascade everywhere in the app. */
 html,body,#app,.wrap,.view,.rolePane,main{background:#fff!important;background-image:none!important;color:#172033!important;}
 body:before,body:after,html:before,html:after{display:none!important;content:none!important;background:none!important;}
@@ -1751,6 +1751,17 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 }
 </style>
 
+
+<style id="v69-section-backgrounds">
+/* V69: section-specific visual headers. Images are local app assets; text stays outside the image for maximum readability. */
+.modulePhoto{position:relative;height:150px;margin:-2px -2px 18px;border-radius:18px;overflow:hidden;border:1px solid #e5e7eb;background:#f8fafc;isolation:isolate}
+.modulePhoto::before{content:"";position:absolute;inset:0;background-image:var(--module-bg);background-size:cover;background-position:center;filter:saturate(.92);transform:scale(1.01);z-index:0}
+.modulePhoto::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.46);z-index:1}
+.modulePhoto .modulePhotoLabel{position:absolute;left:18px;bottom:14px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.9);border:1px solid rgba(17,24,39,.08);font-weight:800;color:#172033;font-size:14px;box-shadow:0 4px 16px rgba(15,23,42,.10)}
+@media(max-width:600px){.modulePhoto{height:125px;margin-bottom:14px;border-radius:15px}.modulePhoto .modulePhotoLabel{font-size:13px;left:12px;bottom:10px}}
+/* Keep all section text above the photo and fully opaque. */
+.view .modulePhoto~*{position:relative;z-index:1}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -1956,6 +1967,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   </div>
 
   <div id="street" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/street_light_survey.png')"><span class="modulePhotoLabel">Street Light Survey</span></div>
 <div class="card"><div class="row"><div><h1 class="moduleTitle"><span class="moduleIcon streetIcon">✦</span> Street Light Survey</h1><p class="muted">Record area-wise light condition and survey findings.</p></div><div class="spacer"></div>
 </div>
       <div class="grid"><div><label>Area Name</label><input id="slArea" placeholder="Area / street"></div><div><label>Total Lights</label><input id="slTotal" type="number" min="0" value="0"></div><div><label>Working Lights</label><input id="slWorking" type="number" min="0" value="0"></div><div><label>Fault Lights</label><input id="slFault" type="number" min="0" value="0"></div></div>
@@ -1968,24 +1980,31 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   </div>
 
   <div id="tower" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/telecom_tower.png')"><span class="modulePhotoLabel">Telecom Tower</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon towerIcon">⌁</span> Telecom Tower</h1><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
 
   <div id="battery" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/battery_bank.png')"><span class="modulePhotoLabel">Battery Maintenance</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon batteryIcon">▣</span> Battery Maintenance</h1><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
 
   <div id="earth" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/earth_pit.png')"><span class="modulePhotoLabel">Earth Pit Maintenance</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon earthIcon">◉</span> Earth Pit Maintenance</h1><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
 
   <div id="wiring" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/wiring_fault.png')"><span class="modulePhotoLabel">Wiring Fault</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon wiringIcon">ϟ</span> Wiring Fault</h1><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
 
   <div id="renovation" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/wiring_fault.png')"><span class="modulePhotoLabel">Renovation & Repair</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon renovationIcon">⌁</span> Renovation</h1><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
 
   <div id="profile" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">My Profile</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">◉</span> My Profile</h1><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
   <div id="settings" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/battery_bank.png')"><span class="modulePhotoLabel">Settings & Security</span></div>
 <div class="card settingsHero"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><p class="muted">Manage your account, security and app preferences.</p></div>
 <div class="card"><h3>🔐 Change Password</h3><p class="muted">Enter your current password and choose a new password.</p><input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password"><input id="newPassword" type="password" autocomplete="new-password" placeholder="New password (8+ characters)"><input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirm new password"><button onclick="changePassword()">🔒 Change Password</button><p id="passwordMsg" class="muted"></p></div>
 <div class="card"><h3>⚙️ App Preferences</h3><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">👤 Profile & Photo</button></div>
@@ -1993,11 +2012,14 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </div>
 
   <div id="notifications" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/street_light_survey.png')"><span class="modulePhotoLabel">Notifications</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">●</span> Notifications</h1><div id="notificationsList"></div></div></div>
 
   <div id="team" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">Team Management</span></div>
 <div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Add, activate, deactivate, remove and manage all engineers and technicians from one place.</p></div><div class="row teamActions"><button onclick="navigate('adminTools')">＋ Add User</button><button class="secondary" onclick="navigate('adminTools')">▤ Approval Requests</button><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('tele-tuty-final-hero.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
       <div class="grid">
@@ -2021,6 +2043,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   </div>
 
   <div id="success" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">Technician Performance</span></div>
 <div class="analyticsHead">
       <div><h1>Technician Success Rate</h1><p class="muted">Performance overview of all technicians</p></div>
       <div class="dateChip">▣ <span>Current period</span>⌄</div>
@@ -2037,6 +2060,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   </div>
 
   <div id="adminTools" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">Admin Controls</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
 
   <div id="backup" class="view hidden">
@@ -3124,8 +3148,8 @@ history.replaceState({teleTutyView:"home"},"",location.pathname+location.search)
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
 
-<style id="v68-true-clean-white-final">
-/* V68: final clean white surface. This intentionally overrides ALL older theme blocks. */
+<style id="v69-true-clean-white-final">
+/* V69: final clean white surface. This intentionally overrides ALL older theme blocks. */
 :root{
   --bg:#ffffff!important; --panel:#ffffff!important; --panel2:#f8fafc!important;
   --line:#d7dee8!important; --text:#172033!important; --muted:#526071!important;
@@ -3211,7 +3235,7 @@ body:before,body:after{display:none!important;content:none!important;background:
 </style>
 </body></html>
 <style>
-/* V68 unified team-management navigation */
+/* V69 unified team-management navigation */
 .teamActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .teamActions button{white-space:nowrap}
 @media(max-width:700px){
