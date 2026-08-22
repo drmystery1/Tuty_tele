@@ -2824,7 +2824,7 @@ async function loadJobs(){
               <div class="jobWorkReadable">${esc(j.work_description||"No work description provided")}</div>
             </section>
             <section class="jobDetailGrid">
-              <div class="jobDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small>📞 ${esc(c.phone)}</small>`:""}</div>
+              <div class="jobDetailItem customerDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small class="customerPhoneLine">📞 ${esc(c.phone)}</small><div class="customerContactActions"><a class="customerCallBtn" href="tel:${encodeURIComponent(c.phone)}" onclick="event.stopPropagation()">📞 Call Customer</a></div>`:`<small class="muted">Customer phone not available</small>`}</div>
               <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
               <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}</div>
               <div class="jobDetailItem"><span>👷 Technician</span><strong>${esc(technician)}</strong>${rolePhone(j.assigned_worker)?`<small>📞 ${esc(rolePhone(j.assigned_worker))}</small>`:""}</div>
@@ -3801,3 +3801,17 @@ body:before,body:after{display:none!important;content:none!important;background:
   .teamActions button{flex:1 1 140px}
 }
 </style>
+
+
+<style id="customer-contact-v88">
+.customerDetailItem{min-width:0}
+.customerPhoneLine{display:block;margin-top:4px;font-weight:700}
+.customerContactActions{margin-top:8px}
+.customerCallBtn{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 11px;border-radius:9px;background:#16a34a!important;color:#fff!important;text-decoration:none!important;font-size:12px;font-weight:800;line-height:1}
+.customerCallBtn:active{transform:scale(.98)}
+@media(max-width:520px){.customerCallBtn{width:100%;}.customerDetailItem{overflow:hidden}}
+</style>
+<script>
+/* V88: assigned technicians can view the customer record attached to their assigned jobs.
+   The database policy is applied separately; this UI adds a direct call action. */
+</script>
