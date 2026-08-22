@@ -2078,7 +2078,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   </div>
   <div class="menuDivider"></div>
   <button onclick="navigate('jobs')"><img class="menuImgIcon" src="public/images/jobs_icon.png" alt=""> <span>Jobs</span></button>
-  <button onclick="navigate('directory')">☎ <span>Telephone Directory</span></button>
+  <button id="directoryMenuBtn" onclick="navigate('directory')">☎ <span>Telephone Directory</span></button>
 
   <button id="successMenuBtn" onclick="navigate('success')"><img class="menuImgIcon" src="public/images/technician_avatar.png" alt=""> <span>Technician Success Rate</span></button>
   <button onclick="navigate('notifications')"><img class="menuImgIcon" src="public/images/notifications_icon.png" alt=""> <span>Notifications</span></button>
@@ -3807,7 +3807,7 @@ function showView(id){
   if(nav){ nav.classList.remove("hidden"); nav.style.display="flex"; nav.style.visibility="visible"; nav.style.opacity="1"; }
   const title=document.getElementById("globalPageTitle");
   if(title){
-    const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",tower:"Telecom Tower",wiring:"Wiring Fault",renovation:"Renovation",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
+    const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",directory:"Telephone Directory",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",tower:"Telecom Tower",wiring:"Wiring Fault",renovation:"Renovation",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
     title.textContent=titles[id]||"Field Operations";
   }
   closeMenu();
