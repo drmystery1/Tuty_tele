@@ -1809,7 +1809,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   </div>
   <div class="menuDivider"></div>
   <button onclick="navigate('jobs')">📋 Jobs</button>
-  <button onclick="navigate('success')">🏆 Technician Success Rate</button>
+  <button id="successMenuBtn" onclick="navigate('success')">🏆 Technician Success Rate</button>
   <button onclick="navigate('notifications')">🔔 Notifications</button>
   <div class="menuDivider"></div>
   <div class="menuGroupTitle">Account</div>
@@ -2135,6 +2135,7 @@ async function load(){
     if($("myAvatar"))$("myAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
     if($("profileAvatar"))$("profileAvatar").textContent=(profile.full_name||"A").charAt(0).toUpperCase();
     if($("adminMenu"))$("adminMenu").classList.toggle("hidden",role!=="admin");
+    applyRoleNavigation();
     if($("adminTools"))$("adminTools").classList.toggle("hidden",role!=="admin");
     navHistory=["home"];
     showView("home");
@@ -3075,7 +3076,24 @@ document.addEventListener("click",(ev)=>{const m=document.getElementById("menu")
 function currentView(){
   return navHistory[navHistory.length-1] || "home";
 }
+function canAccessView(id){
+  const role=String(profile?.role||"").toLowerCase();
+  if(id==="team" || id==="adminTools") return role==="admin";
+  if(id==="success") return role==="admin" || role==="engineer";
+  return true;
+}
+function applyRoleNavigation(){
+  const role=String(profile?.role||"").toLowerCase();
+  const successAllowed=role==="admin" || role==="engineer";
+  const teamAllowed=role==="admin";
+  document.querySelectorAll('[onclick*="navigate(\'success\')"]').forEach(el=>el.classList.toggle("hidden",!successAllowed));
+  document.querySelectorAll('[onclick*="navigate(\'team\')"],[onclick*="navigate(\'adminTools\')"]').forEach(el=>el.classList.toggle("hidden",!teamAllowed));
+  const successEl=$("success"); if(successEl) successEl.classList.toggle("hidden", !successAllowed && !successEl.classList.contains("hidden"));
+  const teamEl=$("team"); if(teamEl) teamEl.classList.toggle("hidden", !teamAllowed && !teamEl.classList.contains("hidden"));
+  const adminEl=$("adminTools"); if(adminEl) adminEl.classList.toggle("hidden", !teamAllowed && !adminEl.classList.contains("hidden"));
+}
 function showView(id){
+  if(!canAccessView(id)){ showView('home'); return false; }
   const el=document.getElementById(id);
   if(!el) return false;
   document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
@@ -3122,6 +3140,7 @@ function setNavButtonState(){
 }
 function navigate(id){
   if(!user || !document.getElementById(id)) return;
+  if(!canAccessView(id)){ alert("This section is available only to Admin/Engineer."); return; }
   closeMenu();
   if(id==="home"){
     navHistory=["home"];
