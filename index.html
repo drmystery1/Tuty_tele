@@ -1771,7 +1771,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </style>
 
 <style id="v73-notifications-role-clean">
-/* V73: final readable notifications + role-based maintenance visibility */
+/* V74: final readable notifications + role-based maintenance visibility */
 #notifications, #notifications .card, #notifications .person, #notifications .person > div {
   background:#fff!important; background-image:none!important; color:#172033!important; opacity:1!important; filter:none!important; text-shadow:none!important;
 }
@@ -1981,7 +1981,6 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
         </div>
         <div class="featureRibbon">
           <button onclick="navigate('jobs')"><b>✓</b><span>Job Updates</span><small>Update job status in real-time</small></button>
-          <button onclick="navigate('jobs')"><b>▤</b><span>Job Notes</span><small>Add notes and observations</small></button>
           <button onclick="navigate('success')"><b>◷</b><span>Job History</span><small>View your past job history</small></button>
         </div>
       </div>
@@ -2163,6 +2162,8 @@ async function load(){
     navHistory=["home"];
     showView("home");
     try{ await loadHome(); }catch(e){ console.error("Dashboard load error",e); if($("loginMsg"))$("loginMsg").textContent="Dashboard data load failed: "+(e?.message||e); }
+    try{ await enableMobileNotifications(); }catch(e){}
+    try{ await loadNotifications(); startNotificationWatch(); }catch(e){}
     const savedAvatar=localStorage.getItem("tele_tuty_avatar_"+user.id);
     if(savedAvatar) setAvatar(savedAvatar);
   }catch(err){
@@ -2240,7 +2241,52 @@ function renderRecentJobs(rows){
    return `<div class="recentItem"><span class="stripe ${st}"></span><div class="recentJobText"><b class="recentJobTitle">${esc(j.job_term||j.job_code||"JOB")}</b><div class="recentJobDesc">${esc(j.work_description||"Field maintenance job")}</div><div class="muted recentJobLocation">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
  }).join("");
 }
-async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];const unread=n.filter(x=>!x.read_at).length;const badge=$("notifCount");if(badge)badge.textContent=unread;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
+let notificationChannel=null, notificationPoll=null, notificationInitialized=false, lastNotificationCreatedAt=null;
+async function showMobileNotification(title,body){
+  try{
+    if(!('Notification' in window) || Notification.permission!=="granted") return;
+    const options={body:body||"",icon:"tele-tuty-logo.png",badge:"tele-tuty-logo.png",tag:"tele-tuty-job-assignment",renotify:true,data:{url:"/"}};
+    if(navigator.serviceWorker?.controller){navigator.serviceWorker.controller.postMessage({type:"SHOW_NOTIFICATION",title:title||"Tele Tuty",options});return;}
+    new Notification(title||"Tele Tuty",options);
+  }catch(e){console.warn("Mobile notification error",e)}
+}
+async function enableMobileNotifications(){
+  try{
+    if(!('Notification' in window)) return;
+    if(Notification.permission==="default") await Notification.requestPermission();
+  }catch(e){console.warn("Notification permission error",e)}
+}
+function stopNotificationWatch(){
+  if(notificationChannel){try{db.removeChannel(notificationChannel)}catch(e){} notificationChannel=null;}
+  if(notificationPoll){clearInterval(notificationPoll);notificationPoll=null;}
+  notificationInitialized=false;lastNotificationCreatedAt=null;
+}
+async function processNewNotifications(n){
+  if(!n?.length) return;
+  const newest=String(n[0].created_at||"");
+  if(!notificationInitialized){notificationInitialized=true;lastNotificationCreatedAt=newest;return;}
+  const fresh=n.filter(x=>String(x.created_at||"")>String(lastNotificationCreatedAt||""));
+  if(!fresh.length) return;
+  lastNotificationCreatedAt=newest;
+  for(const x of fresh.slice().reverse()) await showMobileNotification(x.title||"New notification",x.body||"");
+}
+function startNotificationWatch(){
+  stopNotificationWatch();
+  if(!user?.id) return;
+  try{
+    notificationChannel=db.channel("tele-tuty-notifications-"+user.id)
+      .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
+        const x=payload?.new||{};
+        const created=String(x.created_at||"");
+        if(created && created===lastNotificationCreatedAt) return;
+        if(created) lastNotificationCreatedAt=created;
+        showMobileNotification(x.title||"New notification",x.body||"");
+        loadNotifications();
+      }).subscribe();
+  }catch(e){console.warn("Realtime notification setup error",e)}
+  notificationPoll=setInterval(()=>loadNotifications(true),10000);
+}
+async function loadNotifications(silent=false){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];const unread=n.filter(x=>!x.read_at).length;const badge=$("notifCount");if(badge)badge.textContent=unread;const list=$("notificationsList");if(list)list.innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`;if(silent)await processNewNotifications(n);}catch(e){console.error("Notifications load error",e)}}
 async function loadTeam(){
   const box=$("teamList");
   if(!box) return;
@@ -3063,6 +3109,7 @@ async function logout(){
 
 db.auth.onAuthStateChange((event, session)=>{
   if(event==="SIGNED_OUT"){
+    stopNotificationWatch();
     user=null;
     profile=null;
     navHistory=["home"];
