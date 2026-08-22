@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="76">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="81.1">
   <title>Tele Tuty</title>
 <style>
 /* V34 render guard: style elements must never become visible text */
@@ -1828,6 +1828,95 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   #notifications .person .moduleIcon {flex-basis:44px!important; width:44px!important; height:44px!important;}
 }
 </style>
+
+<style id="v81-dashboard-kpi-final">
+/* V81 final KPI polish: compact icons + full semantic status colors */
+#home .dashKpi{
+  min-height:118px!important;
+  padding:14px!important;
+  border:1px solid transparent!important;
+  border-radius:17px!important;
+  box-shadow:0 5px 16px rgba(15,23,42,.10)!important;
+  color:#fff!important;
+  background-image:none!important;
+}
+#home .dashKpi .kpiIcon{
+  float:right!important;
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  border-radius:10px!important;
+  display:grid!important;
+  place-items:center!important;
+  font-size:17px!important;
+  line-height:1!important;
+  background:rgba(255,255,255,.20)!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  color:#fff!important;
+}
+#home .dashKpi strong{
+  color:#fff!important;
+  font-size:29px!important;
+  margin-top:15px!important;
+  text-shadow:none!important;
+}
+#home .dashKpi small{
+  color:#fff!important;
+  font-size:13px!important;
+  font-weight:750!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+/* Assignment / total jobs: blue */
+#home .dashKpi.blue{
+  background:#2563eb!important;
+  border-color:#1d4ed8!important;
+}
+/* Pending: orange */
+#home .dashKpi.orange{
+  background:#f59e0b!important;
+  border-color:#d97706!important;
+}
+/* Completed: green */
+#home .dashKpi.green{
+  background:#16a34a!important;
+  border-color:#15803d!important;
+}
+/* Success rate: gold; not-completed red remains red */
+#home .dashKpi.red{
+  background:#dc2626!important;
+  border-color:#b91c1c!important;
+}
+#home .rolePane:not(.hidden) .dashKpi:nth-child(4) strong[id$="Rate"]{}
+#home #technicianDashboard .dashKpi:nth-child(4){
+  background:#d4a017!important;
+  border-color:#b8860b!important;
+}
+/* Admin pending/open is orange. */
+#home #adminDashboard .dashKpi:nth-child(4){
+  background:#f59e0b!important;
+  border-color:#d97706!important;
+}
+/* Engineer's fourth KPI is Not Completed, so keep it red. */
+#home #engineerDashboard .dashKpi:nth-child(4){
+  background:#dc2626!important;
+  border-color:#b91c1c!important;
+}
+@media(max-width:520px){
+  #home .dashKpi{
+    min-height:106px!important;
+    padding:12px!important;
+    border-radius:15px!important;
+  }
+  #home .dashKpi .kpiIcon{
+    width:30px!important;height:30px!important;min-width:30px!important;
+    border-radius:9px!important;font-size:15px!important;
+  }
+  #home .dashKpi strong{font-size:25px!important;margin-top:13px!important}
+  #home .dashKpi small{font-size:12px!important}
+}
+</style>
+
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
