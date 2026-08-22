@@ -27,7 +27,7 @@ style{display:none!important}
 .engineerCreateCard .checkField input{width:20px;height:20px}
 
 
-/* V67 CLEAN WHITE THEME
+/* V68 CLEAN WHITE THEME
    Accessibility pass: remove legacy dark/gradient surfaces and enforce
    high-contrast text across every module. Login hero image is preserved. */
 :root{
@@ -1668,8 +1668,8 @@ html,body{background:#fff!important;color:#172033!important;}
 @media(max-width:600px){.teamUserActions{justify-content:stretch!important}.teamUserActions button{flex:1 1 100%!important;width:100%!important}}
 </style>
 
-<style id="v67-absolute-clean-white-theme">
-/* V67 — absolute clean white rebuild.  This block is intentionally last so
+<style id="v68-absolute-clean-white-theme">
+/* V68 — absolute clean white rebuild.  This block is intentionally last so
    every legacy royal/gradient theme loses the cascade everywhere in the app. */
 html,body,#app,.wrap,.view,.rolePane,main{background:#fff!important;background-image:none!important;color:#172033!important;}
 body:before,body:after,html:before,html:after{display:none!important;content:none!important;background:none!important;}
@@ -3123,9 +3123,95 @@ window.addEventListener("keydown",function(e){
 history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
+
+<style id="v68-true-clean-white-final">
+/* V68: final clean white surface. This intentionally overrides ALL older theme blocks. */
+:root{
+  --bg:#ffffff!important; --panel:#ffffff!important; --panel2:#f8fafc!important;
+  --line:#d7dee8!important; --text:#172033!important; --muted:#526071!important;
+  --blue:#2563eb!important; --cyan:#0891b2!important; --green:#16a34a!important;
+  --orange:#f59e0b!important; --red:#dc2626!important;
+}
+html,body{background:#fff!important;background-image:none!important;color:#172033!important}
+body:before,body:after{display:none!important;content:none!important;background:none!important}
+#app,#app *{box-sizing:border-box}
+#app,#app .view,#app .wrap,#app main{background:#fff!important;background-image:none!important;color:#172033!important}
+#app *::before,#app *::after{background-image:none!important;box-shadow:none!important;text-shadow:none!important}
+#app .card,#app .panel,#app .hero,#app .feature,#app .stat,#app .person,#app .empty,
+#app .teamCard,#app .teamUser,#app .cardMini,#app .job,#app .jobCard,#app .jobDetailSection,
+#app .jobDetailItem,#app .engineerCreateCard,#app .table,#app .dashboardShortcut,#app .quick,
+#app .maintenanceTile,#app .analyticsKpi,#app .dashKpi,#app .dashHero{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border-color:#d7dee8!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+  opacity:1!important;filter:none!important;mix-blend-mode:normal!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+#app h1,#app h2,#app h3,#app h4,#app h5,#app h6,#app p,#app label,#app b,#app strong,#app span,
+#app small,#app li,#app td,#app th,#app .moduleTitle,#app .moduleIcon,#app .teamInfo,
+#app .teamUserInfo,#app .teamUserInfo b,#app .teamUserInfo span,#app .teamUserInfo small{
+  color:#172033!important;-webkit-text-fill-color:#172033!important;text-shadow:none!important;
+  opacity:1!important;filter:none!important;mix-blend-mode:normal!important;
+}
+#app .muted,#app .empty,#app .stat span,#app .recentJobLocation,#app .recentJobDesc{color:#526071!important;-webkit-text-fill-color:#526071!important}
+#app input,#app select,#app textarea{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border:1px solid #cbd5e1!important;box-shadow:none!important;opacity:1!important;
+}
+#app input::placeholder,#app textarea::placeholder{color:#64748b!important;opacity:1!important}
+#app button{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border:1px solid #cbd5e1!important;box-shadow:none!important;filter:none!important;
+  text-shadow:none!important;opacity:1!important;transform:none!important;
+}
+#app button.primary,#app .primary{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
+#app button.secondary,#app .secondary{background:#fff!important;color:#1d4ed8!important;border-color:#93c5fd!important}
+#app button.ok,#app .ok{background:#16a34a!important;color:#fff!important;border-color:#16a34a!important}
+#app button.warn,#app .warn{background:#f59e0b!important;color:#172033!important;border-color:#d97706!important}
+#app button.bad,#app .bad{background:#dc2626!important;color:#fff!important;border-color:#dc2626!important}
+#app .pill{background:#eff6ff!important;color:#1d4ed8!important;border:1px solid #bfdbfe!important}
+#app .progress{background:#f1f5f9!important;border-color:#cbd5e1!important}
+#app .progress i{background:#2563eb!important;background-image:none!important;box-shadow:none!important}
+#app .globalPageNav,#app .globalPageNav:before,#app .viewHeader,#app .top,#app .bottomNav{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border-color:#d7dee8!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+#app .globalPageNav:before{display:none!important}
+#app .royalNavBtn,#app .royalNavBtn.home{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border:1px solid #cbd5e1!important;box-shadow:none!important;text-shadow:none!important;
+}
+#app .royalNavBtn .royalIcon,#app .royalNavBtn.home .royalIcon{color:#2563eb!important;text-shadow:none!important}
+#app .royalNavTitle{color:#172033!important;-webkit-text-fill-color:#172033!important;text-shadow:none!important}
+#app .teamCard{overflow:visible!important}
+#app .teamCard .panelHead{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(220px,300px)!important;align-items:start!important;gap:18px!important}
+#app .teamCard .teamActions{width:auto!important;min-width:0!important;flex:1 1 auto!important;display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+#app .teamCard .teamActions button{width:100%!important;margin:0!important;min-width:0!important}
+#app .teamUser{display:grid!important;grid-template-columns:52px minmax(0,1fr) minmax(180px,260px)!important;gap:12px!important;align-items:center!important;padding:12px!important;margin:10px 0!important;overflow:visible!important}
+#app .teamUser .avatar{width:52px!important;height:52px!important;background:#fff!important;color:#1d4ed8!important;border:1px solid #93c5fd!important;box-shadow:none!important;opacity:1!important}
+#app .teamUserInfo{min-width:0!important;overflow:visible!important}
+#app .teamUserInfo b{display:block!important;font-size:17px!important;line-height:1.25!important;white-space:normal!important}
+#app .teamUserInfo span,#app .teamUserInfo small{display:block!important;margin-top:4px!important;font-size:13px!important;line-height:1.35!important;white-space:normal!important}
+#app .teamUserActions{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;justify-content:stretch!important;min-width:0!important}
+#app .teamUserActions button{width:100%!important;min-height:44px!important;margin:0!important}
+@media(max-width:700px){
+  #app .teamCard .panelHead{grid-template-columns:1fr!important;gap:12px!important}
+  #app .teamCard .teamActions{grid-template-columns:1fr!important;width:100%!important}
+  #app .teamUser{grid-template-columns:52px minmax(0,1fr)!important}
+  #app .teamUserActions{grid-column:1/-1!important;grid-template-columns:1fr!important}
+  #app .teamUserActions button{width:100%!important}
+}
+@media(max-width:520px){
+  #app .wrap{padding:10px!important}
+  #app .globalPageNav{padding:8px!important;border-radius:16px!important}
+  #app .royalNavBtn{min-width:78px!important;height:42px!important;padding:0 10px!important}
+  #app .royalNavTitle{font-size:11px!important}
+  #app .teamUser{padding:10px!important}
+}
+</style>
 </body></html>
 <style>
-/* V67 unified team-management navigation */
+/* V68 unified team-management navigation */
 .teamActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .teamActions button{white-space:nowrap}
 @media(max-width:700px){
