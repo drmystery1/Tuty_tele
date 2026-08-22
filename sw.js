@@ -1,4 +1,4 @@
-const CACHE='tele-tuty-shell-v42';
+const CACHE='tele-tuty-shell-v51-ultimate-white';
 const ASSETS=['/','/index.html','/tele-tuty-logo.png','/public/images/admin_hero.jpg','/public/images/engineer_hero.jpg','/public/images/technician_hero.jpg','/public/images/street_hero.jpg','/public/images/battery_bank.png','/public/images/earth_pit.png','/public/images/telecom_tower.png','/public/images/wiring_fault.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('tele-tuty-shell-') && k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
