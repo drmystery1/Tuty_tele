@@ -2184,7 +2184,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
           <button class="dashKpi blue" onclick="openJobsFiltered('all')"><span class="kpiIcon">▣</span><strong id="myJobs">0</strong><small>Assigned Jobs</small></button>
           <button class="dashKpi orange" onclick="openJobsFiltered('pending')"><span class="kpiIcon">◷</span><strong id="myPending">0</strong><small>Pending</small></button>
           <button class="dashKpi green" onclick="openJobsFiltered('completed')"><span class="kpiIcon">✓</span><strong id="myDone">0</strong><small>Completed</small></button>
-          <button class="dashKpi red" onclick="navigate('jobs')"><span class="kpiIcon">!</span><strong id="myRate">0%</strong><small>Success Rate</small></button>
+          <div class="dashKpi gold successRateOnly" role="status" aria-label="Success Rate"><span class="kpiIcon">!</span><strong id="myRate">0%</strong><small>Success Rate</small></div>
         </div>
         <div class="panel">
           <div class="panelHead"><h2>Today's Jobs</h2><button class="textBtn" onclick="navigate('jobs')">View All</button></div>
@@ -3293,6 +3293,37 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
  #home .recentItem{grid-template-columns:4px 30px minmax(0,1fr) auto!important;gap:7px!important;padding:8px!important;min-height:58px!important}#home .recentStatusIcon{width:28px!important;height:28px!important;font-size:14px!important;border-radius:8px!important}
  #home .recentJobTitle{font-size:12px!important}#home .recentJobDesc{font-size:11px!important}#home .recentJobLocation{font-size:10px!important}#home .recentStatus{font-size:9px!important;padding:4px 6px!important}
 }
+</style>
+
+<style id="v83-dashboard-color-and-success-fix">
+/* V83: final dashboard KPI colors + non-clickable technician success rate */
+#home .dashKpi{
+  color:#fff!important;
+  border-width:1px!important;
+}
+#home .dashKpi.blue{background:#2563eb!important;border-color:#1d4ed8!important}
+#home .dashKpi.orange{background:#f59e0b!important;border-color:#d97706!important}
+#home .dashKpi.green{background:#16a34a!important;border-color:#15803d!important}
+#home .dashKpi.red{background:#dc2626!important;border-color:#b91c1c!important}
+#home .dashKpi.gold{background:#d4a017!important;border-color:#b8860b!important}
+#home .dashKpi strong,#home .dashKpi small{color:#fff!important}
+#home .dashKpi .kpiIcon{background:rgba(255,255,255,.18)!important;color:#fff!important;border-color:rgba(255,255,255,.35)!important}
+#home .dashKpi.successRateOnly{cursor:default!important;pointer-events:none!important}
+
+/* Today's Jobs status icons: solid semantic colors, white symbols */
+#home .recentStatusIcon{
+  color:#fff!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#home .recentStatusIcon.completed{background:#16a34a!important;color:#fff!important}
+#home .recentStatusIcon.pending{background:#f59e0b!important;color:#fff!important}
+#home .recentStatusIcon.not_completed{background:#dc2626!important;color:#fff!important}
+#home .recentStatusIcon.in_progress{background:#2563eb!important;color:#fff!important}
+#home .recentStatus.completed{color:#15803d!important;background:#dcfce7!important;border-color:#bbf7d0!important}
+#home .recentStatus.pending{color:#b45309!important;background:#fef3c7!important;border-color:#fde68a!important}
+#home .recentStatus.not_completed{color:#b91c1c!important;background:#fee2e2!important;border-color:#fecaca!important}
+#home .recentStatus.in_progress{color:#1d4ed8!important;background:#dbeafe!important;border-color:#bfdbfe!important}
 </style>
 </head><body><main class="report"><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></main>
 <style id="tele-tuty-v52-visibility-fix">
