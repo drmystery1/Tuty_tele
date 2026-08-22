@@ -2539,9 +2539,12 @@ function toggleGlobalJobSearch(){
 }
 function clearGlobalJobSearch(){
   const input=$("globalJobSearchInput");
+  const box=$("globalJobSearch");
   if(input) input.value="";
   globalJobSearchTerm="";
   const hint=$("globalSearchHint"); if(hint) hint.textContent="Type anything to find matching jobs.";
+  // X button closes the search bar completely, like a normal app search.
+  if(box) box.classList.add("hidden");
   if($("jobs")?.classList.contains("hidden")) return;
   loadJobs();
 }
