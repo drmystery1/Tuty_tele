@@ -2316,6 +2316,9 @@ function updateNotificationUI(){
   }
 }
 async function handleNotificationButton(){
+  // V79: notification and search controls are mutually exclusive.
+  const searchBox=$("globalJobSearch");
+  if(searchBox) searchBox.classList.add("hidden");
   try{
     if('Notification' in window && Notification.permission==="default") await requestMobileNotifications();
   }catch(e){console.warn("Notification button error",e)}
@@ -2513,6 +2516,9 @@ function technicianOptions(selected="") {
 let globalJobSearchTerm="";
 function toggleGlobalJobSearch(){
   const box=$("globalJobSearch"), input=$("globalJobSearchInput");
+  // V79: opening search closes the Notifications view/control state first.
+  const notificationsView=$("notifications");
+  if(notificationsView && !notificationsView.classList.contains("hidden")) navigate("home");
   if(!box) return;
   // Search always starts from the main Field Operations dashboard.
   // This prevents the search box from opening while the user is on
