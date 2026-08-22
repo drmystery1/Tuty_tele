@@ -158,6 +158,16 @@ body *{
   .globalJobSearch{top:70px!important;}
 }
 </style>
+<style id="v77-notification-job-completion">
+#notificationsList .notificationItem{cursor:pointer;display:flex;align-items:flex-start;gap:12px;padding:16px 8px;border-bottom:1px solid #e5e7eb;transition:background .15s ease}
+#notificationsList .notificationItem:active{background:#f8fafc}
+#notificationsList .notificationItem .moduleIcon{flex:0 0 44px}
+#notificationsList .notificationItem .notificationArrow{margin-left:auto;color:#2563eb;font-size:20px;padding-top:6px}
+#notificationsList .notificationItem.unread{background:#f8fbff}
+.completionTime{margin-top:10px;padding:10px 12px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:10px;color:#166534;font-weight:800;font-size:13px}
+.notificationsPhoto::after{background:rgba(255,255,255,.10)!important}
+@media(max-width:600px){#notificationsList .notificationItem{padding:14px 4px}.completionTime{font-size:12px}}
+</style>
 <style id="navigation-fix">
 .menuTitle{padding:10px 12px 6px;color:#6fdfff;font-weight:900;font-size:12px;letter-spacing:1px;text-transform:uppercase}
 .menuDivider{height:1px;background:#1c3853;margin:7px 4px}
@@ -2078,8 +2088,8 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </div>
 
   <div id="notifications" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/street_light_survey.png')"><span class="modulePhotoLabel">Notifications</span></div>
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">●</span> Notifications</h1><div id="notificationsList"></div></div></div>
+    <div class="modulePhoto notificationsPhoto" style="--module-bg:url('tele-tuty-final-hero.png')"><span class="modulePhotoLabel">Tele Tuty Notifications</span></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">🔔</span> Notifications</h1><div id="notificationsList"></div></div></div>
 
   <div id="team" class="view hidden">
     <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">Team Management</span></div>
@@ -2162,8 +2172,9 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=75");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=77");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"smooth",block:"center"});}}),80)}else navigate("notifications");}});</script>
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
@@ -2281,10 +2292,10 @@ function renderRecentJobs(rows){
  }).join("");
 }
 let notificationChannel=null, notificationPoll=null, notificationInitialized=false, lastNotificationCreatedAt=null;
-async function showMobileNotification(title,body){
+async function showMobileNotification(title,body,jobId=null){
   try{
     if(!('Notification' in window) || Notification.permission!=="granted") return false;
-    const options={body:body||"",icon:"/tele-tuty-logo.png",badge:"/tele-tuty-logo.png",tag:"tele-tuty-job-assignment-"+Date.now(),renotify:true,data:{url:"/"}};
+    const options={body:body||"",icon:"/tele-tuty-logo.png",badge:"/tele-tuty-logo.png",tag:"tele-tuty-job-assignment-"+Date.now(),renotify:true,data:{url:"/",jobId:jobId||null}};
     const reg=await navigator.serviceWorker?.ready;
     if(reg?.showNotification){ await reg.showNotification(title||"Tele Tuty",options); return true; }
     new Notification(title||"Tele Tuty",options); return true;
@@ -2335,20 +2346,20 @@ async function processNewNotifications(n){
   const fresh=n.filter(x=>String(x.created_at||"")>String(lastNotificationCreatedAt||""));
   if(!fresh.length) return;
   lastNotificationCreatedAt=newest;
-  for(const x of fresh.slice().reverse()) await showMobileNotification(x.title||"New notification",x.body||"");
+  for(const x of fresh.slice().reverse()) await showMobileNotification(x.title||"New notification",x.body||"",x.job_id||null);
 }
 function startNotificationWatch(){
   stopNotificationWatch();
   if(!user?.id) return;
   // Realtime channel
   try{
-    notificationChannel=db.channel("tele-tuty-notifications-"+user.id+"-v76")
+    notificationChannel=db.channel("tele-tuty-notifications-"+user.id+"-v77")
       .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
         const x=payload?.new||{};
         const created=String(x.created_at||"");
         if(created && created===lastNotificationCreatedAt) return;
         if(created) lastNotificationCreatedAt=created;
-        showMobileNotification(x.title||"New Job Assigned",x.body||"");
+        showMobileNotification(x.title||"New Job Assigned",x.body||"",x.job_id||null);
         loadNotifications();
       }).subscribe((status)=>console.log("Notification realtime:",status));
   }catch(e){console.warn("Realtime notification setup error",e)}
@@ -2357,15 +2368,37 @@ function startNotificationWatch(){
 }
 async function loadNotifications(silent=false){
   try{
-    const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);
+    const r=await db.from("notifications").select("*").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);
     if(r.error) throw r.error;
     const n=r.data||[];
     const unread=n.filter(x=>!x.read_at).length;
     const badge=$("notifCount");if(badge){badge.textContent=unread;badge.classList.toggle("hidden",unread<=0);} updateNotificationUI();
     const list=$("notificationsList");
-    if(list)list.innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">🔔</div><div><b>${esc(x.title||"Notification")}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`;
+    if(list)list.innerHTML=n.map(x=>`<button type="button" class="notificationItem ${x.read_at?'':'unread'}" onclick="openJobFromNotification('${esc(x.id)}')"><span class="moduleIcon">🔔</span><span style="min-width:0;flex:1;text-align:left"><b>${esc(x.title||"Notification")}</b><span style="display:block;color:#334155;font-size:14px;margin-top:3px">${esc(x.body||"")}</span><span class="muted" style="display:block;margin-top:5px">${new Date(x.created_at).toLocaleString()}</span></span><span class="notificationArrow">›</span></button>`).join("")||`<div class="empty">No notifications yet.</div>`;
     if(silent) await processNewNotifications(n);
   }catch(e){console.error("Notifications load error",e)}
+}
+
+async function openJobFromNotification(notificationId){
+  try{
+    const nr=await db.from("notifications").select("*").eq("id",notificationId).maybeSingle();
+    if(nr.error) throw nr.error;
+    const note=nr.data||{};
+    if(note.read_at==null){try{await db.from("notifications").update({read_at:new Date().toISOString()}).eq("id",notificationId)}catch(e){}}
+    let jobId=note.job_id || note.data?.job_id || note.metadata?.job_id || null;
+    if(jobId==null){
+      const body=String(note.body||"").toLowerCase();
+      const jr=await db.from("jobs").select("id,job_code,job_term,work_description,location,assigned_worker,created_at,status").eq("assigned_worker",user.id).order("created_at",{ascending:false}).limit(100);
+      if(!jr.error){
+        const jobs=jr.data||[], tokens=body.split(/[^a-z0-9_]+/).filter(Boolean);
+        const scored=jobs.map(j=>{const fields=[j.job_code,j.job_term,j.work_description,j.location].map(v=>String(v||"").toLowerCase());let score=0;fields.forEach(f=>tokens.forEach(t=>{if(t.length>2&&f.includes(t))score++}));return {j,score}}).sort((a,b)=>b.score-a.score);
+        if(scored[0]?.score>0) jobId=scored[0].j.id;
+      }
+    }
+    await loadNotifications();
+    if(jobId){currentJobFilter="all";globalJobSearchTerm="";const input=$("globalJobSearchInput");if(input)input.value="";navigate("jobs");setTimeout(async()=>{await loadJobs();setTimeout(()=>{const card=$("jobCard"+jobId);if(card){if($("jobExpanded"+jobId)?.classList.contains("hidden"))toggleJobDetails(jobId);card.scrollIntoView({behavior:"smooth",block:"center"})}},80)},0)}
+    else{navigate("jobs");setTimeout(()=>loadJobs(),0)}
+  }catch(e){console.error("Notification job open error",e);navigate("jobs");setTimeout(()=>loadJobs(),0)}
 }
 
 // Remove duplicate/legacy Job Notes UI left by older cached builds.
@@ -2531,7 +2564,7 @@ async function loadJobs(){
   box.innerHTML=`<div class="empty">Loading jobs…</div>`; document.querySelectorAll("#jobStatusTabs button").forEach(b=>b.classList.toggle("active",b.dataset.status===currentJobFilter));
   try{
     if(["engineer","admin"].includes(profile?.role) && !engineerTechCache.length) await loadEngineerTechnicians();
-    let q=db.from("jobs").select("id,job_code,job_term,work_description,location,status,assigned_worker,assigned_engineer,created_by,customer_id,created_at,scheduled_date,scheduled_time,worker_remarks,pending_reason").order("created_at",{ascending:false}).limit(100);
+    let q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);
     if(profile?.role==="worker") q=q.eq("assigned_worker",user.id);
     else if(profile?.role==="engineer") q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);
     const r=await q;
@@ -2601,6 +2634,7 @@ async function loadJobs(){
             </section>
             ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong></section>`:""}
             ${j.pending_reason?`<section class="jobNote pendingNote"><span>⚠️ Pending reason</span><strong>${esc(j.pending_reason)}</strong></section>`:""}
+            ${profile?.role!=="worker" && st==="completed" && completionMap[j.id]?`<div class="completionTime">✓ Completed on: ${esc(new Date(completionMap[j.id]).toLocaleString())}</div>`:""}
           </div>
           ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","STREET_LIGHT","BATTERY","EARTH_PIT","TOWER","WIRING","RENOVATION"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
           ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks" onclick="event.stopPropagation()"><input id="pr${j.id}" placeholder="Pending reason" onclick="event.stopPropagation()"><button class="secondary" type="button" onclick="event.stopPropagation();updateJob(${j.id},'in_progress')">In Progress</button><button type="button" onclick="event.stopPropagation();updateJob(${j.id},'completed')">Complete</button><button class="bad" type="button" onclick="event.stopPropagation();updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
