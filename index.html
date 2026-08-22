@@ -2514,6 +2514,18 @@ let globalJobSearchTerm="";
 function toggleGlobalJobSearch(){
   const box=$("globalJobSearch"), input=$("globalJobSearchInput");
   if(!box) return;
+  // Search always starts from the main Field Operations dashboard.
+  // This prevents the search box from opening while the user is on
+  // Notifications or any other module page.
+  const current=currentView();
+  if(current!=="home") {
+    navigate("home");
+    setTimeout(()=>{
+      box.classList.remove("hidden");
+      input?.focus();
+    },80);
+    return;
+  }
   const opening=box.classList.toggle("hidden")==false;
   if(opening){
     setTimeout(()=>input?.focus(),60);
