@@ -1527,6 +1527,42 @@ html,body{background:#fff!important;color:#172033!important;}
   .loginFormCard h2{font-size:30px!important}
 }
 </style>
+
+<style id="v63-recent-job-text-hard-fix">
+/* V63: hard-fix the exact Recent Jobs description text that was still washed out. */
+.recentItem .recentJobText,
+.recentItem .recentJobTitle,
+.recentItem .recentJobDesc,
+.recentItem .recentJobLocation {
+  color:#111827 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  filter:none !important;
+  text-shadow:none !important;
+  -webkit-text-fill-color:#111827 !important;
+  background:transparent !important;
+  mix-blend-mode:normal !important;
+}
+.recentItem .recentJobDesc {
+  display:block !important;
+  margin-top:4px !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  line-height:1.35 !important;
+}
+.recentItem .recentJobLocation {
+  display:block !important;
+  margin-top:4px !important;
+  color:#64748b !important;
+  -webkit-text-fill-color:#64748b !important;
+  font-size:13px !important;
+}
+.recentItem .recentJobTitle {
+  display:block !important;
+  font-size:15px !important;
+  font-weight:800 !important;
+}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -1961,7 +1997,7 @@ function renderRecentJobs(rows){
  return rows.map(j=>{
    const st=String(j.status||"pending");
    const label=st.replaceAll("_"," ");
-   return `<div class="recentItem"><span class="stripe ${st}"></span><div><b>${esc(j.job_term||j.job_code||"JOB")}</b><div>${esc(j.work_description||"Field maintenance job")}</div><div class="muted">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
+   return `<div class="recentItem"><span class="stripe ${st}"></span><div class="recentJobText"><b class="recentJobTitle">${esc(j.job_term||j.job_code||"JOB")}</b><div class="recentJobDesc">${esc(j.work_description||"Field maintenance job")}</div><div class="muted recentJobLocation">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
  }).join("");
 }
 async function loadNotifications(){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];const unread=n.filter(x=>!x.read_at).length;const badge=$("notifCount");if(badge)badge.textContent=unread;$("notificationsList").innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`}catch(e){console.error("Notifications load error",e)}}
