@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="81.1">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="85.0">
   <title>Tele Tuty</title>
 <style>
 /* V34 render guard: style elements must never become visible text */
@@ -1992,6 +1992,19 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 }
 </style>
 
+
+<style id="v84-image-assets">
+.menuImgIcon{width:30px!important;height:30px!important;object-fit:cover!important;border-radius:8px!important;flex:0 0 30px!important;display:inline-block!important;vertical-align:middle!important;margin-right:8px!important;background:#f8fafc!important;border:1px solid #e2e8f0!important}
+.menu button{display:flex!important;align-items:center!important;gap:2px!important;text-align:left!important}
+.menu button span{display:inline-block!important;min-width:0!important}
+.sectionImgIcon{width:42px!important;height:42px!important;object-fit:cover!important;border-radius:11px!important;vertical-align:middle!important;margin-right:8px!important;border:1px solid #dbeafe!important;background:#eff6ff!important}
+.sectionImgIcon.small{width:30px!important;height:30px!important;border-radius:8px!important;margin-right:7px!important}
+.settingsPhoto{--module-bg:url('public/images/settings_security_banner.png')!important}
+.settingsPhoto::before{background:linear-gradient(90deg,rgba(5,18,34,.62),rgba(5,18,34,.15))!important}
+.settingsHero .moduleTitle{display:flex!important;align-items:center!important}
+.card h3{display:flex!important;align-items:center!important}
+@media(max-width:520px){.menuImgIcon{width:28px!important;height:28px!important;flex-basis:28px!important}.sectionImgIcon{width:38px!important;height:38px!important}}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -2023,21 +2036,21 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   <div class="menuDivider"></div>
   <div class="menuGroup" id="maintenanceMenuGroup">
     <div class="menuGroupTitle">Maintenance Modules</div>
-    <button onclick="navigate('street')">💡 Street Light Survey</button>
-    <button onclick="navigate('battery')">🔋 Battery Maintenance</button>
-    <button onclick="navigate('earth')">🌍 Earth Pit Maintenance</button>
-    <button onclick="navigate('tower')">📡 Telecom Tower</button>
-    <button onclick="navigate('wiring')">⚡ Wiring Fault</button>
-    <button onclick="navigate('renovation')">🛠️ Renovation</button>
+    <button onclick="navigate('street')"><img class="menuImgIcon" src="public/images/street_light_survey.png" alt=""> <span>Street Light Survey</span></button>
+    <button onclick="navigate('battery')"><img class="menuImgIcon" src="public/images/battery_bank.png" alt=""> <span>Battery Maintenance</span></button>
+    <button onclick="navigate('earth')"><img class="menuImgIcon" src="public/images/earth_pit.png" alt=""> <span>Earth Pit Maintenance</span></button>
+    <button onclick="navigate('tower')"><img class="menuImgIcon" src="public/images/telecom_tower.png" alt=""> <span>Telecom Tower</span></button>
+    <button onclick="navigate('wiring')"><img class="menuImgIcon" src="public/images/wiring_fault.png" alt=""> <span>Wiring Fault</span></button>
+    <button onclick="navigate('renovation')"><img class="menuImgIcon" src="public/images/street_light_damage.png" alt=""> <span>Renovation</span></button>
   </div>
   <div class="menuDivider"></div>
-  <button onclick="navigate('jobs')">📋 Jobs</button>
-  <button id="successMenuBtn" onclick="navigate('success')">🏆 Technician Success Rate</button>
-  <button onclick="navigate('notifications')">🔔 Notifications</button>
+  <button onclick="navigate('jobs')"><img class="menuImgIcon" src="public/images/jobs_icon.png" alt=""> <span>Jobs</span></button>
+  <button id="successMenuBtn" onclick="navigate('success')"><img class="menuImgIcon" src="public/images/technician_avatar.png" alt=""> <span>Technician Success Rate</span></button>
+  <button onclick="navigate('notifications')"><img class="menuImgIcon" src="public/images/notifications_icon.png" alt=""> <span>Notifications</span></button>
   <div class="menuDivider"></div>
   <div class="menuGroupTitle">Account</div>
-  <button onclick="navigate('profile')">👤 Profile</button>
-  <button onclick="navigate('settings')">⚙️ Settings & Password</button>
+  <button onclick="navigate('profile')"><img class="menuImgIcon" src="public/images/profile_icon.png" alt=""> <span>Profile</span></button>
+  <button onclick="navigate('settings')"><img class="menuImgIcon" src="public/images/settings_icon.png" alt=""> <span>Settings & Password</span></button>
   <button onclick="navigate('backup')">💾 Backup & PDF</button>
   <div id="adminMenu" class="hidden">
     <div class="menuDivider"></div>
@@ -2244,22 +2257,22 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">◉</span> My Profile</h1><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
   <div id="settings" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/battery_bank.png')"><span class="modulePhotoLabel">Settings & Security</span></div>
-<div class="card settingsHero"><h1 class="moduleTitle"><span class="moduleIcon">⚙</span> Settings</h1><p class="muted">Manage your account, security and app preferences.</p></div>
-<div class="card"><h3>🔐 Change Password</h3><p class="muted">Enter your current password and choose a new password.</p><input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password"><input id="newPassword" type="password" autocomplete="new-password" placeholder="New password (8+ characters)"><input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirm new password"><button onclick="changePassword()">🔒 Change Password</button><p id="passwordMsg" class="muted"></p></div>
-<div class="card"><h3>⚙️ App Preferences</h3><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">👤 Profile & Photo</button></div>
-<div class="card"><h3>🚪 Session</h3><p class="muted">Signed in as <b id="settingsEmail">—</b></p><button class="bad" onclick="logout()">Logout</button></div>
+    <div class="modulePhoto settingsPhoto" style="--module-bg:url('public/images/settings_security_banner.png')"><span class="modulePhotoLabel">Settings & Security</span></div>
+<div class="card settingsHero"><h1 class="moduleTitle"><img class="sectionImgIcon" src="public/images/settings_icon.png" alt=""> Settings</h1><p class="muted">Manage your account, security and app preferences.</p></div>
+<div class="card"><h3><img class="sectionImgIcon small" src="public/images/security_icon.png" alt=""> Change Password</h3><p class="muted">Enter your current password and choose a new password.</p><input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password"><input id="newPassword" type="password" autocomplete="new-password" placeholder="New password (8+ characters)"><input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirm new password"><button onclick="changePassword()">🔒 Change Password</button><p id="passwordMsg" class="muted"></p></div>
+<div class="card"><h3><img class="sectionImgIcon small" src="public/images/app_preferences_icon.png" alt=""> App Preferences</h3><button class="secondary" onclick="toggleCompact()">Compact dashboard</button><button class="secondary" onclick="navigate('profile')">👤 Profile & Photo</button></div>
+<div class="card"><h3><img class="sectionImgIcon small" src="public/images/logout_icon.png" alt=""> Session</h3><p class="muted">Signed in as <b id="settingsEmail">—</b></p><button class="bad" onclick="logout()">Logout</button></div>
 </div>
 
   <div id="notifications" class="view hidden">
-    <div class="modulePhoto notificationsPhoto" style="--module-bg:url('tele-tuty-final-hero.png')"><span class="modulePhotoLabel">Tele Tuty Notifications</span></div>
+    <div class="modulePhoto notificationsPhoto" style="--module-bg:url('public/images/notifications_banner.png')"><span class="modulePhotoLabel">Tele Tuty Notifications</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">🔔</span> Notifications</h1><div id="notificationsList"></div></div></div>
 
   <div id="team" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">Team Management</span></div>
+    <div class="modulePhoto" style="--module-bg:url('public/images/team_management_banner.png')"><span class="modulePhotoLabel">Team Management</span></div>
 <div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Add, activate, deactivate, remove and manage all engineers and technicians from one place.</p></div><div class="row teamActions"><button onclick="navigate('adminTools')">＋ Add User</button><button class="secondary" onclick="navigate('adminTools')">▤ Approval Requests</button><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('tele-tuty-final-hero.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
+    <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_banner.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
       <div class="grid">
@@ -2336,7 +2349,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=77");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=85");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"smooth",block:"center"});}}),80)}else navigate("notifications");}});</script>
 <script>
@@ -3324,6 +3337,19 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 #home .recentStatus.pending{color:#b45309!important;background:#fef3c7!important;border-color:#fde68a!important}
 #home .recentStatus.not_completed{color:#b91c1c!important;background:#fee2e2!important;border-color:#fecaca!important}
 #home .recentStatus.in_progress{color:#1d4ed8!important;background:#dbeafe!important;border-color:#bfdbfe!important}
+</style>
+
+<style id="v84-image-assets">
+.menuImgIcon{width:30px!important;height:30px!important;object-fit:cover!important;border-radius:8px!important;flex:0 0 30px!important;display:inline-block!important;vertical-align:middle!important;margin-right:8px!important;background:#f8fafc!important;border:1px solid #e2e8f0!important}
+.menu button{display:flex!important;align-items:center!important;gap:2px!important;text-align:left!important}
+.menu button span{display:inline-block!important;min-width:0!important}
+.sectionImgIcon{width:42px!important;height:42px!important;object-fit:cover!important;border-radius:11px!important;vertical-align:middle!important;margin-right:8px!important;border:1px solid #dbeafe!important;background:#eff6ff!important}
+.sectionImgIcon.small{width:30px!important;height:30px!important;border-radius:8px!important;margin-right:7px!important}
+.settingsPhoto{--module-bg:url('public/images/settings_security_banner.png')!important}
+.settingsPhoto::before{background:linear-gradient(90deg,rgba(5,18,34,.62),rgba(5,18,34,.15))!important}
+.settingsHero .moduleTitle{display:flex!important;align-items:center!important}
+.card h3{display:flex!important;align-items:center!important}
+@media(max-width:520px){.menuImgIcon{width:28px!important;height:28px!important;flex-basis:28px!important}.sectionImgIcon{width:38px!important;height:38px!important}}
 </style>
 </head><body><main class="report"><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></main>
 <style id="tele-tuty-v52-visibility-fix">
