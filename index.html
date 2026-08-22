@@ -1762,6 +1762,13 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 /* Keep all section text above the photo and fully opaque. */
 .view .modulePhoto~*{position:relative;z-index:1}
 </style>
+
+<style id="v71-module-photo-final-fix">
+#app .modulePhoto{position:relative!important;overflow:hidden!important;background:#f3f4f6!important;}
+#app .modulePhoto::before{content:""!important;position:absolute!important;inset:0!important;display:block!important;background-image:var(--module-bg)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;filter:none!important;transform:none!important;opacity:1!important;z-index:0!important;}
+#app .modulePhoto::after{content:""!important;position:absolute!important;inset:0!important;display:block!important;background:rgba(255,255,255,.20)!important;z-index:1!important;}
+#app .modulePhoto .modulePhotoLabel{position:absolute!important;z-index:2!important;opacity:1!important;color:#172033!important;background:rgba(255,255,255,.92)!important;}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -2820,6 +2827,13 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
   }
   .loginFormCard h2{font-size:30px!important}
 }
+</style>
+
+<style id="v71-module-photo-final-fix">
+#app .modulePhoto{position:relative!important;overflow:hidden!important;background:#f3f4f6!important;}
+#app .modulePhoto::before{content:""!important;position:absolute!important;inset:0!important;display:block!important;background-image:var(--module-bg)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;filter:none!important;transform:none!important;opacity:1!important;z-index:0!important;}
+#app .modulePhoto::after{content:""!important;position:absolute!important;inset:0!important;display:block!important;background:rgba(255,255,255,.20)!important;z-index:1!important;}
+#app .modulePhoto .modulePhotoLabel{position:absolute!important;z-index:2!important;opacity:1!important;color:#172033!important;background:rgba(255,255,255,.92)!important;}
 </style>
 </head><body><main class="report"><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></main>
 <style id="tele-tuty-v52-visibility-fix">
