@@ -2051,7 +2051,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   <div class="menuGroupTitle">Account</div>
   <button onclick="navigate('profile')"><img class="menuImgIcon" src="public/images/profile_icon.png" alt=""> <span>Profile</span></button>
   <button onclick="navigate('settings')"><img class="menuImgIcon" src="public/images/settings_icon.png" alt=""> <span>Settings & Password</span></button>
-  <button onclick="navigate('backup')">💾 Backup & PDF</button>
+  <button id="backupMenuBtn" onclick="navigate('backup')">💾 Backup & PDF</button>
   <div id="adminMenu" class="hidden">
     <div class="menuDivider"></div>
     <div class="menuTitle">Admin</div>
@@ -2272,7 +2272,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     <div class="modulePhoto" style="--module-bg:url('public/images/team_management_banner.png')"><span class="modulePhotoLabel">Team Management</span></div>
 <div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Add, activate, deactivate, remove and manage all engineers and technicians from one place.</p></div><div class="row teamActions"><button onclick="navigate('adminTools')">＋ Add User</button><button class="secondary" onclick="navigate('adminTools')">▤ Approval Requests</button><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_banner.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
+    <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_banner_new.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
       <div class="grid">
@@ -2317,28 +2317,29 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
 
   <div id="backup" class="view hidden">
-<div class="card">
+    <div class="card">
       <h2>💾 Backup & Reports</h2>
-      <p class="muted">Backup your application data or create printable PDF reports.</p>
+      <p class="muted">Admin and Engineer only. Technicians do not have access to backup or restore.</p>
       <div class="row">
-        <button onclick="downloadBackup()">💾 Download Full Backup</button>
+        <button onclick="downloadBackup()">💾 Download Backup</button>
         <button class="secondary" onclick="document.getElementById('restoreFile').click()">♻️ Restore Backup</button>
       </div>
       <input id="restoreFile" type="file" accept="application/json,.json" style="display:none" onchange="restoreBackup(event)">
       <p id="backupMsg" class="muted"></p>
     </div>
     <div class="card">
-      <h3>📄 PDF / Print Reports</h3>
-      <p class="muted">Choose a report, then use your phone/browser's <b>Save as PDF</b> option.</p>
-      <div class="row">
-        <button onclick="printReport('jobs')">📋 Jobs Report PDF</button>
+      <h3>📄 30-Day PDF Reports</h3>
+      <p class="muted">Maximum one month. Engineer gets only these two filtered reports; Admin can also use the full report.</p>
+      <div class="grid reportButtons">
+        <button onclick="printReport('month_telecom')">☎️ Telephone / Telecom Work PDF</button>
+        <button onclick="printReport('month_electrical')">⚡ Electrical Work PDF</button>
         <button onclick="printReport('street')">💡 Street Light Survey PDF</button>
-      </div>
-      <div class="row">
         <button onclick="printReport('success')">🏆 Technician Success Rate PDF</button>
-        <button onclick="printReport('history')">📈 30-Day History PDF</button>
       </div>
-      <button class="secondary" onclick="printReport('full')">👑 Full Admin Report PDF</button>
+      <div id="adminOnlyReportButtons" class="hidden">
+        <button class="secondary" onclick="printReport('jobs')">📋 Full Jobs Report PDF</button>
+        <button class="secondary" onclick="printReport('full')">👑 Full Admin Report PDF</button>
+      </div>
     </div>
     <div class="card">
       <h3>📊 Quick Data Summary</h3>
@@ -2346,6 +2347,16 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     </div>
   </div>
 
+<style id="v88-extra-work-ui">
+.extraWorkSection{margin-top:16px;padding:14px;border:1px solid #dbe4ef;border-radius:16px;background:#f8fbff}
+.extraWorkHead{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:#172033;margin-bottom:10px}
+.extraWorkList{display:grid;gap:8px}.extraWorkItem{display:flex;gap:10px;align-items:flex-start;padding:10px 11px;background:#fff;border:1px solid #e3eaf2;border-radius:12px}
+.extraWorkNo{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:#e8f1ff;color:#1455a5;font-weight:800;flex:none}
+.extraWorkText{flex:1;min-width:0}.extraWorkText b{display:block;color:#172033}.extraWorkText small{display:block;color:#64748b;margin-top:3px}.extraWorkStatus{font-size:12px;font-weight:800;padding:5px 8px;border-radius:999px;white-space:nowrap}.extraWorkStatus.pending{background:#fff2cc;color:#a16207}.extraWorkStatus.in_progress{background:#e6f0ff;color:#1d4ed8}.extraWorkStatus.completed{background:#dcfce7;color:#15803d}.extraWorkStatus.not_completed{background:#fee2e2;color:#b91c1c}
+.extraWorkAdd{display:flex;gap:8px;margin-top:10px}.extraWorkAdd input{margin:0;flex:1}.extraWorkAdd button{margin:0;white-space:nowrap}
+.reportButtons{grid-template-columns:repeat(2,minmax(0,1fr))}.reportButtons button{margin:0}
+@media(max-width:650px){.extraWorkAdd{flex-direction:column}.reportButtons{grid-template-columns:1fr}.extraWorkAdd button{width:100%}}
+</style>
 </section>
 </main>
 
@@ -2824,7 +2835,7 @@ async function loadJobs(){
               <div class="jobWorkReadable">${esc(j.work_description||"No work description provided")}</div>
             </section>
             <section class="jobDetailGrid">
-              <div class="jobDetailItem customerDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small class="customerPhoneLine">📞 ${esc(c.phone)}</small><div class="customerContactActions"><a class="customerCallBtn" href="tel:${encodeURIComponent(c.phone)}" onclick="event.stopPropagation()">📞 Call Customer</a></div>`:`<small class="muted">Customer phone not available</small>`}</div>
+              <div class="jobDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small>📞 ${esc(c.phone)}</small>`:""}</div>
               <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
               <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}</div>
               <div class="jobDetailItem"><span>👷 Technician</span><strong>${esc(technician)}</strong>${rolePhone(j.assigned_worker)?`<small>📞 ${esc(rolePhone(j.assigned_worker))}</small>`:""}</div>
@@ -2833,7 +2844,12 @@ async function loadJobs(){
             </section>
             ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong></section>`:""}
             ${j.pending_reason?`<section class="jobNote pendingNote"><span>⚠️ Pending reason</span><strong>${esc(j.pending_reason)}</strong></section>`:""}
-            ${profile?.role!=="worker" && st==="completed" && completionMap[j.id]?`<div class="completionTime">✓ Completed on: ${esc(new Date(completionMap[j.id]).toLocaleString())}</div>`:""}
+            ${profile?.role!=="worker" && st==="completed" && (j.completed_at||j.status_updated_at)?`<div class="completionTime">✓ Completed on: ${esc(new Date(j.completed_at||j.status_updated_at).toLocaleString())}</div>`:""}
+            <section class="extraWorkSection" id="extraWorkSection${j.id}">
+              <div class="extraWorkHead"><span>🧰 EXTRA WORK ADDED</span><span id="extraWorkCount${j.id}" class="pill">0</span></div>
+              <div id="extraWorkList${j.id}" class="extraWorkList"><div class="muted">Loading extra work…</div></div>
+              ${profile?.role==="worker" && j.assigned_worker===user.id && st!=="completed" ? `<div class="extraWorkAdd"><input id="extraWorkInput${j.id}" placeholder="Extra work found at site…"><button type="button" onclick="event.stopPropagation();addExtraWork(${j.id})">＋ Add Extra Work</button></div>` : ""}
+            </section>
           </div>
           ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","STREET_LIGHT","BATTERY","EARTH_PIT","TOWER","WIRING","RENOVATION"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
           ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks" onclick="event.stopPropagation()"><input id="pr${j.id}" placeholder="Pending reason" onclick="event.stopPropagation()"><button class="secondary" type="button" onclick="event.stopPropagation();updateJob(${j.id},'in_progress')">In Progress</button><button type="button" onclick="event.stopPropagation();updateJob(${j.id},'completed')">Complete</button><button class="bad" type="button" onclick="event.stopPropagation();updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
@@ -2853,6 +2869,7 @@ function toggleJobDetails(id){
   card.classList.toggle("is-open",!open);
   const btn=card.querySelector(".jobSummaryButton");
   if(btn)btn.setAttribute("aria-expanded",String(!open));
+  if(!open) loadExtraWork(id);
 }
 
 async function saveJobEdit(id,customerId){
@@ -2880,6 +2897,61 @@ async function deleteJob(id,code){
     await Promise.all([loadHome(),loadSuccessRate()]);
     if(!$("jobsList")?.children.length) await loadJobs();
   }catch(e){ console.error("Job delete error",e); alert("Could not delete job: "+(e?.message||e)); }
+}
+
+async function loadExtraWork(jobId){
+  const list=$("extraWorkList"+jobId), count=$("extraWorkCount"+jobId);
+  if(!list)return;
+  try{
+    const r=await db.from("job_extra_work").select("*").eq("job_id",jobId).order("created_at",{ascending:true});
+    if(r.error)throw r.error;
+    const rows=r.data||[];
+    if(count)count.textContent=String(rows.length);
+    list.innerHTML=rows.map((x,i)=>{
+      const st=String(x.status||"pending");
+      const when=x.completed_at?`Completed ${new Date(x.completed_at).toLocaleString()}`:`Added ${new Date(x.created_at).toLocaleString()}`;
+      const updateBtn=profile?.role==="worker" && user?.id===x.added_by && st!=="completed" ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px"><button type="button" class="secondary" onclick="event.stopPropagation();updateExtraWork(${x.id},'in_progress')">In Progress</button><button type="button" onclick="event.stopPropagation();updateExtraWork(${x.id},'completed')">Complete</button><button type="button" class="bad" onclick="event.stopPropagation();updateExtraWork(${x.id},'not_completed')">Not Completed</button></div>` : "";
+      return `<div class="extraWorkItem"><span class="extraWorkNo">${i+1}</span><div class="extraWorkText"><b>${esc(x.description)}</b><small>${esc(when)}${x.remarks?` • ${esc(x.remarks)}`:""}</small>${updateBtn}</div><span class="extraWorkStatus ${esc(st)}">${esc(st.replaceAll("_"," "))}</span></div>`;
+    }).join("")||`<div class="muted">No extra work added.</div>`;
+  }catch(e){list.innerHTML=`<div class="muted">Could not load extra work.</div>`;console.warn("Extra work load",e)}
+}
+async function addExtraWork(jobId){
+  if(profile?.role!=="worker")return alert("Only Technician can add extra work.");
+  const input=$("extraWorkInput"+jobId), description=input?.value.trim();
+  if(!description)return alert("Enter the extra work found at site.");
+  try{
+    const jr=await db.from("jobs").select("id,job_code,assigned_worker,assigned_engineer,created_by,job_term").eq("id",jobId).single();
+    if(jr.error)throw jr.error;
+    if(jr.data?.assigned_worker!==user.id) return alert("This job is not assigned to you.");
+    const er=await db.from("job_extra_work").insert({job_id:jobId,added_by:user.id,description}).select("id").single();
+    if(er.error)throw er.error;
+    const recipient=jr.data.assigned_engineer||jr.data.created_by;
+    if(recipient && recipient!==user.id){
+      const nr=await db.from("notifications").insert({recipient_id:recipient,job_id:jobId,title:"Extra work added",body:`${profile.full_name||"Technician"} added extra work to ${jr.data.job_code||"this job"}: ${description}`});
+      if(nr.error)console.warn("Extra work notification failed",nr.error);
+    }
+    if(input)input.value="";
+    await loadExtraWork(jobId);
+    alert("Extra work added to the same job. Engineer notified.");
+  }catch(e){console.error("Add extra work",e);alert("Could not add extra work: "+(e?.message||e))}
+}
+async function updateExtraWork(id,status){
+  if(profile?.role!=="worker")return alert("Only Technician can update extra work.");
+  const remarks=status==="not_completed"?prompt("Reason / remarks:"):(status==="completed"?prompt("Completion remarks:") : null);
+  if((status==="completed"||status==="not_completed")&&!remarks?.trim())return;
+  try{
+    const er=await db.from("job_extra_work").select("id,job_id,description").eq("id",id).single();
+    if(er.error)throw er.error;
+    const payload={status,remarks:remarks?.trim()||null,updated_at:new Date().toISOString(),completed_at:status==="completed"?new Date().toISOString():null};
+    const r=await db.from("job_extra_work").update(payload).eq("id",id);
+    if(r.error)throw r.error;
+    const jr=await db.from("jobs").select("job_code,assigned_engineer,created_by").eq("id",er.data.job_id).single();
+    const recipient=jr.data?.assigned_engineer||jr.data?.created_by;
+    if(recipient && recipient!==user.id){
+      await db.from("notifications").insert({recipient_id:recipient,job_id:er.data.job_id,title:"Extra work updated",body:`Extra work in ${jr.data?.job_code||"job"} is now ${status.replaceAll("_"," ")}: ${er.data.description}`});
+    }
+    await loadExtraWork(er.data.job_id);
+  }catch(e){console.error("Extra work update",e);alert("Could not update extra work: "+(e?.message||e))}
 }
 
 async function updateJob(id,status){const m=$("rm"+id)?.value.trim()||null,p=$("pr"+id)?.value.trim()||null;if(status==="completed"&&!m)return alert("Remarks required");if(status==="not_completed"&&!p)return alert("Pending reason required");const r=await db.rpc("worker_update_job_status",{p_job_id:id,p_status:status,p_remarks:m,p_pending_reason:p});if(r.error)return alert(r.error.message);loadJobs();loadHome();loadSuccessRate()}
@@ -3019,7 +3091,7 @@ function setAvatar(src){$("myAvatar").innerHTML=`<img src="${src}" style="width:
 function toggleCompact(){document.body.classList.toggle("compact");alert("Dashboard view toggled")}
 
 async function fetchBackupData(){
-  const tables=["profiles","customers","jobs","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance","renovations"];
+  const tables=["profiles","customers","jobs","job_extra_work","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance","renovations"];
   const out={app:"Tele Tuty",version:1,created_at:new Date().toISOString(),tables:{}};
   for(const t of tables){
     let q=db.from(t).select("*");
@@ -3049,7 +3121,7 @@ async function restoreBackup(ev){
   if(!confirm("Restore backup data? Existing records are not deleted; duplicate IDs may be skipped."))return;
   try{
     const data=JSON.parse(await f.text());
-    const order=["profiles","customers","jobs","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance","renovations"];
+    const order=["profiles","customers","jobs","job_extra_work","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance","renovations"];
     let count=0;
     for(const t of order){
       const rows=Array.isArray(data.tables?.[t])?data.tables[t]:[];
@@ -3064,7 +3136,29 @@ async function restoreBackup(ev){
 }
 async function printReport(type){
   if(!user)return alert("Login required");
+  if(["month_telecom","month_electrical"].includes(type) && !["admin","engineer"].includes(profile?.role)) return alert("Admin/Engineer access required.");
+  if(type==="jobs"||type==="full") { if(profile?.role!=="admin") return alert("Full report is available only to Admin."); }
   let title="Tele Tuty Report", body="";
+  if(type==="month_telecom"||type==="month_electrical"){
+    const since=new Date(Date.now()-30*86400000);
+    const r=await db.from("jobs").select("*").gte("created_at",since.toISOString()).order("created_at",{ascending:false}).limit(500);
+    if(r.error) return alert(r.error.message);
+    const telecom=new Set(["TELECOM","TOWER"]);
+    const electrical=new Set(["STREET_LIGHT","BATTERY","EARTH_PIT","WIRING","RENOVATION","GENERAL"]);
+    const wanted=type==="month_telecom"?telecom:electrical;
+    const rows=(r.data||[]).filter(x=>wanted.has(String(x.job_term||"").toUpperCase()));
+    const ids=rows.map(x=>x.id);
+    let extras=[];
+    if(ids.length){ const er=await db.from("job_extra_work").select("*").in("job_id",ids).order("created_at",{ascending:true}); if(!er.error) extras=er.data||[]; }
+    const extraMap={}; extras.forEach(x=>(extraMap[x.job_id]??=[]).push(x));
+    const kind=type==="month_telecom"?"Telephone / Telecom Work":"Electrical Work";
+    title=`Tele Tuty - 30 Day ${kind}`;
+    body+=`<h2>${esc(kind)}</h2><div class="meta">Period: ${since.toLocaleDateString()} - ${new Date().toLocaleDateString()} • Total jobs: ${rows.length}</div>`;
+    body+=`<table><tr><th>Date</th><th>Job ID</th><th>Customer</th><th>Location</th><th>Work</th><th>Status</th><th>Extra Work</th></tr>`;
+    const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))]; let cmap={};
+    if(customerIds.length){const cr=await db.from("customers").select("id,name").in("id",customerIds); if(!cr.error)(cr.data||[]).forEach(c=>cmap[c.id]=c.name);}
+    body+=rows.map(x=>{const ex=(extraMap[x.id]||[]).map(e=>`${esc(e.description)} [${esc(e.status)}]`).join("<br>")||"—";return `<tr><td>${new Date(x.created_at).toLocaleDateString()}</td><td>${esc(x.job_code||x.id)}</td><td>${esc(cmap[x.customer_id]||"")}</td><td>${esc(x.location||"")}</td><td>${esc(x.work_description||"")}</td><td>${esc(x.status||"")}</td><td>${ex}</td></tr>`}).join("")+`</table>`;
+  }
   if(type==="jobs"||type==="history"||type==="full"){
     const r=await db.from("jobs").select("*").order("created_at",{ascending:false}).limit(500);
     const rows=r.data||[];
@@ -3597,6 +3691,7 @@ function canAccessView(id){
   const maintenanceViews=["street","battery","earth","tower","wiring","renovation"];
   if(id==="team" || id==="adminTools") return role==="admin";
   if(id==="success") return role==="admin" || role==="engineer";
+  if(id==="backup") return role==="admin" || role==="engineer";
   if(maintenanceViews.includes(id)) return role==="admin" || role==="engineer";
   return true;
 }
@@ -3605,8 +3700,11 @@ function applyRoleNavigation(){
   const successAllowed=role==="admin" || role==="engineer";
   const teamAllowed=role==="admin";
   const maintenanceAllowed=role==="admin" || role==="engineer";
+  const backupAllowed=role==="admin" || role==="engineer";
   document.querySelectorAll('[onclick*="navigate(\'success\')"]').forEach(el=>el.classList.toggle("hidden",!successAllowed));
   document.querySelectorAll('[onclick*="navigate(\'team\')"],[onclick*="navigate(\'adminTools\')"]').forEach(el=>el.classList.toggle("hidden",!teamAllowed));
+  document.querySelectorAll('[onclick*="navigate(\'backup\')"]').forEach(el=>el.classList.toggle("hidden",!backupAllowed));
+  const adminOnlyReports=$("adminOnlyReportButtons"); if(adminOnlyReports) adminOnlyReports.classList.toggle("hidden", role!=="admin");
   const maintenanceMenu=$("maintenanceMenuGroup");
   if(maintenanceMenu) maintenanceMenu.classList.toggle("hidden",!maintenanceAllowed);
   const successEl=$("success"); if(successEl) successEl.classList.toggle("hidden", !successAllowed && !successEl.classList.contains("hidden"));
@@ -3801,17 +3899,3 @@ body:before,body:after{display:none!important;content:none!important;background:
   .teamActions button{flex:1 1 140px}
 }
 </style>
-
-
-<style id="customer-contact-v88">
-.customerDetailItem{min-width:0}
-.customerPhoneLine{display:block;margin-top:4px;font-weight:700}
-.customerContactActions{margin-top:8px}
-.customerCallBtn{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 11px;border-radius:9px;background:#16a34a!important;color:#fff!important;text-decoration:none!important;font-size:12px;font-weight:800;line-height:1}
-.customerCallBtn:active{transform:scale(.98)}
-@media(max-width:520px){.customerCallBtn{width:100%;}.customerDetailItem{overflow:hidden}}
-</style>
-<script>
-/* V88: assigned technicians can view the customer record attached to their assigned jobs.
-   The database policy is applied separately; this UI adds a direct call action. */
-</script>
