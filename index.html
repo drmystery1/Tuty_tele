@@ -1917,6 +1917,81 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 }
 </style>
 
+
+<style id="v82-final-dashboard-layout-fix">
+/* V82: final compact, aligned dashboard cards and Today’s Jobs layout */
+#home .kpiGrid.four{gap:12px!important}
+#home .dashKpi{
+  min-height:108px!important;
+  padding:13px!important;
+  border-radius:16px!important;
+  box-shadow:0 5px 16px rgba(15,23,42,.10)!important;
+}
+#home .dashKpi .kpiIcon{
+  float:right!important;
+  width:30px!important;height:30px!important;min-width:30px!important;
+  border-radius:9px!important;font-size:15px!important;
+}
+#home .dashKpi strong{font-size:27px!important;margin-top:12px!important;line-height:1.05!important}
+#home .dashKpi small{font-size:12px!important;line-height:1.15!important}
+
+/* Keep the semantic KPI colors solid and predictable on every role dashboard. */
+#home .dashKpi.blue{background:#2563eb!important;border-color:#1d4ed8!important}
+#home .dashKpi.orange{background:#f59e0b!important;border-color:#d97706!important}
+#home .dashKpi.green{background:#16a34a!important;border-color:#15803d!important}
+#home .dashKpi.red{background:#dc2626!important;border-color:#b91c1c!important}
+#home #technicianDashboard .dashKpi:nth-child(4){background:#d4a017!important;border-color:#b8860b!important}
+#home #adminDashboard .dashKpi:nth-child(4){background:#f59e0b!important;border-color:#d97706!important}
+#home #engineerDashboard .dashKpi:nth-child(4){background:#dc2626!important;border-color:#b91c1c!important}
+
+/* Today’s Jobs: four-column layout prevents the status from dropping under the text. */
+#home .recentItem{
+  display:grid!important;
+  grid-template-columns:6px 34px minmax(0,1fr) auto!important;
+  gap:11px!important;
+  align-items:center!important;
+  min-height:76px!important;
+  padding:12px 13px!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  border:1px solid #e5e7eb!important;
+  box-shadow:0 3px 12px rgba(15,23,42,.06)!important;
+}
+#home .recentItem .stripe{
+  width:5px!important;height:52px!important;border-radius:8px!important;box-shadow:none!important;
+}
+#home .recentStatusIcon{
+  width:32px!important;height:32px!important;border-radius:10px!important;
+  display:grid!important;place-items:center!important;
+  font-size:17px!important;font-weight:900!important;
+  border:1px solid transparent!important;
+}
+#home .recentStatusIcon.completed{background:#dcfce7!important;color:#16a34a!important;border-color:#bbf7d0!important}
+#home .recentStatusIcon.pending{background:#fef3c7!important;color:#d97706!important;border-color:#fde68a!important}
+#home .recentStatusIcon.not_completed{background:#fee2e2!important;color:#dc2626!important;border-color:#fecaca!important}
+#home .recentStatusIcon.in_progress{background:#dbeafe!important;color:#2563eb!important;border-color:#bfdbfe!important}
+#home .recentJobText{min-width:0!important;overflow:hidden!important}
+#home .recentJobTitle{display:block!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;font-size:14px!important;color:#172033!important}
+#home .recentJobDesc,#home .recentJobLocation{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;color:#64748b!important}
+#home .recentStatus{justify-self:end!important;white-space:nowrap!important;font-size:11px!important;font-weight:800!important;padding:6px 9px!important;border-radius:999px!important}
+#home .recentStatus.completed{color:#15803d!important;background:#dcfce7!important;border:1px solid #bbf7d0!important}
+#home .recentStatus.pending{color:#b45309!important;background:#fef3c7!important;border:1px solid #fde68a!important}
+#home .recentStatus.not_completed{color:#b91c1c!important;background:#fee2e2!important;border:1px solid #fecaca!important}
+#home .recentStatus.in_progress{color:#1d4ed8!important;background:#dbeafe!important;border:1px solid #bfdbfe!important}
+
+@media(max-width:520px){
+  #home .kpiGrid.four{gap:10px!important}
+  #home .dashKpi{min-height:100px!important;padding:11px!important;border-radius:14px!important}
+  #home .dashKpi .kpiIcon{width:28px!important;height:28px!important;min-width:28px!important;border-radius:8px!important;font-size:14px!important}
+  #home .dashKpi strong{font-size:24px!important;margin-top:11px!important}
+  #home .dashKpi small{font-size:11px!important}
+  #home .recentItem{grid-template-columns:5px 32px minmax(0,1fr) auto!important;gap:8px!important;padding:10px!important;min-height:70px!important}
+  #home .recentItem .stripe{height:48px!important;width:4px!important}
+  #home .recentStatusIcon{width:30px!important;height:30px!important;border-radius:9px!important;font-size:15px!important}
+  #home .recentStatus{font-size:10px!important;padding:5px 7px!important}
+}
+</style>
+
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
