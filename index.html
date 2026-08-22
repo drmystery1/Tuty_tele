@@ -1378,6 +1378,20 @@ body:before{display:none!important;opacity:0!important;content:none!important;}
   #success .successRow .kpi{flex:0 0 64px!important;}
 }
 </style>
+<style id="v57-login-theme">
+html,body{background:#fff!important;color:#111827!important}
+.loginPage{max-width:760px!important;margin:0 auto!important;padding:0 12px 48px!important}
+.loginVisual{margin:0 -12px 18px!important;border-radius:0 0 30px 30px!important;overflow:hidden!important;background:#fff!important}
+.loginVisual img{display:block!important;width:100%!important;height:auto!important;max-height:620px!important;object-fit:cover!important;object-position:center top!important}
+.loginFormCard{background:#fff!important;color:#14213d!important;border:1px solid #e5e7eb!important;border-radius:28px!important;padding:28px 22px!important;box-shadow:0 10px 30px rgba(15,23,42,.10)!important}
+.loginFormCard h2{color:#173d7a!important;font-size:30px!important;margin:0 0 8px!important}
+.loginWelcome{color:#5b667a!important;margin:0 0 18px!important;font-size:15px!important}
+.loginFormCard input{display:block!important;width:100%!important;background:#fff!important;color:#172033!important;border:1px solid #d7dce5!important;border-radius:16px!important;padding:16px!important;margin:12px 0!important;font-size:16px!important;box-shadow:none!important}
+.loginFormCard input::placeholder{color:#687385!important;opacity:1!important}
+.loginPrimary{width:100%!important;background:#2452a4!important;color:#fff!important;border:0!important;border-radius:16px!important;padding:16px!important;font-size:17px!important;font-weight:700!important;margin:8px 0 14px!important;box-shadow:none!important}
+.loginFormCard .muted{color:#667085!important;opacity:1!important}
+@media(max-width:600px){.loginPage{padding-bottom:28px!important}.loginVisual img{max-height:none!important}.loginFormCard{border-radius:24px!important;padding:24px 18px!important}.loginFormCard h2{font-size:28px!important}}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -1435,9 +1449,19 @@ body:before{display:none!important;opacity:0!important;content:none!important;}
 </div>
 <main class="wrap">
 
-<section id="login" class="auth">
-  <div class="card loginHero"><img src="tele-tuty-logo.png" alt="Tele Tuty"><h2>Tele Tuty Field Operations</h2><p class="muted">Telephone • Electrical • Telecom Maintenance Management</p></div>
-  <div class="card"><h2>Sign in</h2><input id="email" type="email" placeholder="Email address"><input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button><p id="loginMsg" class="muted">Access is granted after Admin approval and role assignment.</p><p class="muted" style="font-size:11px;margin-top:8px">Secure session login • Supabase Auth</p></div>
+<section id="login" class="auth loginPage">
+  <div class="loginVisual">
+    <img src="tele-tuty-login-bg.png" alt="Tele Tuty telephone and telecom field operations">
+  </div>
+  <div class="card loginFormCard">
+    <h2>Sign in</h2>
+    <p class="loginWelcome">Welcome back! Please sign in to continue.</p>
+    <input id="email" type="email" placeholder="Email address" autocomplete="email">
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+    <button class="loginPrimary" onclick="login()">Sign In</button>
+    <p id="loginMsg" class="muted">Access is granted after Admin approval and role assignment.</p>
+    <p class="muted" style="font-size:11px;margin-top:8px">Secure session login • Supabase Auth</p>
+  </div>
 </section>
 
 <section id="pending" class="auth hidden"><div class="card" style="text-align:center"><div style="font-size:50px">⏳</div><h2>Approval Pending</h2><p class="muted">Your account is waiting for Admin approval.</p><button class="secondary" onclick="load()">Check Approval</button><button class="secondary" onclick="logout()">Logout</button></div></section>
@@ -1749,7 +1773,7 @@ async function login(){
    if(!user){ if(msg) msg.textContent="Login failed. Please try again."; return; }
    await load();
  }catch(err){ console.error(err); if(msg) msg.textContent=err?.message||"Login failed"; }
- finally{ if(btn){btn.disabled=false;btn.textContent="Login";} }
+ finally{ if(btn){btn.disabled=false;btn.textContent="Sign In";} }
 }
 
 async function loadHome(){
