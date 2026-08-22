@@ -1136,8 +1136,8 @@ button.danger{color:#b42318!important}
 </style>
 
 
-<style id="tele-tuty-v54-actual-main-white-fix">
-/* V54: ACTUAL MAIN DOCUMENT FIX. This style is intentionally inside <head>
+<style id="tele-tuty-v55-actual-main-white-fix">
+/* V55: ACTUAL MAIN DOCUMENT FIX. This style is intentionally inside <head>
    so it applies to the real app, not only the generated PDF/report window. */
 html, body { background:#fff !important; background-image:none !important; color:#172033 !important; }
 body, #app, .wrap { background:#fff !important; background-image:none !important; }
@@ -1273,6 +1273,111 @@ button.bad { background:#dc3545 !important; color:#fff !important; }
 }
 </style>
 
+<style id="v55-final-global-readability">
+/* V55 FINAL — GLOBAL WHITE + READABILITY REBUILD */
+html,body,#app,.wrap{background:#fff!important;background-image:none!important;color:#172033!important;}
+body:before{display:none!important;opacity:0!important;content:none!important;}
+
+/* Remove the old glass/royal treatment from every page */
+.globalPageNav,#globalPageNav.globalPageNav,.pageNav,.viewHeader{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border:1px solid #e1e6ee!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+.globalPageNav:before,#globalPageNav:before{display:none!important;content:none!important;background:none!important;}
+.royalNavBtn,.royalNavBtn.home,#globalPageNav .royalNavBtn,#globalPageNav .royalNavBtn.home{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border:1px solid #d5dce6!important;box-shadow:0 2px 8px rgba(15,23,42,.06)!important;
+  text-shadow:none!important;
+}
+.royalNavTitle,.royalNavTitle *{color:#172033!important;text-shadow:none!important;opacity:1!important;}
+.royalNavTitle .crown{color:#d99a00!important;}
+.royalIcon,.royalNavBtn.home .royalIcon{color:#2563eb!important;text-shadow:none!important;}
+
+/* Every visible page: no faded text, no inherited white text */
+#app .view:not(.hidden) h1,#app .view:not(.hidden) h2,#app .view:not(.hidden) h3,
+#app .view:not(.hidden) h4,#app .view:not(.hidden) h5,#app .view:not(.hidden) h6,
+#app .view:not(.hidden) p,#app .view:not(.hidden) span,#app .view:not(.hidden) b,
+#app .view:not(.hidden) strong,#app .view:not(.hidden) small,#app .view:not(.hidden) label,
+#app .view:not(.hidden) li,#app .view:not(.hidden) td,#app .view:not(.hidden) th,
+#app .view:not(.hidden) .muted,#app .view:not(.hidden) .empty{
+  color:#172033!important;opacity:1!important;text-shadow:none!important;
+}
+#app .view:not(.hidden) button{opacity:1!important;text-shadow:none!important;}
+#app .view:not(.hidden) input,#app .view:not(.hidden) select,#app .view:not(.hidden) textarea{
+  background:#fff!important;color:#172033!important;opacity:1!important;border:1px solid #cfd6df!important;
+}
+#app .view:not(.hidden) input::placeholder,#app .view:not(.hidden) textarea::placeholder{color:#7a8492!important;opacity:1!important;}
+
+/* All surfaces */
+#app .view:not(.hidden) .card,#app .view:not(.hidden) .panel,#app .view:not(.hidden) .stat,
+#app .view:not(.hidden) .feature,#app .view:not(.hidden) .quick,#app .view:not(.hidden) .person,
+#app .view:not(.hidden) .empty,#app .view:not(.hidden) .analyticsKpi,#app .view:not(.hidden) .jobCard,
+#app .view:not(.hidden) .successRow,#app .view:not(.hidden) .filterBar,#app .view:not(.hidden) .analyticsTable{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border-color:#dfe5ed!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+  text-shadow:none!important;opacity:1!important;
+}
+
+/* Technician Success Rate — rebuild the whole page for mobile readability */
+#success:not(.hidden){background:#fff!important;color:#172033!important;padding-bottom:110px!important;}
+#success .analyticsHead{background:#fff!important;color:#172033!important;margin:12px 0 16px!important;}
+#success .analyticsHead h1,#success .analyticsHead p,#success .dateChip,
+#success .dateChip span{color:#172033!important;text-shadow:none!important;opacity:1!important;}
+#success .dateChip{background:#fff!important;border:1px solid #dfe5ed!important;box-shadow:none!important;}
+#success .analyticsKpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}
+#success .analyticsKpi{min-height:120px!important;padding:16px!important;background:#fff!important;color:#172033!important;border:1px solid #dfe5ed!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;}
+#success .analyticsKpi small,#success .analyticsKpi b,#success .analyticsKpi span{color:#172033!important;text-shadow:none!important;opacity:1!important;}
+#success .analyticsKpi b{font-size:30px!important;}
+#success .analyticsKpi.purple b{color:#6338c6!important;}
+#success .analyticsKpi.green b{color:#15803d!important;}
+#success .analyticsKpi.orange b{color:#b45309!important;}
+#success .analyticsKpi.red b{color:#b91c1c!important;}
+#success .analyticsKpi.blue b{color:#2563eb!important;}
+#success .filterBar{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin:16px 0!important;padding:0!important;background:#fff!important;}
+#success .filterBar input{grid-column:1/-1!important;height:50px!important;background:#fff!important;color:#172033!important;}
+#success .filterBar button{height:50px!important;background:#fff!important;color:#2563eb!important;border:1px solid #dfe5ed!important;box-shadow:none!important;}
+#success .filterBar .filterBtn{color:#6338c6!important;}
+#success .analyticsTable{padding:12px!important;background:#fff!important;border:1px solid #dfe5ed!important;}
+#success .tableHead{display:none!important;}
+#success #successList{display:grid!important;gap:12px!important;}
+#success .successRow{padding:16px!important;margin:0!important;background:#fff!important;border:1px solid #dfe5ed!important;border-radius:18px!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;}
+#success .successRow .row{display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;color:#172033!important;}
+#success .successRow .avatar{flex:0 0 48px!important;width:48px!important;height:48px!important;display:grid!important;place-items:center!important;border-radius:50%!important;background:#eef4ff!important;color:#2563eb!important;font-weight:900!important;}
+#success .successRow .teamInfo{flex:1 1 150px!important;min-width:130px!important;}
+#success .successRow .teamInfo b,#success .successRow .teamInfo .muted{color:#172033!important;opacity:1!important;}
+#success .successRow .spacer{display:none!important;}
+#success .successRow .row > div:not(.avatar):not(.teamInfo):not(.spacer):not(.kpi){flex:1 1 78px!important;min-width:78px!important;}
+#success .successRow .row > div:not(.avatar):not(.teamInfo):not(.spacer):not(.kpi) b,
+#success .successRow .row > div:not(.avatar):not(.teamInfo):not(.spacer):not(.kpi) .muted{color:#172033!important;opacity:1!important;}
+#success .successRow .kpi{flex:0 0 64px!important;color:#2563eb!important;font-size:24px!important;font-weight:900!important;text-align:right!important;}
+#success .successRow .progress{width:100%!important;height:10px!important;margin-top:10px!important;background:#edf1f5!important;border:1px solid #d8dee7!important;border-radius:999px!important;overflow:hidden!important;}
+#success .successRow .progress i{display:block!important;height:100%!important;border-radius:999px!important;}
+
+/* Job/module pages and generated rows */
+.jobCard,.jobCardReadable,.jobSummaryButton,.jobCollapsedTitle,.jobCollapsedMeta,.jobTypeReadable,.jobCodeReadable,.jobWorkReadable,
+.jobDetailSection,.jobDetailItem,.jobNote,.recentItem,.miniUser,.teamCard,.approvalRow,.person{
+  opacity:1!important;text-shadow:none!important;
+}
+.jobCard .jobCollapsedTitle,.jobCard .jobCollapsedMeta,.jobCard .jobTypeReadable,.jobCard .jobCodeReadable,
+.jobCard .jobWorkReadable,.jobCard .jobDetailItem span,.jobCard .jobDetailItem strong,.jobCard .jobDetailItem small,
+.jobCard .jobNote span,.jobCard .jobNote strong,.jobCard .detailLabel{color:#172033!important;opacity:1!important;}
+
+/* Bottom navigation */
+.bottomNav{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #e1e6ee!important;box-shadow:0 10px 30px rgba(15,23,42,.10)!important;backdrop-filter:none!important;}
+.bottomNav button{background:transparent!important;color:#475569!important;text-shadow:none!important;}
+.bottomNav button.active{background:#eff6ff!important;color:#2563eb!important;}
+
+@media(max-width:600px){
+  #app .view:not(.hidden){padding-bottom:12px!important;}
+  #success .analyticsKpis{grid-template-columns:1fr 1fr!important;}
+  #success .analyticsKpi:first-child{grid-column:1/-1!important;}
+  #success .filterBar{grid-template-columns:1fr!important;}
+  #success .filterBar input,#success .filterBar button{grid-column:auto!important;width:100%!important;}
+  #success .successRow .row > div:not(.avatar):not(.teamInfo):not(.spacer):not(.kpi){flex:1 1 calc(50% - 8px)!important;min-width:calc(50% - 8px)!important;}
+  #success .successRow .kpi{flex:0 0 64px!important;}
+}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
