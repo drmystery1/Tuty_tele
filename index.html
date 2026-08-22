@@ -1414,12 +1414,118 @@ html,body{background:#fff!important;color:#172033!important;}
 }
 </style>
 
-<style id="v59-realistic-login-hero">
-/* V59: use only the clean telecom artwork area; no fake phone status bar or duplicate sign-in card. */
+<style id="v60-realistic-login-hero">
+/* V60: clean telecom artwork only; no browser/status-bar/duplicate login screenshot. */
 #login .loginVisual{margin:0 -12px 18px!important;padding:0!important;background:#fff!important;border-radius:0 0 30px 30px!important;overflow:hidden!important;min-height:0!important;height:auto!important;}
 #login .loginVisual img{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:cover!important;object-position:center center!important;border:0!important;border-radius:0!important;opacity:1!important;visibility:visible!important;}
 #login .loginFormCard{margin-top:0!important;}
 @media(max-width:600px){#login .loginVisual{margin-left:-10px!important;margin-right:-10px!important;margin-bottom:16px!important;}#login .loginVisual img{width:100%!important;height:auto!important;}}
+</style>
+
+<style id="v60-login-clean-hero">
+html,body{background:#fff!important;color:#172033!important;}
+#login{background:#fff!important;color:#172033!important;max-width:760px!important;margin:0 auto!important;padding:0 10px 32px!important;}
+#login .loginVisual{margin:0 -10px 18px!important;padding:0!important;background:#fff!important;border:0!important;border-radius:0 0 30px 30px!important;overflow:hidden!important;box-shadow:none!important;min-height:0!important;height:auto!important;}
+#login .loginVisual img{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:cover!important;object-position:center top!important;border:0!important;border-radius:0!important;box-shadow:none!important;opacity:1!important;visibility:visible!important;}
+#login .loginFormCard{margin:0!important;background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #dfe4ec!important;border-radius:26px!important;padding:24px 18px!important;box-shadow:0 12px 32px rgba(15,23,42,.10)!important;}
+#login .loginFormCard h2{color:#173d7a!important;opacity:1!important;margin:0 0 8px!important;}
+#login .loginWelcome,#login #loginMsg,#login .loginFormCard .muted{color:#526176!important;opacity:1!important;visibility:visible!important;}
+#login .loginFormCard input{background:#fff!important;color:#172033!important;border:1px solid #cfd6e1!important;opacity:1!important;}
+#login .loginFormCard input::placeholder{color:#697586!important;opacity:1!important;}
+#login .loginPrimary{background:#2452a4!important;color:#fff!important;opacity:1!important;}
+</style>
+
+<style id="v61-login-design">
+/* V61: realistic telecom login matching approved hero artwork */
+.loginPage{
+  max-width:760px!important;
+  margin:18px auto 40px!important;
+  padding:0!important;
+}
+.loginVisual{
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:28px 28px 0 0!important;
+  overflow:hidden!important;
+  background:#eef7ff!important;
+  box-shadow:0 10px 30px rgba(15,23,42,.08)!important;
+}
+.loginVisual img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  border-radius:28px 28px 0 0!important;
+  box-shadow:none!important;
+}
+.loginFormCard{
+  margin:0!important;
+  padding:30px 34px 34px!important;
+  border-radius:0 0 28px 28px!important;
+  background:#fff!important;
+  color:#102a56!important;
+  border:1px solid #e1e8f2!important;
+  border-top:0!important;
+  box-shadow:0 14px 35px rgba(15,23,42,.10)!important;
+}
+.loginFormCard h2{
+  margin:0 0 8px!important;
+  color:#123c78!important;
+  font-size:32px!important;
+  font-weight:800!important;
+}
+.loginWelcome{
+  color:#5e6b7e!important;
+  font-size:16px!important;
+  margin:0 0 20px!important;
+}
+.loginFormCard input{
+  min-height:58px!important;
+  margin:8px 0!important;
+  border:1px solid #cfd8e5!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  color:#172033!important;
+  font-size:16px!important;
+  padding:16px 18px!important;
+}
+.loginFormCard input:focus{
+  border-color:#39cfe8!important;
+  box-shadow:0 0 0 3px rgba(57,207,232,.18)!important;
+  outline:none!important;
+}
+.loginFormCard input::placeholder{color:#667085!important;opacity:1!important}
+.loginPrimary{
+  min-height:58px!important;
+  margin:14px 0 18px!important;
+  border:0!important;
+  border-radius:16px!important;
+  background:linear-gradient(90deg,#168cf5,#1855d8)!important;
+  color:#fff!important;
+  font-size:18px!important;
+  font-weight:800!important;
+  box-shadow:0 10px 24px rgba(37,99,235,.24)!important;
+}
+#loginMsg{
+  color:#5e6b7e!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+}
+.loginFormCard .muted[style]{
+  color:#667085!important;
+}
+@media(max-width:600px){
+  .loginPage{margin:0 auto 24px!important;max-width:100%!important}
+  .loginVisual{border-radius:0!important}
+  .loginVisual img{border-radius:0!important}
+  .loginFormCard{
+    padding:26px 22px 30px!important;
+    border-radius:0 0 24px 24px!important;
+  }
+  .loginFormCard h2{font-size:30px!important}
+}
 </style>
 </head>
 
@@ -1480,7 +1586,7 @@ html,body{background:#fff!important;color:#172033!important;}
 
 <section id="login" class="auth loginPage">
   <div class="loginVisual">
-    <img src="tele-tuty-login-hero.png" alt="Tele Tuty telephone and telecom field operations">
+    <img src="tele-tuty-final-hero.png" alt="Tele Tuty telephone and telecom field operations">
   </div>
   <div class="card loginFormCard">
     <h2>Sign in</h2>
@@ -2350,6 +2456,99 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 .bottomNav button.active{background:#eff6ff!important;color:#2563eb!important}
 /* Never fade decorative images into text */
 #app .view:not(.hidden) img{opacity:1!important;filter:none!important}
+</style>
+
+<style id="v61-login-design">
+/* V61: realistic telecom login matching approved hero artwork */
+.loginPage{
+  max-width:760px!important;
+  margin:18px auto 40px!important;
+  padding:0!important;
+}
+.loginVisual{
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:28px 28px 0 0!important;
+  overflow:hidden!important;
+  background:#eef7ff!important;
+  box-shadow:0 10px 30px rgba(15,23,42,.08)!important;
+}
+.loginVisual img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  border-radius:28px 28px 0 0!important;
+  box-shadow:none!important;
+}
+.loginFormCard{
+  margin:0!important;
+  padding:30px 34px 34px!important;
+  border-radius:0 0 28px 28px!important;
+  background:#fff!important;
+  color:#102a56!important;
+  border:1px solid #e1e8f2!important;
+  border-top:0!important;
+  box-shadow:0 14px 35px rgba(15,23,42,.10)!important;
+}
+.loginFormCard h2{
+  margin:0 0 8px!important;
+  color:#123c78!important;
+  font-size:32px!important;
+  font-weight:800!important;
+}
+.loginWelcome{
+  color:#5e6b7e!important;
+  font-size:16px!important;
+  margin:0 0 20px!important;
+}
+.loginFormCard input{
+  min-height:58px!important;
+  margin:8px 0!important;
+  border:1px solid #cfd8e5!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  color:#172033!important;
+  font-size:16px!important;
+  padding:16px 18px!important;
+}
+.loginFormCard input:focus{
+  border-color:#39cfe8!important;
+  box-shadow:0 0 0 3px rgba(57,207,232,.18)!important;
+  outline:none!important;
+}
+.loginFormCard input::placeholder{color:#667085!important;opacity:1!important}
+.loginPrimary{
+  min-height:58px!important;
+  margin:14px 0 18px!important;
+  border:0!important;
+  border-radius:16px!important;
+  background:linear-gradient(90deg,#168cf5,#1855d8)!important;
+  color:#fff!important;
+  font-size:18px!important;
+  font-weight:800!important;
+  box-shadow:0 10px 24px rgba(37,99,235,.24)!important;
+}
+#loginMsg{
+  color:#5e6b7e!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+}
+.loginFormCard .muted[style]{
+  color:#667085!important;
+}
+@media(max-width:600px){
+  .loginPage{margin:0 auto 24px!important;max-width:100%!important}
+  .loginVisual{border-radius:0!important}
+  .loginVisual img{border-radius:0!important}
+  .loginFormCard{
+    padding:26px 22px 30px!important;
+    border-radius:0 0 24px 24px!important;
+  }
+  .loginFormCard h2{font-size:30px!important}
+}
 </style>
 </head><body><main class="report"><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></main>
 <style id="tele-tuty-v52-visibility-fix">
