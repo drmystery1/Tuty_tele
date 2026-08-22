@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="75">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="76">
   <title>Tele Tuty</title>
 <style>
 /* V34 render guard: style elements must never become visible text */
@@ -134,6 +134,30 @@ body *{
 }
 </style>
 
+
+<style id="v76-search-notification-nav">
+/* V76: compact notification/search controls in the Back/Home navigation. */
+.globalPageNav{position:sticky!important;}
+.globalNavTools{display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;flex:0 0 auto!important;}
+.navIconBtn{position:relative!important;width:42px!important;height:42px!important;min-width:42px!important;margin:0!important;padding:0!important;border-radius:13px!important;display:grid!important;place-items:center!important;background:#fff!important;color:#172033!important;border:1px solid #d8dee8!important;box-shadow:0 3px 10px rgba(15,23,42,.06)!important;}
+.navToolIcon{font-size:21px!important;line-height:1!important;color:#2563eb!important;}
+.navNotifBadge{position:absolute!important;right:-4px!important;top:-5px!important;min-width:18px!important;height:18px!important;padding:0 4px!important;border-radius:999px!important;display:grid!important;place-items:center!important;background:#dc2626!important;color:#fff!important;font-size:10px!important;font-weight:900!important;border:2px solid #fff!important;}
+.globalJobSearch{position:sticky!important;top:78px!important;z-index:998!important;background:#fff!important;border:1px solid #d8dee8!important;border-radius:16px!important;padding:9px!important;margin:-5px 0 12px!important;box-shadow:0 8px 24px rgba(15,23,42,.10)!important;}
+.globalSearchRow{display:flex!important;align-items:center!important;gap:7px!important;}
+.globalSearchRow input{margin:0!important;flex:1!important;min-width:0!important;border:0!important;outline:0!important;box-shadow:none!important;padding:10px 5px!important;}
+.globalSearchIcon{font-size:22px!important;color:#2563eb!important;padding:0 4px!important;}
+.globalSearchClear{width:34px!important;height:34px!important;min-width:34px!important;margin:0!important;padding:0!important;border-radius:10px!important;background:#f8fafc!important;color:#334155!important;border:1px solid #e2e8f0!important;font-size:22px!important;line-height:1!important;}
+.globalJobSearch .muted{padding:2px 5px 0!important;font-size:11px!important;}
+@media(max-width:520px){
+  #globalPageNav.globalPageNav{gap:5px!important;}
+  #globalPageNav.globalPageNav .royalNavBtn{min-width:76px!important;padding:0 9px!important;}
+  #globalPageNav.globalPageNav .royalNavTitle{font-size:10px!important;}
+  .globalNavTools{gap:4px!important;}
+  .navIconBtn{width:38px!important;height:38px!important;min-width:38px!important;border-radius:11px!important;}
+  .navToolIcon{font-size:19px!important;}
+  .globalJobSearch{top:70px!important;}
+}
+</style>
 <style id="navigation-fix">
 .menuTitle{padding:10px 12px 6px;color:#6fdfff;font-weight:900;font-size:12px;letter-spacing:1px;text-transform:uppercase}
 .menuDivider{height:1px;background:#1c3853;margin:7px 4px}
@@ -1873,8 +1897,20 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   <nav id="globalPageNav" class="globalPageNav" aria-label="Page navigation">
     <button class="royalNavBtn back" onclick="goBack()" aria-label="Back"><span class="royalIcon">‹</span><span>Back</span></button>
     <div class="royalNavTitle"><span class="crown">♛</span><span id="globalPageTitle">Field Operations</span></div>
+    <div class="globalNavTools" aria-label="Quick actions">
+      <button id="globalNotifBtn" class="navIconBtn" onclick="handleNotificationButton()" aria-label="Notifications" title="Notifications"><span class="navToolIcon">🔔</span><span id="notifCount" class="navNotifBadge hidden">0</span></button>
+      <button id="globalSearchBtn" class="navIconBtn" onclick="toggleGlobalJobSearch()" aria-label="Search jobs" title="Search jobs"><span class="navToolIcon">⌕</span></button>
+    </div>
     <button class="royalNavBtn home" onclick="navigate('home')" aria-label="Home"><span class="royalIcon">⌂</span><span>Home</span></button>
   </nav>
+  <div id="globalJobSearch" class="globalJobSearch hidden" role="search">
+    <div class="globalSearchRow">
+      <span class="globalSearchIcon">⌕</span>
+      <input id="globalJobSearchInput" type="search" autocomplete="off" placeholder="Search area, customer, job, status, technician…" aria-label="Search jobs">
+      <button type="button" class="globalSearchClear" onclick="clearGlobalJobSearch()" aria-label="Clear search">×</button>
+    </div>
+    <div id="globalSearchHint" class="muted">Type anything to find matching jobs.</div>
+  </div>
 
   <div id="home" class="view">
     <section class="roleDashboard" id="dashboardShell">
@@ -1979,11 +2015,6 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
         <div class="panel">
           <div class="panelHead"><h2>Today's Jobs</h2><button class="textBtn" onclick="navigate('jobs')">View All</button></div>
           <div id="homeRecentJobsTech" class="recentList"></div>
-        </div>
-        <div id="techNotificationCard" class="panel techNotificationCard hidden">
-          <div class="panelHead"><h2>🔔 Mobile Notifications</h2></div>
-          <p id="techNotificationStatus" class="muted">Allow notifications to receive new job assignments.</p>
-          <button id="enableNotificationsBtn" onclick="requestMobileNotifications()">Enable Notifications</button>
         </div>
         <div class="featureRibbon">
           <button onclick="navigate('jobs')"><b>✓</b><span>Job Updates</span><small>Update job status in real-time</small></button>
@@ -2168,6 +2199,7 @@ async function load(){
     navHistory=["home"];
     showView("home");
     try{ await loadHome(); }catch(e){ console.error("Dashboard load error",e); if($("loginMsg"))$("loginMsg").textContent="Dashboard data load failed: "+(e?.message||e); }
+    try{ bindGlobalJobSearch(); updateNotificationUI(); }catch(e){}
     try{ await enableMobileNotifications(); }catch(e){}
     try{ removeLegacyJobNotes(); }catch(e){}
     try{ await loadNotifications(); startNotificationWatch(); }catch(e){}
@@ -2259,14 +2291,24 @@ async function showMobileNotification(title,body){
   }catch(e){console.warn("Mobile notification error",e);return false}
 }
 function updateNotificationUI(){
-  const card=$("techNotificationCard"), status=$("techNotificationStatus"), btn=$("enableNotificationsBtn");
-  if(!card||profile?.role!=="worker") return;
-  card.classList.remove("hidden");
-  if(!('Notification' in window)){ status.textContent="This browser does not support mobile notifications."; if(btn)btn.classList.add("hidden"); return; }
-  const perm=Notification.permission;
-  if(perm==="granted"){status.textContent="Notifications are enabled. New job assignments will alert this phone.";if(btn){btn.textContent="Notifications Enabled";btn.disabled=true;}}
-  else if(perm==="denied"){status.textContent="Notifications are blocked. Allow notifications for this site in browser settings.";if(btn){btn.textContent="Open Browser Settings";btn.disabled=true;}}
-  else {status.textContent="Tap Enable Notifications once to allow job assignment alerts.";if(btn){btn.textContent="Enable Notifications";btn.disabled=false;}}
+  const btn=$("globalNotifBtn"), badge=$("notifCount");
+  if(!btn) return;
+  if('Notification' in window){
+    const perm=Notification.permission;
+    btn.title=perm==="granted"?"Notifications enabled":"Enable notifications";
+    btn.classList.toggle("notificationsReady",perm==="granted");
+    btn.setAttribute("aria-label",perm==="granted"?"Notifications enabled":"Enable notifications");
+  }
+  if(badge){
+    const n=parseInt(badge.textContent||"0",10)||0;
+    badge.classList.toggle("hidden",n<=0);
+  }
+}
+async function handleNotificationButton(){
+  try{
+    if('Notification' in window && Notification.permission==="default") await requestMobileNotifications();
+  }catch(e){console.warn("Notification button error",e)}
+  navigate('notifications');
 }
 async function requestMobileNotifications(){
   try{
@@ -2300,7 +2342,7 @@ function startNotificationWatch(){
   if(!user?.id) return;
   // Realtime channel
   try{
-    notificationChannel=db.channel("tele-tuty-notifications-"+user.id+"-v75")
+    notificationChannel=db.channel("tele-tuty-notifications-"+user.id+"-v76")
       .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
         const x=payload?.new||{};
         const created=String(x.created_at||"");
@@ -2319,7 +2361,7 @@ async function loadNotifications(silent=false){
     if(r.error) throw r.error;
     const n=r.data||[];
     const unread=n.filter(x=>!x.read_at).length;
-    const badge=$("notifCount");if(badge)badge.textContent=unread;
+    const badge=$("notifCount");if(badge){badge.textContent=unread;badge.classList.toggle("hidden",unread<=0);} updateNotificationUI();
     const list=$("notificationsList");
     if(list)list.innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">🔔</div><div><b>${esc(x.title||"Notification")}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`;
     if(silent) await processNewNotifications(n);
@@ -2435,6 +2477,48 @@ function technicianOptions(selected="") {
   return `<option value="">Unassigned</option>` + engineerTechCache.map(x=>`<option value="${esc(x.id)}" ${x.id===selected?"selected":""}>${esc(x.full_name||"Technician")}${x.phone?` • ${esc(x.phone)}`:""}</option>`).join("");
 }
 
+let globalJobSearchTerm="";
+function toggleGlobalJobSearch(){
+  const box=$("globalJobSearch"), input=$("globalJobSearchInput");
+  if(!box) return;
+  const opening=box.classList.toggle("hidden")==false;
+  if(opening){
+    setTimeout(()=>input?.focus(),60);
+  }
+}
+function clearGlobalJobSearch(){
+  const input=$("globalJobSearchInput");
+  if(input) input.value="";
+  globalJobSearchTerm="";
+  const hint=$("globalSearchHint"); if(hint) hint.textContent="Type anything to find matching jobs.";
+  if($("jobs")?.classList.contains("hidden")) return;
+  loadJobs();
+}
+function normaliseSearch(v){return String(v??"").toLowerCase().trim();}
+function jobMatchesSearch(j,customer,profileMap,term){
+  if(!term) return true;
+  const worker=profileMap[j.assigned_worker]?.full_name||"";
+  const engineer=profileMap[j.assigned_engineer]?.full_name||"";
+  const creator=profileMap[j.created_by]?.full_name||"";
+  const hay=[j.job_code,j.job_term,j.work_description,j.location,j.status,j.scheduled_date,j.scheduled_time,j.worker_remarks,j.pending_reason,customer?.name,customer?.phone,customer?.address,worker,engineer,creator].join(" ").toLowerCase();
+  return hay.includes(term);
+}
+function bindGlobalJobSearch(){
+  const input=$("globalJobSearchInput");
+  if(!input || input.dataset.bound) return;
+  input.dataset.bound="1";
+  input.addEventListener("input",()=>{
+    globalJobSearchTerm=normaliseSearch(input.value);
+    const hint=$("globalSearchHint");
+    if($("jobs")?.classList.contains("hidden")){
+      navigate("jobs");
+      setTimeout(()=>loadJobs(),0);
+    }else loadJobs();
+    if(hint) hint.textContent=globalJobSearchTerm?`Searching jobs for “${input.value.trim()}”…`:"Type anything to find matching jobs.";
+  });
+}
+bindGlobalJobSearch();
+
 let currentJobFilter="all";
 function setJobFilter(status="all"){ currentJobFilter=status; document.querySelectorAll("#jobStatusTabs button").forEach(b=>b.classList.toggle("active",b.dataset.status===status)); loadJobs(); }
 function openJobsFiltered(status="all"){ currentJobFilter=status; navigate("jobs"); setTimeout(()=>setJobFilter(status),0); }
@@ -2452,9 +2536,7 @@ async function loadJobs(){
     else if(profile?.role==="engineer") q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);
     const r=await q;
     if(r.error) throw r.error;
-    const rows=applyJobFilter(r.data||[]);
-    if($("jobsFilterLabel")) $("jobsFilterLabel").textContent = currentJobFilter==="all" ? "Showing all jobs" : `Showing ${labelFilter(currentJobFilter)} jobs only`;
-    if(!rows.length){box.innerHTML=`<div class="empty">No jobs found.</div>`;return;}
+    let rows=applyJobFilter(r.data||[]);
 
     const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))];
     const profileIds=[...new Set(rows.flatMap(x=>[x.assigned_worker,x.assigned_engineer,x.created_by]).filter(Boolean))];
@@ -2467,6 +2549,13 @@ async function loadJobs(){
       const pr=await db.from("profiles").select("id,full_name,phone,role").in("id",profileIds);
       if(!pr.error) (pr.data||[]).forEach(x=>profileMap[x.id]=x);
     }
+
+    rows=rows.filter(j=>jobMatchesSearch(j,customerMap[j.customer_id]||{},profileMap,globalJobSearchTerm));
+    if($("jobsFilterLabel")){
+      const base=currentJobFilter==="all" ? "Showing all jobs" : `Showing ${labelFilter(currentJobFilter)} jobs only`;
+      $("jobsFilterLabel").textContent=globalJobSearchTerm ? `${base} • Search: “${globalJobSearchTerm}”` : base;
+    }
+    if(!rows.length){box.innerHTML=`<div class="empty">No matching jobs found.</div>`;return;}
 
     const roleName=id=>profileMap[id]?.full_name||"Not assigned";
     const rolePhone=id=>profileMap[id]?.phone||"";
