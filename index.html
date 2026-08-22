@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><title>Tele Tuty</title>
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="75">
+  <title>Tele Tuty</title>
 <style>
 /* V34 render guard: style elements must never become visible text */
 style{display:none!important}
@@ -1979,6 +1980,11 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
           <div class="panelHead"><h2>Today's Jobs</h2><button class="textBtn" onclick="navigate('jobs')">View All</button></div>
           <div id="homeRecentJobsTech" class="recentList"></div>
         </div>
+        <div id="techNotificationCard" class="panel techNotificationCard hidden">
+          <div class="panelHead"><h2>🔔 Mobile Notifications</h2></div>
+          <p id="techNotificationStatus" class="muted">Allow notifications to receive new job assignments.</p>
+          <button id="enableNotificationsBtn" onclick="requestMobileNotifications()">Enable Notifications</button>
+        </div>
         <div class="featureRibbon">
           <button onclick="navigate('jobs')"><b>✓</b><span>Job Updates</span><small>Update job status in real-time</small></button>
           <button onclick="navigate('success')"><b>◷</b><span>Job History</span><small>View your past job history</small></button>
@@ -2125,7 +2131,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=75");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
@@ -2163,6 +2169,7 @@ async function load(){
     showView("home");
     try{ await loadHome(); }catch(e){ console.error("Dashboard load error",e); if($("loginMsg"))$("loginMsg").textContent="Dashboard data load failed: "+(e?.message||e); }
     try{ await enableMobileNotifications(); }catch(e){}
+    try{ removeLegacyJobNotes(); }catch(e){}
     try{ await loadNotifications(); startNotificationWatch(); }catch(e){}
     const savedAvatar=localStorage.getItem("tele_tuty_avatar_"+user.id);
     if(savedAvatar) setAvatar(savedAvatar);
@@ -2244,17 +2251,35 @@ function renderRecentJobs(rows){
 let notificationChannel=null, notificationPoll=null, notificationInitialized=false, lastNotificationCreatedAt=null;
 async function showMobileNotification(title,body){
   try{
-    if(!('Notification' in window) || Notification.permission!=="granted") return;
-    const options={body:body||"",icon:"tele-tuty-logo.png",badge:"tele-tuty-logo.png",tag:"tele-tuty-job-assignment",renotify:true,data:{url:"/"}};
-    if(navigator.serviceWorker?.controller){navigator.serviceWorker.controller.postMessage({type:"SHOW_NOTIFICATION",title:title||"Tele Tuty",options});return;}
-    new Notification(title||"Tele Tuty",options);
-  }catch(e){console.warn("Mobile notification error",e)}
+    if(!('Notification' in window) || Notification.permission!=="granted") return false;
+    const options={body:body||"",icon:"/tele-tuty-logo.png",badge:"/tele-tuty-logo.png",tag:"tele-tuty-job-assignment-"+Date.now(),renotify:true,data:{url:"/"}};
+    const reg=await navigator.serviceWorker?.ready;
+    if(reg?.showNotification){ await reg.showNotification(title||"Tele Tuty",options); return true; }
+    new Notification(title||"Tele Tuty",options); return true;
+  }catch(e){console.warn("Mobile notification error",e);return false}
 }
-async function enableMobileNotifications(){
+function updateNotificationUI(){
+  const card=$("techNotificationCard"), status=$("techNotificationStatus"), btn=$("enableNotificationsBtn");
+  if(!card||profile?.role!=="worker") return;
+  card.classList.remove("hidden");
+  if(!('Notification' in window)){ status.textContent="This browser does not support mobile notifications."; if(btn)btn.classList.add("hidden"); return; }
+  const perm=Notification.permission;
+  if(perm==="granted"){status.textContent="Notifications are enabled. New job assignments will alert this phone.";if(btn){btn.textContent="Notifications Enabled";btn.disabled=true;}}
+  else if(perm==="denied"){status.textContent="Notifications are blocked. Allow notifications for this site in browser settings.";if(btn){btn.textContent="Open Browser Settings";btn.disabled=true;}}
+  else {status.textContent="Tap Enable Notifications once to allow job assignment alerts.";if(btn){btn.textContent="Enable Notifications";btn.disabled=false;}}
+}
+async function requestMobileNotifications(){
   try{
     if(!('Notification' in window)) return;
-    if(Notification.permission==="default") await Notification.requestPermission();
+    const perm=await Notification.requestPermission();
+    updateNotificationUI();
+    if(perm==="granted") await showMobileNotification("Tele Tuty","Mobile notifications are enabled.");
   }catch(e){console.warn("Notification permission error",e)}
+}
+async function enableMobileNotifications(){
+  updateNotificationUI();
+  // Do not call requestPermission automatically: Android browsers require a user gesture.
+  if('Notification' in window && Notification.permission==="granted") return;
 }
 function stopNotificationWatch(){
   if(notificationChannel){try{db.removeChannel(notificationChannel)}catch(e){} notificationChannel=null;}
@@ -2273,20 +2298,43 @@ async function processNewNotifications(n){
 function startNotificationWatch(){
   stopNotificationWatch();
   if(!user?.id) return;
+  // Realtime channel
   try{
-    notificationChannel=db.channel("tele-tuty-notifications-"+user.id)
+    notificationChannel=db.channel("tele-tuty-notifications-"+user.id+"-v75")
       .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
         const x=payload?.new||{};
         const created=String(x.created_at||"");
         if(created && created===lastNotificationCreatedAt) return;
         if(created) lastNotificationCreatedAt=created;
-        showMobileNotification(x.title||"New notification",x.body||"");
+        showMobileNotification(x.title||"New Job Assigned",x.body||"");
         loadNotifications();
-      }).subscribe();
+      }).subscribe((status)=>console.log("Notification realtime:",status));
   }catch(e){console.warn("Realtime notification setup error",e)}
-  notificationPoll=setInterval(()=>loadNotifications(true),10000);
+  // Poll as a reliable fallback while the app is open.
+  notificationPoll=setInterval(()=>loadNotifications(true),3000);
 }
-async function loadNotifications(silent=false){try{const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);const n=r.data||[];const unread=n.filter(x=>!x.read_at).length;const badge=$("notifCount");if(badge)badge.textContent=unread;const list=$("notificationsList");if(list)list.innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">●</div><div><b>${esc(x.title)}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`;if(silent)await processNewNotifications(n);}catch(e){console.error("Notifications load error",e)}}
+async function loadNotifications(silent=false){
+  try{
+    const r=await db.from("notifications").select("id,title,body,created_at,read_at").eq("recipient_id",user.id).order("created_at",{ascending:false}).limit(30);
+    if(r.error) throw r.error;
+    const n=r.data||[];
+    const unread=n.filter(x=>!x.read_at).length;
+    const badge=$("notifCount");if(badge)badge.textContent=unread;
+    const list=$("notificationsList");
+    if(list)list.innerHTML=n.map(x=>`<div class="person"><div class="moduleIcon">🔔</div><div><b>${esc(x.title||"Notification")}</b><div>${esc(x.body||"")}</div><div class="muted">${new Date(x.created_at).toLocaleString()}</div></div></div>`).join("")||`<div class="empty">No notifications yet.</div>`;
+    if(silent) await processNewNotifications(n);
+  }catch(e){console.error("Notifications load error",e)}
+}
+
+// Remove duplicate/legacy Job Notes UI left by older cached builds.
+function removeLegacyJobNotes(){
+  document.querySelectorAll('button,a,.featureRibbon > *,[data-action],.dashboardShortcut').forEach(el=>{
+    const t=(el.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+    if(t==='job notes' || t.startsWith('job notes ')) el.remove();
+  });
+}
+new MutationObserver(removeLegacyJobNotes).observe(document.body,{childList:true,subtree:true});
+
 async function loadTeam(){
   const box=$("teamList");
   if(!box) return;
