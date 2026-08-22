@@ -27,7 +27,7 @@ style{display:none!important}
 .engineerCreateCard .checkField input{width:20px;height:20px}
 
 
-/* V66 CLEAN WHITE THEME
+/* V67 CLEAN WHITE THEME
    Accessibility pass: remove legacy dark/gradient surfaces and enforce
    high-contrast text across every module. Login hero image is preserved. */
 :root{
@@ -1667,6 +1667,90 @@ html,body{background:#fff!important;color:#172033!important;}
 .teamUserActions .removeUserBtn{background:#e11d48!important;color:#fff!important;border:1px solid #be123c!important}
 @media(max-width:600px){.teamUserActions{justify-content:stretch!important}.teamUserActions button{flex:1 1 100%!important;width:100%!important}}
 </style>
+
+<style id="v67-absolute-clean-white-theme">
+/* V67 — absolute clean white rebuild.  This block is intentionally last so
+   every legacy royal/gradient theme loses the cascade everywhere in the app. */
+html,body,#app,.wrap,.view,.rolePane,main{background:#fff!important;background-image:none!important;color:#172033!important;}
+body:before,body:after,html:before,html:after{display:none!important;content:none!important;background:none!important;}
+/* Never allow old decorative gradients / glass overlays on app surfaces. */
+#app *::before,#app *::after{background-image:none!important;}
+#app .globalPageNav,#app #globalPageNav,.globalPageNav,.viewHeader,.bottomNav,.top,.menu,.tabs,
+#app .card,#app .panel,#app .hero,#app .feature,#app .stat,#app .person,#app .dashHero,
+#app .dashKpi,#app .dashboardShortcut,#app .quick,#app .maintenanceTile,#app .analyticsKpi,
+#app .teamCard,#app .empty,#app .table,#app .jobCard,#app .jobCardReadable,
+#app .engineerCreateCard,#app .jobDetailSection,#app .jobDetailItem,#app .jobNote{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border-color:#d9e0e8!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+  text-shadow:none!important;opacity:1!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+/* Global navigation — no purple/blue gradient at all. */
+#globalPageNav,#globalPageNav.globalPageNav,.globalPageNav{
+  background:#fff!important;background-image:none!important;border:1px solid #d9e0e8!important;
+  color:#172033!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+}
+#globalPageNav::before,.globalPageNav::before{display:none!important;background:none!important;content:none!important;}
+#globalPageNav .royalNavBtn,#globalPageNav .royalNavBtn.home,.royalNavBtn,.royalNavBtn.home{
+  background:#fff!important;background-image:none!important;color:#172033!important;
+  border:1px solid #cfd7e2!important;box-shadow:0 2px 8px rgba(15,23,42,.05)!important;
+  text-shadow:none!important;opacity:1!important;
+}
+#globalPageNav .royalNavTitle,#globalPageNav .royalNavTitle *,.royalNavTitle,.royalNavTitle *{
+  color:#172033!important;text-shadow:none!important;opacity:1!important;
+}
+#globalPageNav .royalNavTitle .crown{color:#d99a00!important;}
+#globalPageNav .royalIcon,.royalIcon{color:#2563eb!important;text-shadow:none!important;}
+#globalPageNav .home .royalIcon{color:#2563eb!important;}
+/* Every text element in app content gets a readable dark default. */
+#app h1,#app h2,#app h3,#app h4,#app h5,#app h6,#app p,#app span,#app b,#app strong,
+#app small,#app label,#app legend,#app li,#app td,#app th,#app div{ text-shadow:none!important; }
+#app h1,#app h2,#app h3,#app h4,#app h5,#app h6,#app p,#app label,#app strong,#app b,#app td,#app th{color:#172033!important;}
+#app .muted,#app .empty,#app .stat span,#app .stat small,#app .eyebrow,#app .menuTitle,#app .menuGroupTitle{color:#5f6b7a!important;}
+/* Inputs and controls */
+#app input,#app select,#app textarea{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #cbd5e1!important;box-shadow:none!important;opacity:1!important;}
+#app input::placeholder,#app textarea::placeholder{color:#64748b!important;opacity:1!important;}
+#app select option{background:#fff!important;color:#172033!important;}
+#app button{opacity:1!important;text-shadow:none!important;}
+#app button:not(.ok):not(.warn):not(.bad):not(.loginPrimary),#app .secondary,#app .textBtn,#app .iconBtn,#app .filterBar button,#app .tabs button{
+  background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #cbd5e1!important;box-shadow:0 2px 8px rgba(15,23,42,.05)!important;
+}
+#app .tabs button.active{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important;}
+#app button.ok{background:#16a34a!important;color:#fff!important;border-color:#16a34a!important;}
+#app button.warn{background:#f59e0b!important;color:#172033!important;border-color:#d97706!important;}
+#app button.bad{background:#dc2626!important;color:#fff!important;border-color:#dc2626!important;}
+/* Team management specifically */
+#team,#team *{text-shadow:none!important;}
+#team .card,#team .person,#team .teamCard{background:#fff!important;background-image:none!important;color:#172033!important;}
+#team .person strong,#team .person b,#team .person span,#team .person div{color:#172033!important;opacity:1!important;}
+#team .person .muted{color:#5f6b7a!important;}
+#team .teamActions{display:flex!important;gap:10px!important;flex-wrap:wrap!important;}
+#team .teamActions button{min-height:48px!important;}
+/* Progress/status elements */
+#app .progress{background:#eef2f7!important;border-color:#cbd5e1!important;}
+#app .progress i{background:#2563eb!important;background-image:none!important;}
+#app .pill{background:#f1f5f9!important;background-image:none!important;color:#334155!important;border:1px solid #cbd5e1!important;}
+/* More menu */
+#menu,#menu.menu{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d9e0e8!important;box-shadow:0 16px 40px rgba(15,23,42,.14)!important;}
+#menu button,#menu.menu button{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #e5e7eb!important;}
+#menu button:hover{background:#f8fafc!important;}
+/* Bottom navigation */
+#app .bottomNav{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d9e0e8!important;box-shadow:0 8px 24px rgba(15,23,42,.10)!important;}
+#app .bottomNav button{background:#fff!important;color:#475569!important;border:0!important;box-shadow:none!important;}
+#app .bottomNav button.active{background:#eff6ff!important;color:#2563eb!important;}
+/* Remove old decorative feature images/overlays that wash text out. */
+#app .feature img{opacity:0!important;}
+/* Login keeps the approved telecom hero image; only its form remains clean white. */
+#login,#login .loginFormCard{background:#fff!important;background-image:none!important;color:#172033!important;}
+#login .loginVisual,#login .loginVisual img{background-image:none!important;opacity:1!important;visibility:visible!important;}
+#login .loginFormCard h2{color:#123c78!important;}
+#login .loginWelcome,#login #loginMsg,#login .muted{color:#526176!important;opacity:1!important;}
+#login .loginPrimary{background:#2563eb!important;background-image:none!important;color:#fff!important;}
+@media(max-width:600px){
+  #app .wrap{padding:0 10px 105px!important;}
+  #team .teamActions button{flex:1 1 140px!important;}
+}
+</style>
+
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -3041,7 +3125,7 @@ db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()
 </script>
 </body></html>
 <style>
-/* V66 unified team-management navigation */
+/* V67 unified team-management navigation */
 .teamActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .teamActions button{white-space:nowrap}
 @media(max-width:700px){
