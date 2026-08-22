@@ -1623,7 +1623,6 @@ html,body{background:#fff!important;color:#172033!important;}
     <div class="menuDivider"></div>
     <div class="menuTitle">Admin</div>
     <button onclick="navigate('team')">👥 Team Management</button>
-    <button onclick="navigate('adminTools')">➕ Create Engineer / Technician</button>
   </div>
   <button class="bad" onclick="logout()">🚪 Logout</button>
 </div>
@@ -1695,9 +1694,7 @@ html,body{background:#fff!important;color:#172033!important;}
           <div class="panel">
             <div class="panelHead"><h2>Quick Actions</h2></div>
             <div class="quickGrid">
-              <button onclick="navigate('adminTools')" class="quick blue"><i>＋</i><span>Add User</span></button>
-              <button onclick="navigate('team')" class="quick red"><i>−</i><span>Manage Users</span></button>
-              <button onclick="navigate('team')" class="quick purple"><i>♙</i><span>All Users</span></button>
+              <button onclick="navigate('team')" class="quick purple"><i>♙</i><span>Team Management</span></button>
               <button onclick="navigate('adminTools')" class="quick orange"><i>▤</i><span>Approval Requests</span></button>
               <button onclick="navigate('jobs')" class="quick blue"><i>□</i><span>All Jobs</span></button>
               <button onclick="navigate('success')" class="quick green"><i>▥</i><span>Reports</span></button>
@@ -1706,7 +1703,7 @@ html,body{background:#fff!important;color:#172033!important;}
         </div>
 
         <div class="panel">
-          <div class="panelHead"><h2>Users Management</h2><button class="textBtn" onclick="navigate('team')">View All Users</button></div>
+          <div class="panelHead"><h2>Team Management</h2><button class="textBtn" onclick="navigate('team')">Open Team</button></div>
           <div id="homeUsers" class="miniUsers"></div>
         </div>
       </div>
@@ -1772,7 +1769,7 @@ html,body{background:#fff!important;color:#172033!important;}
       <div class="bottomNav">
         <button class="active" onclick="navigate('home')"><b>⌂</b><span>Dashboard</span></button>
         <button onclick="navigate('jobs')"><b>▣</b><span>Jobs</span></button>
-        <button onclick="navigate('team')"><b>♙</b><span id="workersNav">Workers</span></button>
+        <button onclick="navigate('team')"><b>♙</b><span id="workersNav">Team</span></button>
         <button onclick="navigate('success')"><b>▥</b><span>Reports</span></button>
         <button data-menu-toggle="true" onclick="toggleMenu()"><b>•••</b><span>More</span></button>
       </div>
@@ -1820,7 +1817,7 @@ html,body{background:#fff!important;color:#172033!important;}
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">●</span> Notifications</h1><div id="notificationsList"></div></div></div>
 
   <div id="team" class="view hidden">
-<div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Manage technicians and engineers. Deactivate a user to temporarily block access, or Remove to permanently delete their login account.</p></div><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div><div id="teamList"></div></div></div>
+<div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Add, activate, deactivate, remove and manage all engineers and technicians from one place.</p></div><div class="row teamActions"><button onclick="navigate('adminTools')">＋ Add User</button><button class="secondary" onclick="navigate('adminTools')">▤ Approval Requests</button><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
@@ -2948,3 +2945,12 @@ history.replaceState({teleTutyView:"home"},"",location.pathname+location.search)
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
 </script>
 </body></html>
+<style>
+/* V65 unified team-management navigation */
+.teamActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.teamActions button{white-space:nowrap}
+@media(max-width:700px){
+  .teamActions{width:100%;justify-content:flex-start}
+  .teamActions button{flex:1 1 140px}
+}
+</style>
