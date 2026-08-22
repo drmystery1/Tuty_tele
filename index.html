@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="85.0">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="90.0">
   <title>Tele Tuty</title>
 <style>
 /* V34 render guard: style elements must never become visible text */
@@ -2005,6 +2005,39 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 .card h3{display:flex!important;align-items:center!important}
 @media(max-width:520px){.menuImgIcon{width:28px!important;height:28px!important;flex-basis:28px!important}.sectionImgIcon{width:38px!important;height:38px!important}}
 </style>
+
+<style id="v90-directory-style">
+#directory.view{padding-bottom:32px}
+.dir90-wrap{display:grid;gap:12px}
+.dir90-card{background:#fff;border:1px solid #d7dee8;border-radius:18px;padding:16px;box-shadow:0 3px 14px rgba(15,23,42,.06)}
+.dir90-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.dir90-title h2{margin:0;font-size:22px;color:#172033}
+.dir90-title p{margin:5px 0 0;color:#64748b;font-size:13px}
+.dir90-search{display:flex;align-items:center;gap:8px;margin-top:12px;padding:6px 8px;border:1px solid #cbd5e1;border-radius:14px;background:#f8fafc}
+.dir90-search input{flex:1;min-width:0;margin:0!important;border:0!important;background:#fff!important;color:#172033!important;box-shadow:none!important}
+.dir90-search button{width:auto!important;margin:0!important;padding:8px 11px!important}
+.dir90-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:8px;color:#64748b;font-size:12px}
+.dir90-list{display:grid;gap:10px}
+.dir90-entry{border:1px solid #d7dee8;border-radius:16px;padding:13px;background:#fff}
+.dir90-top{display:flex;gap:10px;align-items:flex-start}
+.dir90-avatar{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#eff6ff;border:1px solid #bfdbfe;color:#2563eb;font-weight:900;flex:0 0 42px}
+.dir90-name{font-weight:850;color:#172033;font-size:16px}
+.dir90-role{font-weight:650;color:#334155;margin-top:2px}
+.dir90-section{font-size:12px;color:#64748b;margin-top:4px}
+.dir90-phones{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.dir90-phone{display:inline-flex;align-items:center;gap:4px;padding:6px 9px;border-radius:999px;background:#f8fafc;border:1px solid #dbe4ef;color:#1d4ed8;font-size:12px;font-weight:750}
+.dir90-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.dir90-actions button{width:auto!important;margin:0!important;padding:7px 10px!important;font-size:12px!important}
+.dir90-edit{background:#fff!important;color:#1d4ed8!important;border:1px solid #93c5fd!important}
+.dir90-danger{background:#dc2626!important;color:#fff!important;border:1px solid #dc2626!important}
+.dir90-form{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0}
+.dir90-form.open{display:block}
+.dir90-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.dir90-grid label{font-size:12px;font-weight:750;color:#334155}
+.dir90-grid input,.dir90-grid select{width:100%;margin:4px 0!important;background:#fff!important;color:#172033!important;border:1px solid #cbd5e1!important}
+.dir90-empty{text-align:center;padding:25px;border:1px dashed #cbd5e1;border-radius:16px;color:#64748b;background:#fff}
+@media(max-width:560px){.dir90-title{flex-direction:column}.dir90-grid{grid-template-columns:1fr}}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -2045,6 +2078,8 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   </div>
   <div class="menuDivider"></div>
   <button onclick="navigate('jobs')"><img class="menuImgIcon" src="public/images/jobs_icon.png" alt=""> <span>Jobs</span></button>
+  <button onclick="navigate('directory')">☎ <span>Telephone Directory</span></button>
+
   <button id="successMenuBtn" onclick="navigate('success')"><img class="menuImgIcon" src="public/images/technician_avatar.png" alt=""> <span>Technician Success Rate</span></button>
   <button onclick="navigate('notifications')"><img class="menuImgIcon" src="public/images/notifications_icon.png" alt=""> <span>Notifications</span></button>
   <div class="menuDivider"></div>
@@ -2316,6 +2351,44 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">Admin Controls</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
 
+
+  <div id="directory" class="view hidden">
+    <div class="dir90-wrap">
+      <div class="dir90-card">
+        <div class="dir90-title">
+          <div>
+            <h2>☎ Telephone Directory</h2>
+            <p>Company directory. Search by telephone / extension number to see the name and position.</p>
+          </div>
+          <button onclick="openDirectoryForm()">＋ Add</button>
+        </div>
+        <div class="dir90-search">
+          <span>⌕</span>
+          <input id="directorySearch" oninput="renderDirectory()" type="search" inputmode="numeric" autocomplete="off" placeholder="Enter telephone number…">
+          <button class="dir90-edit" onclick="clearDirectorySearch()">Clear</button>
+        </div>
+        <div class="dir90-meta"><span id="directoryCount">Loading…</span><span>Admin • Engineer • Technician</span></div>
+      </div>
+      <div id="directoryForm" class="dir90-card dir90-form">
+        <h3 id="directoryFormTitle" style="margin-top:0">Add Directory Entry</h3>
+        <input id="directoryId" type="hidden">
+        <div class="dir90-grid">
+          <label>Name / Location<input id="directoryName" placeholder="Name or office"></label>
+          <label>Position / Designation<input id="directoryDesignation" placeholder="Manager / Engineer / Office"></label>
+          <label>Section<input id="directorySection" placeholder="Department / section"></label>
+          <label>Source<select id="directorySource"><option value="SPIC/GSFL">SPIC / GSFL</option><option value="TAC">TAC</option></select></label>
+          <label>Office / Extension<input id="directoryOffice" inputmode="tel" placeholder="3560 or 3500/3412"></label>
+          <label>Residence<input id="directoryResidence" inputmode="tel" placeholder="Optional"></label>
+        </div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px">
+          <button onclick="saveDirectoryEntry()">💾 Save</button>
+          <button class="secondary" onclick="closeDirectoryForm()">Cancel</button>
+        </div>
+        <p id="directoryFormMsg" class="muted"></p>
+      </div>
+      <div id="directoryList" class="dir90-list"></div>
+    </div>
+  </div>
   <div id="backup" class="view hidden">
     <div class="card">
       <h2>💾 Backup & Reports</h2>
@@ -2360,7 +2433,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=85");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=90");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"smooth",block:"center"});}}),80)}else navigate("notifications");}});</script>
 <script>
@@ -3721,6 +3794,7 @@ function showView(id){
   if(!el) return false;
   document.querySelectorAll(".view").forEach(x=>x.classList.add("hidden"));
   el.classList.remove("hidden");
+  if(id==="directory") setTimeout(()=>loadDirectory(),0);
   // The Field Operations hero belongs to the dashboard only.
   // Never let it sit above / overlap a module view.
   const fieldHero=document.getElementById("fieldOperationsHero");
@@ -3802,6 +3876,88 @@ window.addEventListener("keydown",function(e){
 
 history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
 db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
+
+/* V90 Telephone Directory */
+let directoryRows=[], directoryLoaded=false;
+function directoryDigits(v){return String(v??"").replace(/\D/g,"");}
+function directoryPhones(v){return (String(v??"").match(/\d{3,15}/g)||[]).filter((x,i,a)=>a.indexOf(x)===i);}
+function directoryMatches(row,q){
+  q=String(q||"").trim();
+  if(!q)return true;
+  const d=directoryDigits(q);
+  if(d){
+    const nums=[...(row.phone_numbers||[]),row.office_phone,row.residence_phone].map(directoryDigits);
+    return nums.some(n=>n.includes(d));
+  }
+  return [row.name,row.designation,row.section,row.source,row.office_phone,row.residence_phone].map(x=>String(x||"").toLowerCase()).join(" ").includes(q.toLowerCase());
+}
+async function loadDirectory(force=false){
+  if(directoryLoaded&&!force){renderDirectory();return;}
+  const r=await db.from("telephone_directory").select("*").order("source").order("section").order("name").limit(1000);
+  if(r.error){
+    const el=$("directoryList");if(el)el.innerHTML='<div class="dir90-empty">Unable to load directory: '+esc(r.error.message)+'</div>';
+    return;
+  }
+  directoryRows=r.data||[];directoryLoaded=true;renderDirectory();
+}
+function renderDirectory(){
+  const list=$("directoryList");if(!list)return;
+  const q=$("directorySearch")?.value||"";
+  const rows=directoryRows.filter(x=>directoryMatches(x,q));
+  const count=$("directoryCount");if(count)count.textContent=`${rows.length} result${rows.length===1?"":"s"}${q?' for "'+q+'"':""}`;
+  if(!rows.length){list.innerHTML='<div class="dir90-empty">No matching number found.<br>Try another telephone / extension number.</div>';return;}
+  list.innerHTML=rows.map(r=>{
+    const title=r.name||r.designation||"Directory entry";
+    const phones=(r.phone_numbers?.length?r.phone_numbers:[...directoryPhones(r.office_phone),...directoryPhones(r.residence_phone)]).filter((x,i,a)=>a.indexOf(x)===i);
+    return `<div class="dir90-entry">
+      <div class="dir90-top"><div class="dir90-avatar">☎</div><div>
+        <div class="dir90-name">${esc(title)}</div>
+        ${r.designation?`<div class="dir90-role">${esc(r.designation)}</div>`:""}
+        <div class="dir90-section">${esc(r.section||"General")} • ${r.source==="TAC"?"TAC":"SPIC / GSFL"}</div>
+      </div></div>
+      <div class="dir90-phones">${phones.length?phones.map(p=>`<span class="dir90-phone">☎ ${esc(p)}</span>`).join(""):'<span class="muted">No number recorded</span>'}</div>
+      <div class="dir90-actions"><button class="dir90-edit" onclick="editDirectoryEntry(${Number(r.id)})">✎ Edit</button>${String(profile?.role||"").toLowerCase()==="admin"?`<button class="dir90-danger" onclick="deleteDirectoryEntry(${Number(r.id)})">🗑 Delete</button>`:""}</div>
+    </div>`;
+  }).join("");
+}
+function clearDirectorySearch(){const i=$("directorySearch");if(i){i.value="";i.focus();}renderDirectory();}
+function openDirectoryForm(row=null){
+  $("directoryForm")?.classList.add("open");
+  $("directoryFormTitle").textContent=row?"Edit Directory Entry":"Add Directory Entry";
+  $("directoryId").value=row?.id||"";
+  $("directoryName").value=row?.name||"";
+  $("directoryDesignation").value=row?.designation||"";
+  $("directorySection").value=row?.section||"";
+  $("directorySource").value=row?.source||"SPIC/GSFL";
+  $("directoryOffice").value=row?.office_phone||"";
+  $("directoryResidence").value=row?.residence_phone||"";
+  $("directoryFormMsg").textContent="";
+  $("directoryForm")?.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function closeDirectoryForm(){$("directoryForm")?.classList.remove("open");}
+function editDirectoryEntry(id){const row=directoryRows.find(x=>Number(x.id)===Number(id));if(row)openDirectoryForm(row);}
+async function saveDirectoryEntry(){
+  if(!user)return;
+  const name=$("directoryName").value.trim(), designation=$("directoryDesignation").value.trim(), section=$("directorySection").value.trim();
+  const source=$("directorySource").value, office=$("directoryOffice").value.trim(), residence=$("directoryResidence").value.trim();
+  if(!name&&!designation){$("directoryFormMsg").textContent="Enter a name or office.";return;}
+  if(!office&&!residence){$("directoryFormMsg").textContent="Enter at least one telephone number.";return;}
+  const payload={name:name||null,designation:designation||null,section:section||null,source,office_phone:office||null,residence_phone:residence||null,phone_numbers:[...new Set([...directoryPhones(office),...directoryPhones(residence)])],updated_by:user.id};
+  $("directoryFormMsg").textContent="Saving…";
+  const id=$("directoryId").value;
+  const r=id?await db.from("telephone_directory").update(payload).eq("id",id):await db.from("telephone_directory").insert({...payload,created_by:user.id});
+  if(r.error){$("directoryFormMsg").textContent=r.error.message;return;}
+  await loadDirectory(true);$("directoryFormMsg").textContent="Saved.";setTimeout(closeDirectoryForm,250);
+}
+async function deleteDirectoryEntry(id){
+  if(String(profile?.role||"").toLowerCase()!=="admin")return;
+  const row=directoryRows.find(x=>Number(x.id)===Number(id));
+  if(!confirm(`Delete "${row?.name||"this entry"}"?`))return;
+  const r=await db.from("telephone_directory").delete().eq("id",id);
+  if(r.error){alert(r.error.message);return;}
+  await loadDirectory(true);
+}
+
 </script>
 
 <style id="v69-true-clean-white-final">
