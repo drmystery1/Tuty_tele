@@ -3175,7 +3175,7 @@ async function loadJobs(){
             <section class="extraWorkSection" id="extraWorkSection${j.id}">
               <div class="extraWorkHead"><span>🧰 EXTRA WORK ADDED</span><span id="extraWorkCount${j.id}" class="pill">0</span></div>
               <div id="extraWorkList${j.id}" class="extraWorkList"><div class="muted">Loading extra work…</div></div>
-              ${profile?.role==="worker" && j.assigned_worker===user.id && st!=="completed" ? `<div class="extraWorkAdd"><input id="extraWorkInput${j.id}" placeholder="Extra work found at site…"><button type="button" onclick="event.stopPropagation();addExtraWork(${j.id})">＋ Add Extra Work</button></div>` : ""}
+              ${profile?.role==="worker" && (assignmentMap[j.id]||[]).some(a=>a.technician_id===user.id) && st!=="completed" ? `<div class="extraWorkAdd"><input id="extraWorkInput${j.id}" placeholder="Extra work found at site…"><button type="button" onclick="event.stopPropagation();addExtraWork(${j.id})">＋ Add Extra Work</button></div>` : ""}
             </section>
           </div>
           ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","TELECOM","STREET_LIGHT","BATTERY","EARTH_PIT"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
@@ -3249,7 +3249,9 @@ async function addExtraWork(jobId){
   try{
     const jr=await db.from("jobs").select("id,job_code,assigned_worker,assigned_engineer,created_by,job_term").eq("id",jobId).single();
     if(jr.error)throw jr.error;
-    if(jr.data?.assigned_worker!==user.id) return alert("This job is not assigned to you.");
+    const ar=await db.from("job_assignments").select("id").eq("job_id",jobId).eq("technician_id",user.id).maybeSingle();
+    if(ar.error)throw ar.error;
+    if(!ar.data) return alert("This job is not assigned to you.");
     const er=await db.from("job_extra_work").insert({job_id:jobId,added_by:user.id,description}).select("id").single();
     if(er.error)throw er.error;
     const recipient=jr.data.assigned_engineer||jr.data.created_by;
