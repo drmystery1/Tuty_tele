@@ -2322,7 +2322,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
       <div class="row"><button id="createJobBtn" onclick="engineerCreateJob()">＋ Create & Assign Job</button><button class="secondary" onclick="clearEngineerJobForm()">Clear</button></div>
       <p id="engineerJobMsg" class="muted"></p>
     </div>
-    <div class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" onclick="setJobFilter('all')">All Jobs</button><button type="button" data-status="pending" onclick="setJobFilter('pending')">Pending</button><button type="button" data-status="completed" onclick="setJobFilter('completed')">Completed</button><button type="button" data-status="not_completed" onclick="setJobFilter('not_completed')">Not Completed</button><button type="button" data-status="in_progress" onclick="setJobFilter('in_progress')">In Progress</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
+    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" onclick="setJobFilter('all')">All Jobs</button><button type="button" data-status="pending" onclick="setJobFilter('pending')">Pending</button><button type="button" data-status="completed" onclick="setJobFilter('completed')">Completed</button><button type="button" data-status="not_completed" onclick="setJobFilter('not_completed')">Not Completed</button><button type="button" data-status="in_progress" onclick="setJobFilter('in_progress')">In Progress</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
   </div>
 
   <div id="success" class="view hidden">
@@ -3075,8 +3075,11 @@ async function loadEngineerTechnicians(){
 }
 function focusEngineerJobForm(){
   const card=$("engineerCreateJobCard");
+  const jobsListCard=$("jobsListCard");
   if(!card)return;
   card.classList.remove("hidden");
+  // Create Job is a standalone screen: do not show the Jobs list underneath it.
+  if(jobsListCard) jobsListCard.classList.add("hidden");
   card.scrollIntoView({behavior:"smooth",block:"start"});
   setTimeout(()=>$("jobCustomer")?.focus(),250);
 }
@@ -3169,6 +3172,8 @@ async function engineerCreateJob(){
     if(r.error)throw r.error;
     if(msg)msg.textContent=`Job ${r.data?.job_code||"created"} created successfully${tech?" and assigned":""}.`;
     await loadJobs(); await loadHome();
+    const listCard=$("jobsListCard");
+    if(listCard) listCard.classList.remove("hidden");
     setTimeout(clearEngineerJobForm,250);
   }catch(e){
     if(customerId) await db.from("customers").delete().eq("id",customerId);
@@ -3851,9 +3856,11 @@ function showView(id){
   }
   closeMenu();
   const createCard=document.getElementById("engineerCreateJobCard");
+  const jobsListCard=document.getElementById("jobsListCard");
   const newJobTopBtn=document.getElementById("newJobTopBtn");
   const canCreate=profile?.role==="engineer" || profile?.role==="admin";
   if(createCard) createCard.classList.add("hidden");
+  if(jobsListCard) jobsListCard.classList.remove("hidden");
   if(newJobTopBtn) newJobTopBtn.classList.toggle("hidden", !(id==="jobs" && canCreate));
   if(id==="jobs" && canCreate) loadEngineerTechnicians().catch?.(()=>{});
   if(id==="notifications")loadNotifications().catch?.(()=>{});
