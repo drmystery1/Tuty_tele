@@ -2389,7 +2389,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
           <input id="directorySearch" oninput="renderDirectory()" type="search" inputmode="numeric" autocomplete="off" placeholder="Enter telephone number…">
           <button class="dir90-edit" onclick="clearDirectorySearch()">Clear</button>
         </div>
-        <div class="dir90-meta"><span id="directoryCount">Loading…</span><span>Admin • Engineer • Technician</span></div>
+        <div class="dir90-meta"><span id="directoryCount">Loading…</span><span>Admin • Engineer • Technician — Edit / Add enabled</span></div>
       </div>
       <div id="directoryForm" class="dir90-card dir90-form">
         <h3 id="directoryFormTitle" style="margin-top:0">Add Directory Entry</h3>
@@ -2455,7 +2455,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=90");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=92");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"smooth",block:"center"});}}),80)}else navigate("notifications");}});</script>
 <script>
@@ -3978,6 +3978,9 @@ function closeDirectoryForm(){$("directoryForm")?.classList.remove("open");}
 function editDirectoryEntry(id){const row=directoryRows.find(x=>Number(x.id)===Number(id));if(row)openDirectoryForm(row);}
 async function saveDirectoryEntry(){
   if(!user)return;
+  // Directory policy: any authenticated Admin / Engineer / Technician may add or edit; Admin alone may delete.
+  const allowedDirectoryRoles=["admin","engineer","technician","worker"];
+  if(!allowedDirectoryRoles.includes(String(profile?.role||"").toLowerCase())){ $("directoryFormMsg").textContent="Directory editing is not available for this account."; return; }
   const name=$("directoryName").value.trim(), designation=$("directoryDesignation").value.trim(), section=$("directorySection").value.trim();
   const source=$("directorySource").value, office=$("directoryOffice").value.trim(), residence=$("directoryResidence").value.trim();
   if(!name&&!designation){$("directoryFormMsg").textContent="Enter a name or office.";return;}

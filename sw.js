@@ -1,4 +1,4 @@
-const CACHE='tele-tuty-V91';
+const CACHE='tele-tuty-V92-directory-edit';
 self.addEventListener('install',e=>{self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('message',e=>{const d=e.data||{};if(d.type==='SHOW_NOTIFICATION'){const title=d.title||'Tele Tuty';const options=Object.assign({icon:'/tele-tuty-logo.png',badge:'/tele-tuty-logo.png',data:{url:'/',jobId:d.jobId||null},renotify:true},d.options||{});e.waitUntil(self.registration.showNotification(title,options));}});
