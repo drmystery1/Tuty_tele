@@ -6,11 +6,11 @@
 <link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="90.0">
   <title>Tele Tuty</title>
 <style>
-/* V34 render guard: style elements must never become visible text */
+
 style{display:none!important}
 :root{--bg:#06101c;--panel:#0c1b2c;--panel2:#10253b;--line:#1c3853;--text:#eff8ff;--muted:#8fa9c0;--blue:#269fff;--cyan:#32e1d2;--green:#31d58a;--orange:#ffb648;--red:#ff5d6d}
 *{box-sizing:border-box}body{margin:0;background:#fff;color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}.top{height:64px;position:sticky;top:0;z-index:30;display:flex;align-items:center;padding:0 16px;background:#061321e8;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.brand{font-weight:900;font-size:20px}.topspace{flex:1}.menuBtn{width:44px!important;height:44px;margin:0!important;border-radius:13px!important;background:#102b47!important;font-size:23px!important}.wrap{max-width:1180px;margin:auto;padding:16px}.auth{max-width:440px;margin:7vh auto}.loginHero{text-align:center;padding:24px}.loginHero img{width:min(230px,70vw);border-radius:28px;box-shadow:0 20px 60px #0007}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 18px 45px #0005}.hero{display:flex;align-items:center;gap:18px;padding:22px;background:#fff}.heroIcon{font-size:42px}.muted{color:var(--muted);font-size:13px}.row{display:flex;gap:9px;align-items:center}.row>*{flex:1}.spacer{flex:1}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#7eeaff;font-weight:900;border:1px solid #285e86;flex:none}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.homeKpis{margin-top:4px}.homeKpis .stat{min-height:112px}.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:12px}.sectionTitle h3{margin:0}.viewHeader{display:flex;align-items:center;gap:8px;margin:0 0 12px;position:sticky;top:64px;z-index:20;padding:7px 0;background:#fff}.viewHeader .navBtn{box-shadow:0 8px 20px #0004}.menuGroup{padding:5px 4px}.menuGroupTitle{padding:10px 10px 6px;color:#6fdfff;font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}.menu button{font-size:14px}.menu .bad{color:#ffd9de;background:rgba(216,59,81,.12)}.stat{padding:15px;border:1px solid var(--line);border-radius:16px;background:#081727}
-/* Dashboard KPI cards */
+
 .homeKpis .stat:nth-child(1){background:#fff;border-color:#17669a;box-shadow:0 12px 30px #006eff22}
 .homeKpis .stat:nth-child(2){background:#fff;border-color:#7046a8;box-shadow:0 12px 30px #8b5cf622}
 .homeKpis .stat:nth-child(3){background:#fff;border-color:#a85e20;box-shadow:0 12px 30px #ff9d1c22}
@@ -19,7 +19,7 @@ style{display:none!important}
 .homeKpis .stat:nth-child(1) b{color:#b8e8ff}.homeKpis .stat:nth-child(2) b{color:#ead7ff}.homeKpis .stat:nth-child(3) b{color:#ffe1ad}.homeKpis .stat:nth-child(4) b{color:#b8ffdb}
 .stat span{display:block;color:var(--muted);font-size:12px}.stat b{display:block;font-size:28px;margin-top:4px}.hidden{display:none!important}input,select,textarea,button{width:100%;padding:12px 13px;border-radius:12px;border:1px solid #28445e;margin:6px 0;font-size:15px;background:#071523;color:var(--text)}textarea{min-height:86px;resize:vertical}button{background:#fff;border:0;font-weight:850;cursor:pointer}.secondary{background:#102b47;color:#b6e9ff;border:1px solid #285473}.ok{background:#fff}.warn{background:#fff;color:#ffe8b0}.bad{background:#fff}.danger{color:#ff8c99}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#12314c;color:#aee7ff;font-size:12px}.tabs{display:flex;gap:8px;overflow:auto;padding:3px 0 10px}.tabs button{min-width:max-content;width:auto;margin:0;background:#0c2136}.tabs button.active{background:#168bff}.menu{position:fixed;right:15px;top:58px;z-index:100;width:240px;background:#0b1b2c;border:1px solid var(--line);border-radius:16px;padding:8px;box-shadow:0 25px 60px #0009}.menu button{background:transparent;text-align:left;margin:2px 0}.menu button:hover{background:#12314d}.featureGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.feature{min-height:155px;cursor:pointer;position:relative;overflow:hidden}.feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.2}.featureContent{position:relative;z-index:1}.featureIcon{font-size:32px}.job{border-left:4px solid var(--blue)}.done{border-left-color:var(--green)}.pending{border-left-color:var(--orange)}.person{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #193148}.progress{height:9px;border-radius:20px;background:#091523;overflow:hidden;border:1px solid var(--line)}.progress i{display:block;height:100%;background:#fff;border-radius:20px}.kpi{font-size:34px;font-weight:900}.table{width:100%;overflow:auto}.table table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}.empty{padding:22px;text-align:center;color:var(--muted)}@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.featureGrid{grid-template-columns:1fr 1fr}.hero{flex-direction:column;align-items:flex-start}.row{flex-wrap:wrap}}@media(max-width:520px){.wrap{padding:10px}.grid{grid-template-columns:1fr 1fr}.featureGrid{grid-template-columns:1fr}.top{height:58px}.menu{top:54px;right:10px;width:min(290px,calc(100vw - 20px))}.viewHeader{top:58px}.homeKpis .stat{min-height:100px}.stat b{font-size:24px}}
 
-/* Engineer job creation */
+
 .engineerCreateCard{border:1px solid rgba(95,180,255,.35);box-shadow:0 18px 50px rgba(30,90,255,.12)}
 .engineerCreateCard .roleBadge{padding:8px 12px;border-radius:999px;background:#fff;color:#fff;font-size:12px;font-weight:700}
 .engineerCreateCard .req{color:#ff6680}
@@ -28,9 +28,7 @@ style{display:none!important}
 .engineerCreateCard .checkField input{width:20px;height:20px}
 
 
-/* V69 CLEAN WHITE THEME
-   Accessibility pass: remove legacy dark/gradient surfaces and enforce
-   high-contrast text across every module. Login hero image is preserved. */
+
 :root{
   --bg:#ffffff;
   --panel:#ffffff;
@@ -116,7 +114,7 @@ button.bad,.bad{background:#dc2626!important;background-image:none!important;col
   .teamActions button{min-width:0!important;flex:1 1 100%!important}
   .panelHead{gap:10px}
 }
-/* Legacy surfaces are intentionally flat and high-contrast. */
+
 body *{
   scrollbar-color:#cbd5e1 #f8fafc;
 }
@@ -138,7 +136,7 @@ body *{
 
 
 <style id="v76-search-notification-nav">
-/* V76: compact notification/search controls in the Back/Home navigation. */
+
 .globalPageNav{position:sticky!important;}
 .globalNavTools{display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;flex:0 0 auto!important;}
 .navIconBtn{position:relative!important;width:42px!important;height:42px!important;min-width:42px!important;margin:0!important;padding:0!important;border-radius:13px!important;display:grid!important;place-items:center!important;background:#fff!important;color:#172033!important;border:1px solid #d8dee8!important;box-shadow:0 3px 10px rgba(15,23,42,.06)!important;}
@@ -241,7 +239,7 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 </style>
 
 <style id="module-color-themes-v8">
-/* V8 — colorful module themes */
+
 #adminTools .card:first-of-type{
   background:linear-gradient(135deg,#102d55 0%,#3a1d73 48%,#6b234f 100%);
   border-color:#8d6cff;box-shadow:0 18px 48px rgba(119,75,255,.22),inset 0 1px 0 rgba(255,255,255,.08)
@@ -286,7 +284,7 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
   background:linear-gradient(135deg,#172b48,#244d68 48%,#394275);
   border-color:#65b8d7
 }
-/* subtle premium texture on every themed module */
+
 #adminTools .card:after,#success .card:after,#battery .card:after,#earth .card:after,
 #street .card:after,
 #team .card:after,#jobs .card:after,#notifications .card:after,#profile .card:after,#settings .card:after{
@@ -294,13 +292,13 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
  background-image:radial-gradient(rgba(255,255,255,.28) .65px,transparent .65px),linear-gradient(125deg,rgba(255,255,255,.05),transparent 34%,rgba(255,255,255,.025) 65%,transparent);
  background-size:9px 9px,100% 100%;mix-blend-mode:screen
 }
-/* theme buttons inside each module */
+
 #battery button:not(.secondary){background:linear-gradient(135deg,#00a878,#20d6a5,#2478e8)}
 #earth button:not(.secondary){background:linear-gradient(135deg,#b57b08,#e4bd43,#2d9c72)}
 #street button:not(.secondary){background:linear-gradient(135deg,#168fc4,#2bd7d0,#8356df)}
 #adminTools button:not(.secondary){background:linear-gradient(135deg,#277dff,#8a55ed,#db4d8d)}
 #success button:not(.secondary){background:linear-gradient(135deg,#287cff,#6556e8,#b84fd4)}
-/* colorful labels */
+
 #battery h2{color:#7fffe2}#earth h2{color:#ffe39a}
 #street h2{color:#9af4ff}
 #adminTools h2{color:#d7c4ff}#success h2{color:#b9caff}
@@ -403,7 +401,7 @@ window.addEventListener("error",function(e){
 </style>
 
 <style id="white-page-background">
-/* V42 supersedes the old white-page override. Keep the high-tech dark environment. */
+
 html,body{background:transparent!important;color:var(--text)!important}
 .viewHeader{background:linear-gradient(180deg,rgba(6,16,28,.96),rgba(6,16,28,.78),transparent)!important}
 </style>
@@ -656,13 +654,13 @@ img{border-radius:14px}
 
 
 <style id="v36-field-hero-isolation">
-/* V36: Field Operations hero is dashboard-only. Prevent overlap/flash on module pages. */
+
 #app > #fieldOperationsHero.hidden{display:none!important}
 #app > #fieldOperationsHero{position:relative;z-index:1}
 </style>
 
 <style id="v26-royal-nav-hard-fix">
-/* V26: navigation must always be visible and must not depend on page/router state */
+
 #globalPageNav.globalPageNav{
   display:flex!important;
   visibility:visible!important;
@@ -716,7 +714,7 @@ img{border-radius:14px}
   text-shadow:0 2px 12px rgba(0,0,0,.35)!important;
 }
 #globalPageNav.globalPageNav .crown{color:#ffd85c!important}
-/* never let a hidden-class accidentally kill the global navigation */
+
 #globalPageNav.globalPageNav.hidden{display:flex!important}
 .compactHero h2,.compactHero .muted,.compactHero .teamInfo{color:#fff!important}
 @media(max-width:520px){
@@ -753,7 +751,7 @@ img{border-radius:14px}
 #newJobTopBtn{display:block}
 </style>
 <style id="v41-job-readable">
-/* V41: high-contrast job details for field technicians */
+
 .jobCardReadable{color:#f5fbff!important;background:linear-gradient(145deg,#071b31 0%,#101f45 58%,#241449 100%)!important;border:1px solid rgba(126,210,255,.48)!important;box-shadow:0 12px 30px rgba(4,12,28,.32),inset 0 1px 0 rgba(255,255,255,.08)!important;padding:16px!important}
 .jobCardReadable *{box-sizing:border-box}
 .jobTopReadable{align-items:flex-start!important;border-bottom:1px solid rgba(157,216,255,.18);padding-bottom:13px;margin-bottom:2px}
@@ -790,15 +788,15 @@ img{border-radius:14px}
 
 
 <style id="global-high-contrast-v42">
-/* V42: global readability fix — keep the royal dark theme, but never let text disappear */
+
 body{color:#f3f8ff!important}
-/* All dark UI surfaces */
+
 .card,.panel,.feature,.quick,.stat,.jobCard,.jobCardReadable,.analyticsKpi,.miniUser,.recentItem,
 .dashHero,.rolePane,.settingsHero,.menu,.jobEditPanel,.jobDetailSection,.jobDetailItem,.jobNote,
 .featureRibbon button,.bottomNav,.pageNav,.viewHeader{
   color:#f3f8ff!important;
 }
-/* Headings / primary content */
+
 .card h1,.card h2,.card h3,.card h4,.card h5,.card h6,
 .card b,.card strong,.card label,.card p,.card span,.card div,
 .panel h1,.panel h2,.panel h3,.panel b,.panel strong,.panel span,
@@ -812,37 +810,37 @@ body{color:#f3f8ff!important}
   color:#f3f8ff!important;
   text-shadow:0 1px 7px rgba(0,0,0,.32);
 }
-/* Secondary text — still clearly visible */
+
 .card .muted,.panel .muted,.feature small,.quick small,.miniUser span,
 .recentItem .muted,.analyticsKpi small,.analyticsKpi span,
 .dashBrand span,.dashWelcome p,.eyebrow{
   color:#b9c9dc!important;
 }
-/* Keep semantic/status colors */
+
 .recentStatus.pending{color:#ffd166!important}
 .recentStatus.completed{color:#72f0ad!important}
 .recentStatus.not_completed{color:#ff8797!important}
 .recentStatus.in_progress{color:#7bc5ff!important}
 .jobStatusReadable{color:#fff!important}
-/* Form controls */
+
 input,select,textarea{color:#f3f8ff!important;background:#071523!important}
 input::placeholder,textarea::placeholder{color:#9fb2c7!important;opacity:1}
 select option{color:#f3f8ff;background:#071523}
-/* Buttons remain readable against their gradients */
+
 button{color:#f7fbff}
 .secondary{color:#c9edff!important}
-/* Royal dashboard text that was getting too dark */
+
 .textBtn{color:#67b8ff!important}
 .pageNavTitle,.moduleTitle{color:#f3f8ff!important}
-/* Navigation text */
+
 .bottomNav button{color:#c5d2e1!important}
 .bottomNav .active{color:#63b4ff!important}
-/* Don't override intentionally colored icons */
+
 .featureRibbon b,.quick i,.moduleIcon,.royalIcon{filter:drop-shadow(0 1px 4px rgba(0,0,0,.25))}
 </style>
 
 <style id="v50-advanced-hitech-theme">
-/* V50 — Tele Tuty Advanced Hitech UI */
+
 :root{
   --ht-bg:#030711; --ht-panel:rgba(8,18,34,.82); --ht-panel2:rgba(12,27,48,.88);
   --ht-line:rgba(121,207,255,.22); --ht-line2:rgba(165,122,255,.18);
@@ -930,7 +928,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 .recentItem{border-radius:18px !important;padding:15px !important;background:linear-gradient(145deg,rgba(11,27,47,.90),rgba(9,17,32,.88)) !important;border-color:rgba(112,193,255,.13) !important}
 .recentItem .stripe{height:64px !important;width:5px !important;box-shadow:0 0 18px currentColor}
 .recentStatus{border-radius:999px !important;border:1px solid rgba(255,255,255,.08)}
-/* Premium page navigation */
+
 #globalPageNav.globalPageNav{
   border-radius:22px !important;padding:9px !important;gap:9px !important;
   background:linear-gradient(105deg,rgba(8,31,59,.96),rgba(43,36,111,.95) 50%,rgba(105,31,116,.94)) !important;
@@ -947,7 +945,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 #globalPageNav.globalPageNav .royalNavBtn.home{background:linear-gradient(145deg,#2659a1,#7c36a7 58%,#c04389) !important}
 #globalPageNav .royalIcon{width:32px;height:32px;display:grid;place-items:center;border-radius:11px;background:rgba(255,255,255,.10);font-size:22px !important}
 #globalPageNav .royalNavTitle{letter-spacing:.4px !important}
-/* Bottom navigation */
+
 .bottomNav{
   width:min(720px,calc(100vw - 22px)) !important;padding:9px !important;border-radius:24px !important;
   background:linear-gradient(145deg,rgba(5,18,34,.94),rgba(14,18,42,.94)) !important;
@@ -959,7 +957,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 .bottomNav button.active{background:linear-gradient(145deg,rgba(35,122,255,.18),rgba(120,55,255,.13)) !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
 .bottomNav b{width:36px;height:36px;margin:0 auto 4px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.055);font-size:18px !important;border:1px solid rgba(255,255,255,.08)}
 .bottomNav .active b{background:linear-gradient(145deg,rgba(44,160,255,.22),rgba(130,80,255,.24));border-color:rgba(104,209,255,.20)}
-/* Jobs / details */
+
 .jobCard{border-radius:22px !important}
 .jobSummaryButton{padding:17px 7px !important;border-radius:17px !important}
 .jobCollapsedTitle{font-size:17px !important;color:#f8fcff !important}
@@ -967,7 +965,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 .pill{border-radius:999px !important;border:1px solid rgba(112,211,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 .jobCardReadable{border-radius:24px !important;box-shadow:0 25px 55px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07) !important}
 .jobDetailSection,.jobDetailItem,.jobNote{border-radius:17px !important}
-/* Menus */
+
 #menu.menu{
   width:min(330px,calc(100vw - 20px)) !important;border-radius:24px !important;padding:10px !important;
   background:linear-gradient(145deg,rgba(5,17,31,.98),rgba(18,18,45,.98)) !important;
@@ -977,12 +975,12 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 #menu.menu button{min-height:46px !important;border-radius:14px !important;padding:10px 12px !important;color:#effaff !important}
 #menu.menu button:hover{background:linear-gradient(90deg,rgba(47,147,255,.14),rgba(157,77,255,.10)) !important}
 .menuGroupTitle{color:#66e2ff !important;letter-spacing:1.6px !important}
-/* Tables and forms */
+
 .table{border-radius:20px;overflow:auto;border:1px solid rgba(111,193,255,.12)}
 .table th{background:rgba(24,61,94,.35);color:#aeeeff !important}
 .table td{color:#edf8ff !important}
 .analyticsKpi{border-radius:20px !important}
-/* subtle motion */
+
 @keyframes htSweep{0%,55%{transform:translateX(-100%)}75%,100%{transform:translateX(100%)}}
 @keyframes htPulse{0%,100%{box-shadow:0 0 0 rgba(88,231,255,0)}50%{box-shadow:0 0 28px rgba(88,231,255,.10)}}
 .dashLogo,.moduleIcon{animation:htPulse 4s ease-in-out infinite}
@@ -1001,7 +999,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 </style>
 
 <style id="v42-clean-dashboard">
-/* Clean white Field Operations dashboard */
+
 #home {
   background:#fff !important;
   color:#111 !important;
@@ -1098,7 +1096,7 @@ input::placeholder,textarea::placeholder{color:#7890a8 !important}
 </style>
 
 <style id="full-white-theme">
-/* Full white theme across every Tele-Tuty screen */
+
 :root{--bg:#ffffff;--panel:#ffffff;--panel2:#ffffff;--line:#e5e7eb;--text:#111827;--muted:#6b7280;}
 html,body{background:#fff!important;color:#111827!important;}
 body{background:#fff!important;background-image:none!important;}
@@ -1129,14 +1127,14 @@ button:hover,.menu button:hover{background:#f8fafc!important;}
 .kpi{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;color:#111827!important;text-shadow:none!important;}
 .person{border-bottom-color:#e5e7eb!important;}
 .royalIcon,.royalNavBtn.home .royalIcon,.royalNavTitle,.royalNavTitle .crown{color:#374151!important;text-shadow:none!important;}
-/* Keep every page container white even where older page-specific themes exist */
+
 [id]{background-color:#fff;}
 #battery,#earth,#street,#adminTools,#success{background:#fff!important;background-image:none!important;color:#111827!important;}
 #battery h2,#earth h2,#street h2,#adminTools h2,#success h2{color:#111827!important;}
 </style>
 
 <style id="tele-tuty-final-white-visibility-fix">
-/* FINAL GLOBAL WHITE THEME + TEXT VISIBILITY FIX */
+
 :root{
   --bg:#ffffff!important;
   --panel:#ffffff!important;
@@ -1240,32 +1238,31 @@ button.secondary,.textBtn,.tabs button,.filterBar button,.iconBtn{
 .tabs button.active{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
 .pill{background:#eef2ff!important;color:#3730a3!important;border:1px solid #c7d2fe!important;box-shadow:none!important}
 .checkField label{color:#172033!important}
-/* Keep semantic action buttons readable */
+
 button.ok{background:#16a34a!important;color:#fff!important}
 button.warn{background:#d97706!important;color:#fff!important}
 button.bad,.menu button.bad{background:#dc3545!important;color:#fff!important}
 button.danger{color:#b42318!important}
-/* Dashboard-specific white shell */
+
 .dashHero,.dashHeroArt{background:#fff!important;color:#172033!important;box-shadow:none!important}
 .dashBrand,.dashBrand b,.dashBrand span,.dashWelcome,.dashWelcome *{color:#172033!important}
 .eyebrow{color:#6b7280!important}
-/* Force all hidden-page containers to use white when opened */
+
 .view,.rolePane,.maintenanceCenter{background:#fff!important;color:#172033!important}
 .analyticsHead,.filterBar,.tableHead{color:#172033!important}
 .analyticsHead h1,.analyticsHead p,.analyticsHead span,.tableHead span{color:#172033!important}
 .dateChip{background:#fff!important;color:#172033!important;border:1px solid #e1e6ee!important}
-/* Ensure no transparent/white-on-white inherited text remains */
+
 [style*="color:white"],[style*="color: white"],[style*="color:#fff"],[style*="color:#ffffff"]{color:#172033!important}
 </style>
 
 
 <style id="tele-tuty-v56-actual-main-white-fix">
-/* V56: ACTUAL MAIN DOCUMENT FIX. This style is intentionally inside <head>
-   so it applies to the real app, not only the generated PDF/report window. */
+
 html, body { background:#fff !important; background-image:none !important; color:#172033 !important; }
 body, #app, .wrap { background:#fff !important; background-image:none !important; }
 
-/* Top/page navigation */
+
 #globalPageNav, .globalPageNav, .pageNav, .viewHeader {
   background:#fff !important; background-image:none !important;
   color:#172033 !important; border:1px solid #e1e6ee !important;
@@ -1284,7 +1281,7 @@ body, #app, .wrap { background:#fff !important; background-image:none !important
 }
 #globalPageNav .royalNavTitle .crown { color:#d99a00 !important; }
 
-/* Every content surface */
+
 .card, .cardMini, .panel, .feature, .quick, .stat, .analyticsKpi,
 .dashboardShortcut, .maintenanceTile, .jobEditPanel, .jobDetailSection,
 .jobDetailItem, .jobNote, .recentItem, .miniUser, .settingsHero,
@@ -1297,7 +1294,7 @@ body, #app, .wrap { background:#fff !important; background-image:none !important
 .card::before, .card::after, .panel::before, .panel::after,
 .jobCard::before, .jobCard::after, .feature::after { display:none !important; }
 
-/* Jobs page: force every visible label dark and opaque */
+
 .jobCard, .jobCardReadable, .jobCard.cardMini { color:#172033 !important; }
 .jobCard .jobSummaryButton, .jobSummaryButton {
   background:#fff !important; background-image:none !important;
@@ -1333,7 +1330,7 @@ body, #app, .wrap { background:#fff !important; background-image:none !important
 }
 .jobCard .jobExpandIcon { color:#172033 !important; opacity:1 !important; }
 
-/* Job filter tabs: fit cleanly on mobile */
+
 .jobStatusTabs, .tabs { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:8px !important; overflow:visible !important; }
 .jobStatusTabs button, .tabs button {
   min-width:0 !important; width:100% !important; overflow:hidden !important;
@@ -1345,7 +1342,7 @@ body, #app, .wrap { background:#fff !important; background-image:none !important
   background:#2563eb !important; color:#fff !important; border-color:#2563eb !important;
 }
 
-/* Forms / buttons */
+
 input, select, textarea {
   background:#fff !important; color:#172033 !important; border:1px solid #cfd6df !important;
   opacity:1 !important; box-shadow:none !important;
@@ -1360,7 +1357,7 @@ button.ok { background:#16a34a !important; color:#fff !important; }
 button.warn { background:#d97706 !important; color:#fff !important; }
 button.bad { background:#dc3545 !important; color:#fff !important; }
 
-/* More menu */
+
 #menu.menu {
   background:#fff !important; background-image:none !important; color:#172033 !important;
   border:1px solid #d9dfe8 !important; box-shadow:0 18px 45px rgba(15,23,42,.16) !important;
@@ -1372,7 +1369,7 @@ button.bad { background:#dc3545 !important; color:#fff !important; }
 .menuTitle, .menuGroupTitle { color:#4b5563 !important; }
 .menuDivider { background:#e5e7eb !important; }
 
-/* Bottom navigation */
+
 .bottomNav {
   background:#fff !important; background-image:none !important; color:#172033 !important;
   border:1px solid #e1e6ee !important; box-shadow:0 10px 30px rgba(15,23,42,.10) !important;
@@ -1382,7 +1379,7 @@ button.bad { background:#dc3545 !important; color:#fff !important; }
 .bottomNav button.active { background:#eff6ff !important; color:#2563eb !important; }
 .bottomNav b { background:#f8fafc !important; color:inherit !important; border-color:#e2e8f0 !important; }
 
-/* Remove old decorative overlays that can wash out text */
+
 .feature img { opacity:.03 !important; }
 
 @media (max-width:600px) {
@@ -1397,11 +1394,11 @@ button.bad { background:#dc3545 !important; color:#fff !important; }
 </style>
 
 <style id="v56-final-global-readability">
-/* V56 FINAL — GLOBAL WHITE + READABILITY REBUILD */
+
 html,body,#app,.wrap{background:#fff!important;background-image:none!important;color:#172033!important;}
 body:before{display:none!important;opacity:0!important;content:none!important;}
 
-/* Remove the old glass/royal treatment from every page */
+
 .globalPageNav,#globalPageNav.globalPageNav,.pageNav,.viewHeader{
   background:#fff!important;background-image:none!important;color:#172033!important;
   border:1px solid #e1e6ee!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
@@ -1417,7 +1414,7 @@ body:before{display:none!important;opacity:0!important;content:none!important;}
 .royalNavTitle .crown{color:#d99a00!important;}
 .royalIcon,.royalNavBtn.home .royalIcon{color:#2563eb!important;text-shadow:none!important;}
 
-/* Every visible page: no faded text, no inherited white text */
+
 #app .view:not(.hidden) h1,#app .view:not(.hidden) h2,#app .view:not(.hidden) h3,
 #app .view:not(.hidden) h4,#app .view:not(.hidden) h5,#app .view:not(.hidden) h6,
 #app .view:not(.hidden) p,#app .view:not(.hidden) span,#app .view:not(.hidden) b,
@@ -1432,7 +1429,7 @@ body:before{display:none!important;opacity:0!important;content:none!important;}
 }
 #app .view:not(.hidden) input::placeholder,#app .view:not(.hidden) textarea::placeholder{color:#7a8492!important;opacity:1!important;}
 
-/* All surfaces */
+
 #app .view:not(.hidden) .card,#app .view:not(.hidden) .panel,#app .view:not(.hidden) .stat,
 #app .view:not(.hidden) .feature,#app .view:not(.hidden) .quick,#app .view:not(.hidden) .person,
 #app .view:not(.hidden) .empty,#app .view:not(.hidden) .analyticsKpi,#app .view:not(.hidden) .jobCard,
@@ -1442,7 +1439,7 @@ body:before{display:none!important;opacity:0!important;content:none!important;}
   text-shadow:none!important;opacity:1!important;
 }
 
-/* Technician Success Rate — rebuild the whole page for mobile readability */
+
 #success:not(.hidden){background:#fff!important;color:#172033!important;padding-bottom:110px!important;}
 #success .analyticsHead{background:#fff!important;color:#172033!important;margin:12px 0 16px!important;}
 #success .analyticsHead h1,#success .analyticsHead p,#success .dateChip,
@@ -1477,7 +1474,7 @@ body:before{display:none!important;opacity:0!important;content:none!important;}
 #success .successRow .progress{width:100%!important;height:10px!important;margin-top:10px!important;background:#edf1f5!important;border:1px solid #d8dee7!important;border-radius:999px!important;overflow:hidden!important;}
 #success .successRow .progress i{display:block!important;height:100%!important;border-radius:999px!important;}
 
-/* Job/module pages and generated rows */
+
 .jobCard,.jobCardReadable,.jobSummaryButton,.jobCollapsedTitle,.jobCollapsedMeta,.jobTypeReadable,.jobCodeReadable,.jobWorkReadable,
 .jobDetailSection,.jobDetailItem,.jobNote,.recentItem,.miniUser,.teamCard,.approvalRow,.person{
   opacity:1!important;text-shadow:none!important;
@@ -1486,7 +1483,7 @@ body:before{display:none!important;opacity:0!important;content:none!important;}
 .jobCard .jobWorkReadable,.jobCard .jobDetailItem span,.jobCard .jobDetailItem strong,.jobCard .jobDetailItem small,
 .jobCard .jobNote span,.jobCard .jobNote strong,.jobCard .detailLabel{color:#172033!important;opacity:1!important;}
 
-/* Bottom navigation */
+
 .bottomNav{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #e1e6ee!important;box-shadow:0 10px 30px rgba(15,23,42,.10)!important;backdrop-filter:none!important;}
 .bottomNav button{background:transparent!important;color:#475569!important;text-shadow:none!important;}
 .bottomNav button.active{background:#eff6ff!important;color:#2563eb!important;}
@@ -1517,7 +1514,7 @@ html,body{background:#fff!important;color:#111827!important}
 </style>
 
 <style id="v58-login-final-fix">
-/* V58: final login readability + embedded telecom artwork */
+
 html,body{background:#fff!important;color:#172033!important;}
 #login{background:#fff!important;color:#172033!important;}
 #login .loginVisual{display:block!important;background:#fff!important;border-radius:0 0 30px 30px!important;overflow:hidden!important;min-height:300px!important;border:0!important;box-shadow:none!important;}
@@ -1538,7 +1535,7 @@ html,body{background:#fff!important;color:#172033!important;}
 </style>
 
 <style id="v60-realistic-login-hero">
-/* V60: clean telecom artwork only; no browser/status-bar/duplicate login screenshot. */
+
 #login .loginVisual{margin:0 -12px 18px!important;padding:0!important;background:#fff!important;border-radius:0 0 30px 30px!important;overflow:hidden!important;min-height:0!important;height:auto!important;}
 #login .loginVisual img{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:cover!important;object-position:center center!important;border:0!important;border-radius:0!important;opacity:1!important;visibility:visible!important;}
 #login .loginFormCard{margin-top:0!important;}
@@ -1559,7 +1556,7 @@ html,body{background:#fff!important;color:#172033!important;}
 </style>
 
 <style id="v62-login-design">
-/* V62: realistic telecom login matching approved hero artwork */
+
 .loginPage{
   max-width:760px!important;
   margin:18px auto 40px!important;
@@ -1652,7 +1649,7 @@ html,body{background:#fff!important;color:#172033!important;}
 </style>
 
 <style id="v63-recent-job-text-hard-fix">
-/* V63: hard-fix the exact Recent Jobs description text that was still washed out. */
+
 .recentItem .recentJobText,
 .recentItem .recentJobTitle,
 .recentItem .recentJobDesc,
@@ -1697,11 +1694,10 @@ html,body{background:#fff!important;color:#172033!important;}
 </style>
 
 <style id="v69-absolute-clean-white-theme">
-/* V69 — absolute clean white rebuild.  This block is intentionally last so
-   every legacy royal/gradient theme loses the cascade everywhere in the app. */
+
 html,body,#app,.wrap,.view,.rolePane,main{background:#fff!important;background-image:none!important;color:#172033!important;}
 body:before,body:after,html:before,html:after{display:none!important;content:none!important;background:none!important;}
-/* Never allow old decorative gradients / glass overlays on app surfaces. */
+
 #app *::before,#app *::after{background-image:none!important;}
 #app .globalPageNav,#app #globalPageNav,.globalPageNav,.viewHeader,.bottomNav,.top,.menu,.tabs,
 #app .card,#app .panel,#app .hero,#app .feature,#app .stat,#app .person,#app .dashHero,
@@ -1712,7 +1708,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   border-color:#d9e0e8!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
   text-shadow:none!important;opacity:1!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
 }
-/* Global navigation — no purple/blue gradient at all. */
+
 #globalPageNav,#globalPageNav.globalPageNav,.globalPageNav{
   background:#fff!important;background-image:none!important;border:1px solid #d9e0e8!important;
   color:#172033!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
@@ -1729,12 +1725,12 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 #globalPageNav .royalNavTitle .crown{color:#d99a00!important;}
 #globalPageNav .royalIcon,.royalIcon{color:#2563eb!important;text-shadow:none!important;}
 #globalPageNav .home .royalIcon{color:#2563eb!important;}
-/* Every text element in app content gets a readable dark default. */
+
 #app h1,#app h2,#app h3,#app h4,#app h5,#app h6,#app p,#app span,#app b,#app strong,
 #app small,#app label,#app legend,#app li,#app td,#app th,#app div{ text-shadow:none!important; }
 #app h1,#app h2,#app h3,#app h4,#app h5,#app h6,#app p,#app label,#app strong,#app b,#app td,#app th{color:#172033!important;}
 #app .muted,#app .empty,#app .stat span,#app .stat small,#app .eyebrow,#app .menuTitle,#app .menuGroupTitle{color:#5f6b7a!important;}
-/* Inputs and controls */
+
 #app input,#app select,#app textarea{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #cbd5e1!important;box-shadow:none!important;opacity:1!important;}
 #app input::placeholder,#app textarea::placeholder{color:#64748b!important;opacity:1!important;}
 #app select option{background:#fff!important;color:#172033!important;}
@@ -1746,28 +1742,28 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 #app button.ok{background:#16a34a!important;color:#fff!important;border-color:#16a34a!important;}
 #app button.warn{background:#f59e0b!important;color:#172033!important;border-color:#d97706!important;}
 #app button.bad{background:#dc2626!important;color:#fff!important;border-color:#dc2626!important;}
-/* Team management specifically */
+
 #team,#team *{text-shadow:none!important;}
 #team .card,#team .person,#team .teamCard{background:#fff!important;background-image:none!important;color:#172033!important;}
 #team .person strong,#team .person b,#team .person span,#team .person div{color:#172033!important;opacity:1!important;}
 #team .person .muted{color:#5f6b7a!important;}
 #team .teamActions{display:flex!important;gap:10px!important;flex-wrap:wrap!important;}
 #team .teamActions button{min-height:48px!important;}
-/* Progress/status elements */
+
 #app .progress{background:#eef2f7!important;border-color:#cbd5e1!important;}
 #app .progress i{background:#2563eb!important;background-image:none!important;}
 #app .pill{background:#f1f5f9!important;background-image:none!important;color:#334155!important;border:1px solid #cbd5e1!important;}
-/* More menu */
+
 #menu,#menu.menu{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d9e0e8!important;box-shadow:0 16px 40px rgba(15,23,42,.14)!important;}
 #menu button,#menu.menu button{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #e5e7eb!important;}
 #menu button:hover{background:#f8fafc!important;}
-/* Bottom navigation */
+
 #app .bottomNav{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d9e0e8!important;box-shadow:0 8px 24px rgba(15,23,42,.10)!important;}
 #app .bottomNav button{background:#fff!important;color:#475569!important;border:0!important;box-shadow:none!important;}
 #app .bottomNav button.active{background:#eff6ff!important;color:#2563eb!important;}
-/* Remove old decorative feature images/overlays that wash text out. */
+
 #app .feature img{opacity:0!important;}
-/* Login keeps the approved telecom hero image; only its form remains clean white. */
+
 #login,#login .loginFormCard{background:#fff!important;background-image:none!important;color:#172033!important;}
 #login .loginVisual,#login .loginVisual img{background-image:none!important;opacity:1!important;visibility:visible!important;}
 #login .loginFormCard h2{color:#123c78!important;}
@@ -1781,13 +1777,13 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 
 
 <style id="v69-section-backgrounds">
-/* V69: section-specific visual headers. Images are local app assets; text stays outside the image for maximum readability. */
+
 .modulePhoto{position:relative;height:150px;margin:-2px -2px 18px;border-radius:18px;overflow:hidden;border:1px solid #e5e7eb;background:#f8fafc;isolation:isolate}
 .modulePhoto::before{content:"";position:absolute;inset:0;background-image:var(--module-bg);background-size:cover;background-position:center;filter:saturate(.92);transform:scale(1.01);z-index:0}
 .modulePhoto::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.46);z-index:1}
 .modulePhoto .modulePhotoLabel{position:absolute;left:18px;bottom:14px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.9);border:1px solid rgba(17,24,39,.08);font-weight:800;color:#172033;font-size:14px;box-shadow:0 4px 16px rgba(15,23,42,.10)}
 @media(max-width:600px){.modulePhoto{height:125px;margin-bottom:14px;border-radius:15px}.modulePhoto .modulePhotoLabel{font-size:13px;left:12px;bottom:10px}}
-/* Keep all section text above the photo and fully opaque. */
+
 .view .modulePhoto~*{position:relative;z-index:1}
 </style>
 
@@ -1799,7 +1795,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </style>
 
 <style id="v73-notifications-role-clean">
-/* V74: final readable notifications + role-based maintenance visibility */
+
 #notifications, #notifications .card, #notifications .person, #notifications .person > div {
   background:#fff!important; background-image:none!important; color:#172033!important; opacity:1!important; filter:none!important; text-shadow:none!important;
 }
@@ -1823,7 +1819,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </style>
 
 <style id="v81-dashboard-kpi-final">
-/* V81 final KPI polish: compact icons + full semantic status colors */
+
 #home .dashKpi{
   min-height:118px!important;
   padding:14px!important;
@@ -1860,22 +1856,22 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   opacity:1!important;
   text-shadow:none!important;
 }
-/* Assignment / total jobs: blue */
+
 #home .dashKpi.blue{
   background:#2563eb!important;
   border-color:#1d4ed8!important;
 }
-/* Pending: orange */
+
 #home .dashKpi.orange{
   background:#f59e0b!important;
   border-color:#d97706!important;
 }
-/* Completed: green */
+
 #home .dashKpi.green{
   background:#16a34a!important;
   border-color:#15803d!important;
 }
-/* Success rate: gold; not-completed red remains red */
+
 #home .dashKpi.red{
   background:#dc2626!important;
   border-color:#b91c1c!important;
@@ -1885,12 +1881,12 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
   background:#d4a017!important;
   border-color:#b8860b!important;
 }
-/* Admin pending/open is orange. */
+
 #home #adminDashboard .dashKpi:nth-child(4){
   background:#f59e0b!important;
   border-color:#d97706!important;
 }
-/* Engineer fourth KPI uses the same neutral card style as the other KPIs. */
+
 #home #engineerDashboard .dashKpi:nth-child(4){
   background:#fff!important;
   border-color:#d7dee8!important;
@@ -1919,7 +1915,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 
 
 <style id="v82-final-dashboard-layout-fix">
-/* V82: final compact, aligned dashboard cards and Today’s Jobs layout */
+
 #home .kpiGrid.four{gap:12px!important}
 #home .dashKpi{
   min-height:108px!important;
@@ -1935,7 +1931,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 #home .dashKpi strong{font-size:27px!important;margin-top:12px!important;line-height:1.05!important}
 #home .dashKpi small{font-size:12px!important;line-height:1.15!important}
 
-/* Keep the semantic KPI colors solid and predictable on every role dashboard. */
+
 #home .dashKpi.blue{background:#2563eb!important;border-color:#1d4ed8!important}
 #home .dashKpi.orange{background:#f59e0b!important;border-color:#d97706!important}
 #home .dashKpi.green{background:#16a34a!important;border-color:#15803d!important}
@@ -1944,7 +1940,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 #home #adminDashboard .dashKpi:nth-child(4){background:#f59e0b!important;border-color:#d97706!important}
 #home #engineerDashboard .dashKpi:nth-child(4){background:#dc2626!important;border-color:#b91c1c!important}
 
-/* Today’s Jobs: four-column layout prevents the status from dropping under the text. */
+
 #home .recentItem{
   display:grid!important;
   grid-template-columns:6px 34px minmax(0,1fr) auto!important;
@@ -2051,7 +2047,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
-/* V37: More menu must always sit above every page layer, including the royal nav and dashboard hero. */
+
 #menu.menu{
   position:fixed!important;
   top:64px!important;
@@ -2583,7 +2579,6 @@ function updateNotificationUI(){
   }
 }
 async function handleNotificationButton(){
-  // V79: notification and search controls are mutually exclusive.
   const searchBox=$("globalJobSearch");
   if(searchBox) searchBox.classList.add("hidden");
   try{
@@ -2601,7 +2596,6 @@ async function requestMobileNotifications(){
 }
 async function enableMobileNotifications(){
   updateNotificationUI();
-  // Do not call requestPermission automatically: Android browsers require a user gesture.
   if('Notification' in window && Notification.permission==="granted") return;
 }
 function stopNotificationWatch(){
@@ -2621,7 +2615,6 @@ async function processNewNotifications(n){
 function startNotificationWatch(){
   stopNotificationWatch();
   if(!user?.id) return;
-  // Realtime channel
   try{
     notificationChannel=db.channel("tele-tuty-notifications-"+user.id+"-v77")
       .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+user.id},payload=>{
@@ -2633,7 +2626,6 @@ function startNotificationWatch(){
         loadNotifications();
       }).subscribe((status)=>console.log("Notification realtime:",status));
   }catch(e){console.warn("Realtime notification setup error",e)}
-  // Poll as a reliable fallback while the app is open.
   notificationPoll=setInterval(()=>loadNotifications(true),3000);
 }
 async function loadNotifications(silent=false){
@@ -2670,8 +2662,6 @@ async function openJobFromNotification(notificationId){
     else{navigate("jobs");setTimeout(()=>loadJobs(),0)}
   }catch(e){console.error("Notification job open error",e);navigate("jobs");setTimeout(()=>loadJobs(),0)}
 }
-
-// Remove duplicate/legacy Job Notes UI left by older cached builds.
 function removeLegacyJobNotes(){
   document.querySelectorAll('button,a,.featureRibbon > *,[data-action],.dashboardShortcut').forEach(el=>{
     const t=(el.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
@@ -2783,13 +2773,9 @@ function technicianOptions(selected="") {
 let globalJobSearchTerm="";
 function toggleGlobalJobSearch(){
   const box=$("globalJobSearch"), input=$("globalJobSearchInput");
-  // V79: opening search closes the Notifications view/control state first.
   const notificationsView=$("notifications");
   if(notificationsView && !notificationsView.classList.contains("hidden")) navigate("home");
   if(!box) return;
-  // Search always starts from the main Field Operations dashboard.
-  // This prevents the search box from opening while the user is on
-  // Notifications or any other module page.
   const current=currentView();
   if(current!=="home") {
     navigate("home");
@@ -2810,7 +2796,6 @@ function clearGlobalJobSearch(){
   if(input) input.value="";
   globalJobSearchTerm="";
   const hint=$("globalSearchHint"); if(hint) hint.textContent="Type anything to find matching jobs.";
-  // X button closes the search bar completely, like a normal app search.
   if(box) box.classList.add("hidden");
   if($("jobs")?.classList.contains("hidden")) return;
   loadJobs();
@@ -3076,7 +3061,7 @@ async function loadSuccessRate(){
  const people=p.data||[];
  let assigned=0,completed=0,pending=0,notDone=0;
  successCache=people.map(x=>{
-   const a=js.filter(y=>y.assigned_worker===x.id);
+   const a=js.filter(y=>y.technician_id===x.id);
    const d=a.filter(y=>y.status==="completed").length;
    const pn=a.filter(y=>["pending","in_progress"].includes(y.status)).length;
    const nd=a.filter(y=>y.status==="not_completed").length;
@@ -3121,7 +3106,6 @@ function focusEngineerJobForm(){
   const jobsListCard=$("jobsListCard");
   if(!card)return;
   card.classList.remove("hidden");
-  // Create Job is a standalone screen: do not show the Jobs list underneath it.
   if(jobsListCard) jobsListCard.classList.add("hidden");
   card.scrollIntoView({behavior:"smooth",block:"start"});
   setTimeout(()=>($('jobType')?.value==='TELECOM'?$('jobPhone'):$('jobFault'))?.focus(),250);
@@ -3230,8 +3214,6 @@ async function engineerCreateJob(){
       if(tr.error)throw tr.error;
       if(tr.data)technicians=[tr.data];
     }
-
-    // One job record per complaint. Multiple technicians are represented by job_assignments.
     const payload={customer_id:customerId,work_description:work,location,assigned_engineer:user.id,assigned_worker:null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent};
     const r=await db.from("jobs").insert(payload).select("id,job_code").single();
     if(r.error)throw r.error;
@@ -3240,7 +3222,6 @@ async function engineerCreateJob(){
       const assignments=technicians.map(t=>({job_id:jobId,technician_id:t.id,status:"pending",assigned_at:new Date().toISOString(),status_updated_at:new Date().toISOString()}));
       const ar=await db.from("job_assignments").insert(assignments);
       if(ar.error)throw ar.error;
-      // Notify every assigned technician.
       await Promise.all(technicians.map(t=>db.from("notifications").insert({recipient_id:t.id,job_id:jobId,title:urgent?"Urgent job assigned":"New job assigned",body:`${type.replaceAll("_"," ")} job ${r.data.job_code||"JOB"} has been assigned to you.`})));
     }
     const count=technicians.length;
@@ -3366,9 +3347,9 @@ async function printReport(type){
   }
   if(type==="success"||type==="full"){
     const p=await db.from("profiles").select("id,full_name,role").eq("role","worker");
-    const j=await db.from("jobs").select("assigned_worker,status");
+    const j=await db.from("job_assignments").select("technician_id,status");
     body+="<h2>Technician Success Rate</h2><table><tr><th>Technician</th><th>Total Jobs</th><th>Completed</th><th>Success Rate</th></tr>"+
-      (p.data||[]).map(x=>{const a=(j.data||[]).filter(y=>y.assigned_worker===x.id),d=a.filter(y=>y.status==="completed").length,rate=a.length?Math.round(d/a.length*100):0;return `<tr><td>${esc(x.full_name)}</td><td>${a.length}</td><td>${d}</td><td>${rate}%</td></tr>`}).join("")+"</table>";
+      (p.data||[]).map(x=>{const a=(j.data||[]).filter(y=>y.technician_id===x.id),d=a.filter(y=>y.status==="completed").length,rate=a.length?Math.round(d/a.length*100):0;return `<tr><td>${esc(x.full_name)}</td><td>${a.length}</td><td>${d}</td><td>${rate}%</td></tr>`}).join("")+"</table>";
     title="Tele Tuty - Technician Success Rate";
   }
   const w=window.open("","_blank");
@@ -3392,10 +3373,10 @@ th:last-child,td:last-child{border-right:0}tr:last-child td{border-bottom:0}
 @media print{body{padding:0;background:#fff;color:#111}.report{max-width:none;border:0;border-radius:0;box-shadow:none;background:#fff;color:#111}h1,h2,.meta,th,td{color:#111;text-shadow:none}.meta{color:#444}table{background:#fff;border-color:#999}th{background:#eee!important;color:#111!important}td, tr:nth-child(even) td{background:#fff!important;color:#111!important;border-color:#aaa}.noprint{display:none!important}}
 </style>
 <style id="teleTutyV56AbsoluteReadability">
-/* V56: remove ALL legacy theme/fade effects from the actual app */
+
 html,body,#app,.wrap{background:#fff!important;background-image:none!important;color:#111827!important;opacity:1!important;filter:none!important}
 #app .view:not(.hidden), #app .view:not(.hidden) *{opacity:1!important;text-shadow:none!important;filter:none!important}
-/* Every text-bearing app element must be dark and readable */
+
 #app .view:not(.hidden) h1,#app .view:not(.hidden) h2,#app .view:not(.hidden) h3,#app .view:not(.hidden) h4,
 #app .view:not(.hidden) p,#app .view:not(.hidden) label,#app .view:not(.hidden) small,
 #app .view:not(.hidden) span,#app .view:not(.hidden) strong,#app .view:not(.hidden) b,
@@ -3403,7 +3384,7 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 #app .view:not(.hidden) td,#app .view:not(.hidden) th,#app .view:not(.hidden) legend,
 #app .view:not(.hidden) .muted,#app .view:not(.hidden) .hint,#app .view:not(.hidden) .sub,
 #app .view:not(.hidden) .description,#app .view:not(.hidden) .sectionTitle{color:#111827!important;opacity:1!important;text-shadow:none!important}
-/* Make all app surfaces white; no dark/glass remnants */
+
 #app .view:not(.hidden) .card,#app .view:not(.hidden) .panel,#app .view:not(.hidden) .jobCard,
 #app .view:not(.hidden) .feature,#app .view:not(.hidden) .quick,#app .view:not(.hidden) .stat,
 #app .view:not(.hidden) .analyticsKpi,#app .view:not(.hidden) .successRow,#app .view:not(.hidden) .teamCard,
@@ -3413,7 +3394,7 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 #app .view:not(.hidden) .settingsHero,#app .view:not(.hidden) .empty{
  background:#fff!important;background-image:none!important;color:#111827!important;border-color:#d7dde5!important;
  box-shadow:0 2px 12px rgba(15,23,42,.07)!important;opacity:1!important;filter:none!important}
-/* Header/navigation: also white, because screenshots show legacy purple */
+
 #app .view:not(.hidden) .globalPageNav,#app .view:not(.hidden) #globalPageNav,
 #app .view:not(.hidden) .pageNav,#app .view:not(.hidden) .viewHeader{
  background:#fff!important;background-image:none!important;color:#111827!important;border:1px solid #d7dde5!important;
@@ -3422,12 +3403,12 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 #app .view:not(.hidden) .royalNavTitle .crown{color:#d99a00!important}
 #app .view:not(.hidden) .royalNavBtn,#app .view:not(.hidden) .backBtn,#app .view:not(.hidden) .homeBtn{
  background:#fff!important;color:#111827!important;border:1px solid #cfd6df!important;opacity:1!important}
-/* Forms */
+
 #app .view:not(.hidden) input,#app .view:not(.hidden) select,#app .view:not(.hidden) textarea{
  background:#fff!important;color:#111827!important;border:1px solid #c8d0da!important;opacity:1!important;filter:none!important}
 #app .view:not(.hidden) input::placeholder,#app .view:not(.hidden) textarea::placeholder{color:#6b7280!important;opacity:1!important}
 #app .view:not(.hidden) select option{background:#fff!important;color:#111827!important}
-/* Buttons: readable by default, then status-specific overrides */
+
 #app .view:not(.hidden) button{background:#fff!important;color:#111827!important;border:1px solid #d2d8e0!important;opacity:1!important;text-shadow:none!important;filter:none!important}
 #app .view:not(.hidden) button.secondary,#app .view:not(.hidden) .textBtn,#app .view:not(.hidden) .filterBar button,
 #app .view:not(.hidden) .iconBtn{background:#fff!important;color:#2563eb!important}
@@ -3435,21 +3416,21 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 #app .view:not(.hidden) button.warn{background:#d97706!important;color:#fff!important}
 #app .view:not(.hidden) button.bad{background:#dc3545!important;color:#fff!important}
 #app .view:not(.hidden) .tabs button.active{background:#2563eb!important;color:#fff!important}
-/* Status pills */
+
 #app .view:not(.hidden) .recentStatus.completed{background:#dcfce7!important;color:#15803d!important}
 #app .view:not(.hidden) .recentStatus.pending{background:#fef3c7!important;color:#b45309!important}
 #app .view:not(.hidden) .recentStatus.not_completed{background:#fee2e2!important;color:#b91c1c!important}
 #app .view:not(.hidden) .recentStatus.in_progress{background:#dbeafe!important;color:#1d4ed8!important}
 #app .view:not(.hidden) .jobStatusReadable{color:#fff!important}
-/* Technician success rows: force all metrics readable */
+
 #success:not(.hidden) .successRow,#success:not(.hidden) .successRow *{color:#111827!important;opacity:1!important;text-shadow:none!important}
 #success:not(.hidden) .successRow .avatar{color:#2563eb!important;background:#eef4ff!important}
 #success:not(.hidden) .successRow .kpi{color:#2563eb!important}
 #success:not(.hidden) .successRow .progress{background:#edf1f5!important}
-/* Maintenance / survey pages */
+
 #app .view:not(.hidden) .maintenanceTile *,#app .view:not(.hidden) .featureContent *,
 #app .view:not(.hidden) .surveyForm *{color:#111827!important;opacity:1!important}
-/* Menu and bottom nav */
+
 #menu.menu{background:#fff!important;color:#111827!important;border:1px solid #d7dde5!important;opacity:1!important}
 #menu.menu *{color:#111827!important;opacity:1!important;text-shadow:none!important}
 #menu.menu button{background:#fff!important;color:#111827!important}
@@ -3457,12 +3438,12 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 .bottomNav *{opacity:1!important}
 .bottomNav button{background:transparent!important;color:#475569!important}
 .bottomNav button.active{background:#eff6ff!important;color:#2563eb!important}
-/* Never fade decorative images into text */
+
 #app .view:not(.hidden) img{opacity:1!important;filter:none!important}
 </style>
 
 <style id="v62-login-design">
-/* V62: realistic telecom login matching approved hero artwork */
+
 .loginPage{
   max-width:760px!important;
   margin:18px auto 40px!important;
@@ -3562,7 +3543,7 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 </style>
 
 <style id="v81-professional-dashboard-sizing-status">
-/* V81 — compact, professional dashboard + full-color status icons across Admin/Engineer/Technician */
+
 #home .dashKpi{min-height:108px!important;padding:13px 14px!important;border-radius:16px!important;box-shadow:0 4px 14px rgba(15,23,42,.07)!important}
 #home .dashKpi strong{font-size:27px!important;margin-top:10px!important;line-height:1.05!important}
 #home .dashKpi small{font-size:12px!important;color:#64748b!important;opacity:1!important}
@@ -3594,7 +3575,7 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 </style>
 
 <style id="v83-dashboard-color-and-success-fix">
-/* V83: final dashboard KPI colors + non-clickable technician success rate */
+
 #home .dashKpi{
   color:#fff!important;
   border-width:1px!important;
@@ -3608,7 +3589,7 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 #home .dashKpi .kpiIcon{background:rgba(255,255,255,.18)!important;color:#fff!important;border-color:rgba(255,255,255,.35)!important}
 #home .dashKpi.successRateOnly{cursor:default!important;pointer-events:none!important}
 
-/* Today's Jobs status icons: solid semantic colors, white symbols */
+
 #home .recentStatusIcon{
   color:#fff!important;
   border:0!important;
@@ -3638,12 +3619,12 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 </style>
 
 <style id="v98-job-flow-ui">
-/* V98: job flow + consistent white theme across all three role views */
+
 #engineerCreateJobCard .hidden{display:none!important}
 #engineerCreateJobCard .jobDirectoryFound,#engineerCreateJobCard .jobDirectoryManual{font-size:12px!important;line-height:1.35!important}
 #engineerCreateJobCard input.autoField{font-size:13px!important;letter-spacing:-.15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
 #engineerCreateJobCard #jobCustomerWrap,#engineerCreateJobCard #jobLocationWrap,#engineerCreateJobCard #jobPhoneWrap,#engineerCreateJobCard #jobFaultWrap{min-width:0}
-/* Normalize the single red dashboard/card column so all three role pages use the same neutral card treatment. */
+
 #app .dashKpi.red,#app .quick.red,#app .analyticsKpi.red{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d7dee8!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important}
 #app .dashKpi.red *,#app .quick.red *,#app .analyticsKpi.red *{color:#172033!important;-webkit-text-fill-color:#172033!important}
 #app .dashKpi.red .kpiIcon,#app .quick.red i{color:#2563eb!important;-webkit-text-fill-color:#2563eb!important}
@@ -3655,25 +3636,25 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 </style>
 </head><body><main class="report"><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></main>
 <style id="tele-tuty-v52-visibility-fix">
-/* V52: FINAL WHITE UI / JOB READABILITY FIX — appended last so legacy themes cannot override it */
+
 html,body,#app,.wrap{background:#fff!important;background-image:none!important;color:#172033!important}
 body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important}
-/* Page chrome */
+
 .globalPageNav,#globalPageNav.globalPageNav,.pageNav,.viewHeader{background:#fff!important;background-image:none!important;color:#172033!important;border-color:#e3e7ee!important;box-shadow:0 3px 14px rgba(15,23,42,.05)!important}
 .globalPageNav:before{display:none!important}
 .royalNavBtn,.royalNavBtn.home,.backBtn,.homeBtn{background:#fff!important;color:#172033!important;border:1px solid #d8dee8!important;box-shadow:0 2px 8px rgba(15,23,42,.06)!important}
 .royalNavTitle,.royalNavTitle *,.royalIcon,.royalNavBtn.home .royalIcon{color:#172033!important;text-shadow:none!important}
 .royalNavTitle .crown{color:#d99a00!important}
-/* All content surfaces */
+
 .card,.cardMini,.jobCard,.jobCardReadable,.panel,.feature,.quick,.stat,.analyticsKpi,.dashboardShortcut,.maintenanceTile,.jobEditPanel,.jobDetailSection,.jobDetailItem,.jobNote,.recentItem,.miniUser,.settingsHero,.teamCard,.empty{background:#fff!important;background-image:none!important;color:#172033!important;border-color:#e1e6ee!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important;text-shadow:none!important}
 .card:before,.card:after,.panel:before,.panel:after,.jobCard:before,.jobCard:after,.feature:after{display:none!important}
-/* Universal readable text, including nested spans that legacy CSS made white */
+
 .card h1,.card h2,.card h3,.card h4,.card h5,.card h6,.card p,.card label,.card legend,.card b,.card strong,.card span,.card small,.card div,
 .panel h1,.panel h2,.panel h3,.panel h4,.panel p,.panel label,.panel b,.panel strong,.panel span,.panel small,
 .jobCard h1,.jobCard h2,.jobCard h3,.jobCard p,.jobCard label,.jobCard b,.jobCard strong,.jobCard span,.jobCard small,.jobCard div,
 .analyticsKpi *,.recentItem *,.miniUser *,.featureContent *,.dashboardShortcut *,.maintenanceTile *{color:#172033!important;text-shadow:none!important}
 .card .muted,.panel .muted,.jobCard .muted,.muted,.dashboardShortcut small,.maintenanceTile small,.empty,.jobDetailItem small,.jobDetailItem span,.jobNote span{color:#5f6b7a!important}
-/* Jobs page — especially the collapsed BATTERY/TELECOM/STREET LIGHT titles */
+
 .jobSummaryButton{background:#fff!important;color:#172033!important;border:0!important;box-shadow:none!important}
 .jobSummaryButton:hover{background:#f7f9fc!important}
 .jobCollapsedTitle,.jobCard .jobCollapsedTitle{color:#172033!important;font-weight:800!important;opacity:1!important}
@@ -3689,31 +3670,31 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important}
 .recentStatus.not_completed{color:#b91c1c!important;background:#fee2e2!important;border:1px solid #fecaca!important}
 .recentStatus.in_progress{color:#1d4ed8!important;background:#dbeafe!important;border:1px solid #bfdbfe!important}
 .pill{color:#334155!important;background:#f1f5f9!important;border:1px solid #cbd5e1!important}
-/* Tabs: never cut the last label on mobile */
+
 .tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px!important;overflow:visible!important;padding-bottom:8px!important}
 .tabs button{min-width:0!important;width:100%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;background:#fff!important;color:#172033!important;border:1px solid #d7dde6!important;box-shadow:0 2px 7px rgba(15,23,42,.05)!important}
 .tabs button.active{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
-/* Forms */
+
 input,select,textarea{background:#fff!important;color:#172033!important;border:1px solid #cfd6df!important;box-shadow:none!important;opacity:1!important}
 input::placeholder,textarea::placeholder{color:#7a8492!important;opacity:1!important}
 select option{background:#fff!important;color:#172033!important}
 button{color:#fff!important;text-shadow:none!important;opacity:1!important}
 button.secondary,.textBtn,.filterBar button,.iconBtn{background:#fff!important;color:#2563eb!important;border:1px solid #d7dde6!important;box-shadow:0 2px 8px rgba(15,23,42,.05)!important}
 button.ok{background:#16a34a!important;color:#fff!important}button.warn{background:#d97706!important;color:#fff!important}button.bad{background:#dc3545!important;color:#fff!important}
-/* Menu */
+
 #menu.menu{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d9dfe8!important;box-shadow:0 18px 45px rgba(15,23,42,.16)!important}
 #menu.menu button,#menu.menu button.bad{background:#fff!important;color:#172033!important;border:1px solid #e5e9ef!important}
 #menu.menu button:hover{background:#f5f7fb!important;color:#111827!important}
 .menuTitle,.menuGroupTitle{color:#4b5563!important}
 .menuDivider{background:#e5e7eb!important}
-/* Bottom nav */
+
 .bottomNav{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #e1e6ee!important;box-shadow:0 10px 30px rgba(15,23,42,.10)!important;backdrop-filter:none!important}
 .bottomNav button{background:transparent!important;color:#475569!important;border:0!important;box-shadow:none!important}
 .bottomNav button.active{background:#eff6ff!important;color:#2563eb!important}
 .bottomNav b{background:#f8fafc!important;color:inherit!important;border-color:#e2e8f0!important}
-/* Hide decorative image overlays that wash out text */
+
 .feature img{opacity:.03!important}
-/* Mobile layout */
+
 @media(max-width:600px){
   .wrap{padding:0 10px 105px!important}
   .globalPageNav,#globalPageNav.globalPageNav{margin:0!important;border-radius:18px!important}
@@ -3729,11 +3710,11 @@ button.ok{background:#16a34a!important;color:#fff!important}button.warn{backgrou
 
 
 <style id="v62-final-readable-recent-jobs">
-/* V62 FINAL: fix pale/faded text on dashboard + all white screens */
+
 html,body,#app{background:#fff!important;color:#172033!important;opacity:1!important;filter:none!important}
 #app .view:not(.hidden){background:#fff!important;color:#172033!important;opacity:1!important;filter:none!important}
 #app .view:not(.hidden) *,#app .view:not(.hidden) *::before,#app .view:not(.hidden) *::after{opacity:1!important;filter:none!important;text-shadow:none!important}
-/* Recent Jobs: every visible line is dark/readable */
+
 #homeRecentJobs,#homeRecentJobsTech,.recentList{background:#fff!important;color:#172033!important;opacity:1!important}
 .recentItem,.recentItem > div,.recentItem > div > div,.recentItem b,.recentItem .muted,
 .recentItem span:not(.stripe):not(.recentStatus){color:#172033!important;opacity:1!important;text-shadow:none!important;filter:none!important}
@@ -3746,28 +3727,43 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
 .recentStatus.pending{background:#fef3c7!important;color:#b45309!important;border:1px solid #fde68a!important}
 .recentStatus.not_completed{background:#fee2e2!important;color:#b91c1c!important;border:1px solid #fecaca!important}
 .recentStatus.in_progress{background:#dbeafe!important;color:#1d4ed8!important;border:1px solid #bfdbfe!important}
-/* Dashboard panels and headings */
+
 .panel,.panelHead,.panelHead h2,.panelHead button{background:#fff!important;color:#172033!important;opacity:1!important;text-shadow:none!important}
 .panelHead .textBtn{color:#2563eb!important;background:#fff!important;border:1px solid #dbe3ec!important}
-/* All ordinary text on every app page */
+
 #app .view:not(.hidden) h1,#app .view:not(.hidden) h2,#app .view:not(.hidden) h3,
 #app .view:not(.hidden) h4,#app .view:not(.hidden) p,#app .view:not(.hidden) label,
 #app .view:not(.hidden) small,#app .view:not(.hidden) b,#app .view:not(.hidden) strong,
 #app .view:not(.hidden) span,#app .view:not(.hidden) div,#app .view:not(.hidden) a,
 #app .view:not(.hidden) li,#app .view:not(.hidden) td,#app .view:not(.hidden) th{color:#172033!important;opacity:1!important;text-shadow:none!important}
 #app .view:not(.hidden) .muted,#app .view:not(.hidden) .hint,#app .view:not(.hidden) .sub{color:#64748b!important;opacity:1!important}
-/* Header/navigation */
+
 #globalPageNav,.globalPageNav,.viewHeader{background:#fff!important;color:#172033!important;border-color:#dfe4eb!important;opacity:1!important;filter:none!important}
 #globalPageNav *, .globalPageNav *, .viewHeader *{color:#172033!important;opacity:1!important;text-shadow:none!important}
 .royalNavTitle{color:#172033!important}.royalNavTitle .crown{color:#d99a00!important}
 .royalNavBtn,.backBtn,.homeBtn{background:#fff!important;color:#172033!important;border:1px solid #d8dee8!important;opacity:1!important}
-/* Inputs */
+
 #app .view:not(.hidden) input,#app .view:not(.hidden) select,#app .view:not(.hidden) textarea{background:#fff!important;color:#172033!important;border-color:#cfd6df!important;opacity:1!important}
 #app .view:not(.hidden) input::placeholder,#app .view:not(.hidden) textarea::placeholder{color:#64748b!important;opacity:1!important}
-/* bottom nav */
+
 .bottomNav{background:#fff!important;color:#172033!important;opacity:1!important}.bottomNav *{opacity:1!important}.bottomNav button{color:#475569!important;background:transparent!important}
 </style>
 
+<style>
+
+.teamActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.teamActions button{white-space:nowrap}
+@media(max-width:700px){
+  .teamActions{width:100%;justify-content:flex-start}
+  .teamActions button{flex:1 1 140px}
+}
+</style>
+<style id="final-ui-bugfixes">
+#app #home .dashKpi.red,#app #home .quick.red,#app #home .analyticsKpi.red{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d7dee8!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important}
+#app #home .dashKpi.red *,#app #home .quick.red *,#app #home .analyticsKpi.red *{color:#172033!important;-webkit-text-fill-color:#172033!important}
+#app #home .dashKpi.red .kpiIcon{background:#f1f5f9!important;color:#2563eb!important;border-color:#e2e8f0!important;-webkit-text-fill-color:#2563eb!important}
+#success .analyticsKpi,#success .successRow{background:#fff!important;background-image:none!important}
+</style>
 </body></html>`);
   w.document.close();
 }
@@ -3788,7 +3784,7 @@ async function loadBackupSummary(){
 }
 
 
-/* ---- Account security ---- */
+
 async function changePassword(){
   if(!user?.email) return alert("Please login again.");
   const current=$("currentPassword")?.value||"";
@@ -3817,7 +3813,7 @@ async function changePassword(){
   }
 }
 
-/* ---- Authentication / session controls ---- */
+
 let signingOut = false;
 async function logout(){
   if(signingOut) return;
@@ -3877,7 +3873,7 @@ db.auth.onAuthStateChange((event, session)=>{
   }
 });
 
-/* ---- Stable app router ---- */
+
 function closeMenu(){
   const m=document.getElementById("menu");
   if(m) m.classList.add("hidden");
@@ -3930,8 +3926,6 @@ function showView(id){
   el.classList.remove("hidden");
   if(id==="directory") setTimeout(()=>loadDirectory(),0);
   if(id==="home") setTimeout(()=>{ if(!directoryLoaded) loadDirectory().then(renderHomeDirectoryResults).catch(()=>{}); else renderHomeDirectoryResults(); },0);
-  // The Field Operations hero belongs to the dashboard only.
-  // Never let it sit above / overlap a module view.
   const fieldHero=document.getElementById("fieldOperationsHero");
   if(fieldHero){
     const isHome=id==="home";
@@ -4029,7 +4023,7 @@ function renderHomeDirectoryResults(){
 }
 function clearHomeDirectorySearch(){const i=document.getElementById("homeDirectoryInput");if(i){i.value="";i.focus();}renderHomeDirectoryResults();}
 
-/* V90 Telephone Directory */
+
 let directoryRows=[], directoryLoaded=false;
 document.addEventListener("DOMContentLoaded",()=>{const i=document.getElementById("homeDirectoryInput");if(i){i.addEventListener("input",renderHomeDirectoryResults);}});
 document.addEventListener("DOMContentLoaded",()=>{ if(document.getElementById("jobType")){ setEngineerJobDateTime(); updateEngineerJobFields(); }});
@@ -4089,7 +4083,6 @@ function closeDirectoryForm(){$("directoryForm")?.classList.remove("open");}
 function editDirectoryEntry(id){const row=directoryRows.find(x=>Number(x.id)===Number(id));if(row)openDirectoryForm(row);}
 async function saveDirectoryEntry(){
   if(!user)return;
-  // Directory policy: any authenticated Admin / Engineer / Technician may add or edit; Admin alone may delete.
   const allowedDirectoryRoles=["admin","engineer","technician","worker"];
   if(!allowedDirectoryRoles.includes(String(profile?.role||"").toLowerCase())){ $("directoryFormMsg").textContent="Directory editing is not available for this account."; return; }
   const name=$("directoryName").value.trim(), designation=$("directoryDesignation").value.trim(), section=$("directorySection").value.trim();
@@ -4137,7 +4130,7 @@ async function loadDirectoryHistory(){
 </script>
 
 <style id="v69-true-clean-white-final">
-/* V69: final clean white surface. This intentionally overrides ALL older theme blocks. */
+
 :root{
   --bg:#ffffff!important; --panel:#ffffff!important; --panel2:#f8fafc!important;
   --line:#d7dee8!important; --text:#172033!important; --muted:#526071!important;
@@ -4222,12 +4215,3 @@ body:before,body:after{display:none!important;content:none!important;background:
 }
 </style>
 </body></html>
-<style>
-/* V69 unified team-management navigation */
-.teamActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.teamActions button{white-space:nowrap}
-@media(max-width:700px){
-  .teamActions{width:100%;justify-content:flex-start}
-  .teamActions button{flex:1 1 140px}
-}
-</style>
