@@ -262,21 +262,9 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
   background:linear-gradient(135deg,#3c2a0b 0%,#72510f 42%,#145b49 100%);
   border-color:#d8b44a;box-shadow:0 18px 48px rgba(221,173,43,.18),inset 0 1px 0 rgba(255,255,255,.08)
 }
-#tower .card{
-  background:linear-gradient(135deg,#102b4e 0%,#174d78 46%,#42277d 100%);
-  border-color:#58b8ff;box-shadow:0 18px 48px rgba(48,156,255,.20),inset 0 1px 0 rgba(255,255,255,.08)
-}
 #street .card{
   background:linear-gradient(135deg,#14375a 0%,#0d6d86 44%,#5b2c82 100%);
   border-color:#4bc9e9;box-shadow:0 18px 48px rgba(46,201,233,.18),inset 0 1px 0 rgba(255,255,255,.08)
-}
-#wiring .card{
-  background:linear-gradient(135deg,#47140f 0%,#8b3517 42%,#54206f 100%);
-  border-color:#ff8751;box-shadow:0 18px 48px rgba(255,101,50,.18),inset 0 1px 0 rgba(255,255,255,.08)
-}
-#renovation .card{
-  background:linear-gradient(135deg,#332052 0%,#65307b 45%,#a04645 100%);
-  border-color:#d878c5;box-shadow:0 18px 48px rgba(193,87,201,.20),inset 0 1px 0 rgba(255,255,255,.08)
 }
 #team .card{
   background:linear-gradient(135deg,#0c3c55,#126c75 45%,#304b9a);
@@ -300,7 +288,7 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 }
 /* subtle premium texture on every themed module */
 #adminTools .card:after,#success .card:after,#battery .card:after,#earth .card:after,
-#tower .card:after,#street .card:after,#wiring .card:after,#renovation .card:after,
+#street .card:after,
 #team .card:after,#jobs .card:after,#notifications .card:after,#profile .card:after,#settings .card:after{
  content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
  background-image:radial-gradient(rgba(255,255,255,.28) .65px,transparent .65px),linear-gradient(125deg,rgba(255,255,255,.05),transparent 34%,rgba(255,255,255,.025) 65%,transparent);
@@ -309,15 +297,12 @@ button:hover{filter:brightness(1.08);transform:translateY(-1px)}
 /* theme buttons inside each module */
 #battery button:not(.secondary){background:linear-gradient(135deg,#00a878,#20d6a5,#2478e8)}
 #earth button:not(.secondary){background:linear-gradient(135deg,#b57b08,#e4bd43,#2d9c72)}
-#tower button:not(.secondary){background:linear-gradient(135deg,#147bd1,#24bce5,#7656e8)}
 #street button:not(.secondary){background:linear-gradient(135deg,#168fc4,#2bd7d0,#8356df)}
-#wiring button:not(.secondary){background:linear-gradient(135deg,#d4471e,#ff8b35,#9a3fbb)}
-#renovation button:not(.secondary){background:linear-gradient(135deg,#7b45c8,#d257ad,#e87858)}
 #adminTools button:not(.secondary){background:linear-gradient(135deg,#277dff,#8a55ed,#db4d8d)}
 #success button:not(.secondary){background:linear-gradient(135deg,#287cff,#6556e8,#b84fd4)}
 /* colorful labels */
-#battery h2{color:#7fffe2}#earth h2{color:#ffe39a}#tower h2{color:#9bdcff}
-#street h2{color:#9af4ff}#wiring h2{color:#ffc19e}#renovation h2{color:#ffc4f2}
+#battery h2{color:#7fffe2}#earth h2{color:#ffe39a}
+#street h2{color:#9af4ff}
 #adminTools h2{color:#d7c4ff}#success h2{color:#b9caff}
 </style>
 
@@ -530,10 +515,7 @@ button:active{transform:scale(.985)}
 #success .card,
 #battery .card,
 #earth .card,
-#tower .card,
 #street .card,
-#wiring .card,
-#renovation .card,
 #team .card,
 #jobs .card,
 #notifications .card,
@@ -630,7 +612,7 @@ body:before{opacity:.08}
 .analyticsKpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.analyticsKpi{min-height:120px;padding:15px;border-radius:15px;background:#0b1728;border:1px solid var(--line2)}.analyticsKpi small{display:block;color:#a3b1c3}.analyticsKpi b{display:block;font-size:30px;margin:12px 0 6px}.analyticsKpi span{font-size:11px;color:#7f92aa}.analyticsKpi.purple b{color:#a981ff}.analyticsKpi.green b{color:#43db83}.analyticsKpi.orange b{color:#ffb23c}.analyticsKpi.red b{color:#ff6372}.analyticsKpi.blue b{color:#56a9ff}
 .filterBar{display:grid;grid-template-columns:1.5fr .75fr .75fr auto;gap:10px;margin:16px 0}.filterBar input,.filterBar button{height:48px;margin:0!important}.filterBar button{background:#0b1728!important;border:1px solid var(--line2)!important}.filterBar .filterBtn{color:#9e7cff!important}
 .tableHead{display:grid;grid-template-columns:2fr .8fr .8fr .8fr .95fr 1fr;padding:0 14px 9px;color:#899bb1;font-size:11px;text-transform:uppercase;letter-spacing:.5px}.analyticsTable .card{margin:7px 0!important}.analyticsTable #successList>.card{background:#0b1728;border-radius:13px;padding:14px;margin:7px 0}.analyticsTable #successList>.card .kpi{font-size:23px;color:#45d984}.analyticsTable #successList>.card .progress{margin-top:8px}
-.moduleTitle{font-size:25px;margin:0 0 4px;display:flex;align-items:center;gap:10px}.moduleIcon{width:42px;height:42px;border-radius:13px;display:inline-grid;place-items:center;background:#0e2038;color:#52a9ff;border:1px solid rgba(82,169,255,.2)}.streetIcon{color:#ffcb4b}.batteryIcon{color:#4aa7ff}.earthIcon{color:#35d77f}.wiringIcon{color:#ff5e72}.renovationIcon{color:#a980ff}
+.moduleTitle{font-size:25px;margin:0 0 4px;display:flex;align-items:center;gap:10px}.moduleIcon{width:42px;height:42px;border-radius:13px;display:inline-grid;place-items:center;background:#0e2038;color:#52a9ff;border:1px solid rgba(82,169,255,.2)}.streetIcon{color:#ffcb4b}.batteryIcon{color:#4aa7ff}.earthIcon{color:#35d77f}
 
 input,select,textarea{background:#091727!important;border-color:rgba(103,152,211,.18)!important;border-radius:12px!important}label{color:#a9b7c9;font-size:12px;font-weight:700}
 button{border-radius:12px!important}
@@ -747,7 +729,7 @@ img{border-radius:14px}
 
 <style id="v29-maintenance-ui">
 .maintenanceCenter{margin-top:14px;background:linear-gradient(135deg,rgba(8,29,49,.98),rgba(29,20,58,.96));border:1px solid rgba(116,190,255,.24)}
-.maintenanceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}.maintenanceTile.tower{background:linear-gradient(135deg,#283c87,#6b2f9c)!important}.maintenanceTile.wiring{background:linear-gradient(135deg,#8a3a19,#8d1f4b)!important}.maintenanceTile.renovation{background:linear-gradient(135deg,#4e2d7f,#9b2c72)!important}
+.maintenanceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.maintenanceTile{min-height:105px!important;margin:0!important;text-align:left!important;padding:14px!important;border-radius:18px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 25px rgba(0,0,0,.16)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important}.maintenanceTile span{font-size:25px}.maintenanceTile b{font-size:14px}.maintenanceTile small{font-size:11px;opacity:.78}.maintenanceTile.street{background:linear-gradient(135deg,#0b6c9b,#2b3e9c)!important}.maintenanceTile.battery{background:linear-gradient(135deg,#075c55,#177f55)!important}.maintenanceTile.earth{background:linear-gradient(135deg,#245f3d,#6d5b20)!important}
 .menu{max-height:calc(100vh - 76px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}.menu button{display:block!important;visibility:visible!important;min-height:42px!important;color:#edf8ff!important}.menuGroupTitle,.menuTitle{color:#fff!important}
 @media(max-width:600px){.maintenanceGrid{grid-template-columns:1fr 1fr}.maintenanceTile{min-height:96px!important}}
 @media(max-width:380px){.maintenanceGrid{grid-template-columns:1fr}.maintenanceTile{min-height:82px!important}}
@@ -1149,8 +1131,8 @@ button:hover,.menu button:hover{background:#f8fafc!important;}
 .royalIcon,.royalNavBtn.home .royalIcon,.royalNavTitle,.royalNavTitle .crown{color:#374151!important;text-shadow:none!important;}
 /* Keep every page container white even where older page-specific themes exist */
 [id]{background-color:#fff;}
-#battery,#earth,#tower,#street,#wiring,#renovation,#adminTools,#success{background:#fff!important;background-image:none!important;color:#111827!important;}
-#battery h2,#earth h2,#tower h2,#street h2,#wiring h2,#renovation h2,#adminTools h2,#success h2{color:#111827!important;}
+#battery,#earth,#street,#adminTools,#success{background:#fff!important;background-image:none!important;color:#111827!important;}
+#battery h2,#earth h2,#street h2,#adminTools h2,#success h2{color:#111827!important;}
 </style>
 
 <style id="tele-tuty-final-white-visibility-fix">
@@ -2083,9 +2065,6 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     <button onclick="navigate('street')"><img class="menuImgIcon" src="public/images/street_light_survey.png" alt=""> <span>Street Light Survey</span></button>
     <button onclick="navigate('battery')"><img class="menuImgIcon" src="public/images/battery_bank.png" alt=""> <span>Battery Maintenance</span></button>
     <button onclick="navigate('earth')"><img class="menuImgIcon" src="public/images/earth_pit.png" alt=""> <span>Earth Pit Maintenance</span></button>
-    <button onclick="navigate('tower')"><img class="menuImgIcon" src="public/images/telecom_tower.png" alt=""> <span>Telecom Tower</span></button>
-    <button onclick="navigate('wiring')"><img class="menuImgIcon" src="public/images/wiring_fault.png" alt=""> <span>Wiring Fault</span></button>
-    <button onclick="navigate('renovation')"><img class="menuImgIcon" src="public/images/street_light_damage.png" alt=""> <span>Renovation</span></button>
   </div>
   <div class="menuDivider"></div>
   <button onclick="navigate('jobs')"><img class="menuImgIcon" src="public/images/jobs_icon.png" alt=""> <span>Jobs</span></button>
@@ -2213,14 +2192,11 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
       </div>
 
       <div class="panel maintenanceCenter hidden" id="maintenanceCenter">
-        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery, earth pit, tower and electrical work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
+        <div class="panelHead"><div><h2>Maintenance Center</h2><p class="muted">Street lights, battery and earth pit work</p></div><button class="textBtn" onclick="toggleMenu()">View All</button></div>
         <div class="maintenanceGrid">
           <button class="maintenanceTile street" onclick="navigate('street')"><span>💡</span><b>Street Light</b><small>Survey & faults</small></button>
           <button class="maintenanceTile battery" onclick="navigate('battery')"><span>🔋</span><b>Battery</b><small>Maintenance & due dates</small></button>
           <button class="maintenanceTile earth" onclick="navigate('earth')"><span>🌍</span><b>Earth Pit</b><small>Resistance & condition</small></button>
-          <button class="maintenanceTile tower" onclick="navigate('tower')"><span>📡</span><b>Telecom Tower</b><small>Tower field work</small></button>
-          <button class="maintenanceTile wiring" onclick="navigate('wiring')"><span>⚡</span><b>Wiring Fault</b><small>Electrical faults</small></button>
-          <button class="maintenanceTile renovation" onclick="navigate('renovation')"><span>🛠️</span><b>Renovation</b><small>Repair & upgrade work</small></button>
         </div>
       </div>
 
@@ -2289,29 +2265,13 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
       <p id="slMsg" class="muted"></p>
     </div>
     <div class="card"><h3>Recent Street Light Surveys</h3><div id="streetList"></div></div>
-  </div>
-
-  <div id="tower" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/telecom_tower.png')"><span class="modulePhotoLabel">Telecom Tower</span></div>
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon towerIcon">⌁</span> Telecom Tower</h1><p class="muted">Field reference images and tower work tracking.</p><img src="public/images/telecom_tower.png" style="width:100%;max-height:280px;object-fit:cover"><label>Area / Tower Location</label><input id="towerArea" placeholder="Tower location"><label>Work Details</label><textarea id="towerWork" placeholder="Tower inspection, antenna, cable, power, shelter, etc."></textarea><button onclick="createModuleJob('tower')">Create Tower Job</button></div></div>
-
-  <div id="battery" class="view hidden">
+  </div><div id="battery" class="view hidden">
     <div class="modulePhoto" style="--module-bg:url('public/images/battery_bank.png')"><span class="modulePhotoLabel">Battery Maintenance</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon batteryIcon">▣</span> Battery Maintenance</h1><div class="row"><img src="public/images/battery_bank.png" style="width:150px;height:110px;object-fit:cover"><div class="spacer"><p class="muted">Battery bank maintenance record</p></div></div><label>Area Name</label><input id="batArea" placeholder="Site / area"><label>Battery Status</label><select id="batStatus"><option>Healthy</option><option>Needs Attention</option><option>Critical</option><option>Replaced</option></select><label>Condition</label><textarea id="batCondition" placeholder="Voltage, terminals, backup, physical condition..."></textarea><label>Next Due Date</label><input id="batDue" type="date"><label>Remarks</label><textarea id="batRemarks"></textarea><button onclick="saveBattery()">💾 Save Maintenance</button><p id="batMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="batteryList"></div></div></div>
 
   <div id="earth" class="view hidden">
     <div class="modulePhoto" style="--module-bg:url('public/images/earth_pit.png')"><span class="modulePhotoLabel">Earth Pit Maintenance</span></div>
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon earthIcon">◉</span> Earth Pit Maintenance</h1><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div>
-
-  <div id="wiring" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/wiring_fault.png')"><span class="modulePhotoLabel">Wiring Fault</span></div>
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon wiringIcon">ϟ</span> Wiring Fault</h1><img src="public/images/wiring_fault.png" style="width:100%;max-height:250px;object-fit:cover"><label>Location</label><input id="wireArea" placeholder="Location"><label>Fault Details</label><textarea id="wireWork" placeholder="Cable / power / DB / lighting / short circuit / open circuit..."></textarea><button onclick="createModuleJob('wiring')">Create Wiring Job</button></div></div>
-
-  <div id="renovation" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/wiring_fault.png')"><span class="modulePhotoLabel">Renovation & Repair</span></div>
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon renovationIcon">⌁</span> Renovation</h1><label>Area Name</label><input id="renoArea" placeholder="Area"><label>Work Description</label><textarea id="renoWork"></textarea><button onclick="saveRenovation()">💾 Create Renovation</button><p id="renoMsg" class="muted"></p></div><div class="card"><h3>Renovation History</h3><div id="renoList"></div></div></div>
-
-  <div id="profile" class="view hidden">
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon earthIcon">◉</span> Earth Pit Maintenance</h1><img src="public/images/earth_pit.png" style="width:100%;max-height:250px;object-fit:cover"><label>Area Name</label><input id="earthArea" placeholder="Area / site"><label>Condition</label><select id="earthCondition"><option>Good</option><option>Needs Attention</option><option>Critical</option></select><label>Resistance</label><input id="earthResistance" placeholder="e.g. 1.2 Ω"><label>Next Due Date</label><input id="earthDue" type="date"><label>Remarks</label><textarea id="earthRemarks"></textarea><button onclick="saveEarth()">💾 Save Earth Pit Record</button><p id="earthMsg" class="muted"></p></div><div class="card"><h3>Recent Records</h3><div id="earthList"></div></div></div><div id="profile" class="view hidden">
     <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">My Profile</span></div>
 <div class="card"><h1 class="moduleTitle"><span class="moduleIcon">◉</span> My Profile</h1><div class="row"><div id="profileAvatar" class="avatar">A</div><div><h3 id="profileName"></h3><p id="profileRole" class="muted"></p></div></div><label>Profile Photo</label><input id="avatarFile" type="file" accept="image/*" onchange="uploadAvatar()"><p class="muted">Photo is stored on this device for the profile preview.</p></div></div>
 
@@ -2338,7 +2298,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
         <div><label>Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
         <div><label>Customer Phone</label><input id="jobPhone" type="tel" placeholder="Phone number"></div>
         <div><label>Location / Address <b class="req">*</b></label><input id="jobLocation" placeholder="Site / address"></div>
-        <div><label>Job Type</label><select id="jobType"><option value="GENERAL">General Job</option><option value="TELECOM">Telecom</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option><option value="WIRING">Wiring Fault</option><option value="RENOVATION">Renovation</option></select></div>
+        <div><label>Job Type</label><select id="jobType"><option value="GENERAL">General Job</option><option value="TELECOM">Telephone</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option></select></div>
         <div><label>Preferred Date</label><input id="jobDate" type="date"></div>
         <div><label>Preferred Time</label><input id="jobTime" type="time"></div>
       </div>
@@ -2948,7 +2908,7 @@ async function loadJobs(){
               ${profile?.role==="worker" && j.assigned_worker===user.id && st!=="completed" ? `<div class="extraWorkAdd"><input id="extraWorkInput${j.id}" placeholder="Extra work found at site…"><button type="button" onclick="event.stopPropagation();addExtraWork(${j.id})">＋ Add Extra Work</button></div>` : ""}
             </section>
           </div>
-          ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","STREET_LIGHT","BATTERY","EARTH_PIT","TOWER","WIRING","RENOVATION"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
+          ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","TELECOM","STREET_LIGHT","BATTERY","EARTH_PIT"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
           ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks" onclick="event.stopPropagation()"><input id="pr${j.id}" placeholder="Pending reason" onclick="event.stopPropagation()"><button class="secondary" type="button" onclick="event.stopPropagation();updateJob(${j.id},'in_progress')">In Progress</button><button type="button" onclick="event.stopPropagation();updateJob(${j.id},'completed')">Complete</button><button class="bad" type="button" onclick="event.stopPropagation();updateJob(${j.id},'not_completed')">Not Completed</button></div>`:""}
         </div>
       </article>`;
@@ -3086,24 +3046,6 @@ async function loadBattery(){const r=await db.from("battery_maintenance").select
 async function saveBattery(){const p={area_name:$("batArea").value.trim(),battery_status:$("batStatus").value,condition:$("batCondition").value.trim()||null,remarks:$("batRemarks").value.trim()||null,next_due_date:$("batDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("battery_maintenance").insert(p);if(r.error)return alert(r.error.message);$("batMsg").textContent="Battery record saved.";await loadBattery()}
 async function loadEarth(){const r=await db.from("earthpit_maintenance").select("*").order("updated_at",{ascending:false}).limit(30);$("earthList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon earthIcon">◉</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.condition||"")} • Resistance ${esc(x.resistance||"-")}</div><div>${esc(x.remarks||"")}</div></div></div>`).join("")||`<div class="empty">No earth pit records yet.</div>`}
 async function saveEarth(){const p={area_name:$("earthArea").value.trim(),condition:$("earthCondition").value,resistance:$("earthResistance").value.trim()||null,remarks:$("earthRemarks").value.trim()||null,next_due_date:$("earthDue").value||null,updated_by:user.id};if(!p.area_name)return alert("Area name required");const r=await db.from("earthpit_maintenance").insert(p);if(r.error)return alert(r.error.message);$("earthMsg").textContent="Earth pit record saved.";await loadEarth()}
-async function loadRenovation(){const r=await db.from("renovations").select("*").order("created_at",{ascending:false}).limit(30);$("renoList").innerHTML=(r.data||[]).map(x=>`<div class="person"><div class="moduleIcon renovationIcon">⌁</div><div><b>${esc(x.area_name)}</b><div class="muted">${esc(x.status)}</div><div>${esc(x.work_description)}</div></div></div>`).join("")||`<div class="empty">No renovation records.</div>`}
-async function saveRenovation(){const p={area_name:$("renoArea").value.trim(),work_description:$("renoWork").value.trim(),created_by:user.id};if(!p.area_name||!p.work_description)return alert("Area and work details required");p.status="pending";const r=await db.from("renovations").insert(p);if(r.error)return alert(r.error.message);$("renoMsg").textContent="Renovation created.";await loadRenovation()}
-async function createModuleJob(type){
-  const area=type==="tower"?$("towerArea").value.trim():$("wireArea").value.trim();
-  const work=type==="tower"?$("towerWork").value.trim():$("wireWork").value.trim();
-  if(!area||!work)return alert("Location and work details required");
-  try{
-    const c=await db.from("customers").insert({name:area,address:area}).select("id").single();
-    if(c.error)throw c.error;
-    const p={customer_id:c.data.id,work_description:(type==="tower"?"Tower: ":"Wiring Fault: ")+work,location:area,assigned_engineer:profile.role==="engineer"?user.id:null,created_by:user.id,job_term:type==="tower"?"TOWER":"WIRING",status:"pending"};
-    const r=await db.from("jobs").insert(p);
-    if(r.error){await db.from("customers").delete().eq("id",c.data.id);throw r.error;}
-    alert("Job created successfully");
-    $(type==="tower"?"towerArea":"wireArea").value="";
-    $(type==="tower"?"towerWork":"wireWork").value="";
-    navigate("jobs");
-  }catch(e){alert("Could not create job: "+(e?.message||e));}
-}
 
 async function loadEngineerTechnicians(){
   const sel=$("jobTechnician");
@@ -3188,7 +3130,7 @@ function setAvatar(src){$("myAvatar").innerHTML=`<img src="${src}" style="width:
 function toggleCompact(){document.body.classList.toggle("compact");alert("Dashboard view toggled")}
 
 async function fetchBackupData(){
-  const tables=["profiles","customers","jobs","job_extra_work","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance","renovations"];
+  const tables=["profiles","customers","jobs","job_extra_work","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance"];
   const out={app:"Tele Tuty",version:1,created_at:new Date().toISOString(),tables:{}};
   for(const t of tables){
     let q=db.from(t).select("*");
@@ -3218,7 +3160,7 @@ async function restoreBackup(ev){
   if(!confirm("Restore backup data? Existing records are not deleted; duplicate IDs may be skipped."))return;
   try{
     const data=JSON.parse(await f.text());
-    const order=["profiles","customers","jobs","job_extra_work","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance","renovations"];
+    const order=["profiles","customers","jobs","job_extra_work","notifications","job_assignments","job_history","street_light_surveys","battery_maintenance","earthpit_maintenance"];
     let count=0;
     for(const t of order){
       const rows=Array.isArray(data.tables?.[t])?data.tables[t]:[];
@@ -3228,7 +3170,7 @@ async function restoreBackup(ev){
       count+=rows.length;
     }
     $("backupMsg").textContent=`Restore completed: ${count} records processed.`;
-    loadHome();loadJobs();loadSuccessRate();loadStreet();loadBattery();loadEarth();loadRenovation();
+    loadHome();loadJobs();loadSuccessRate();loadStreet();loadBattery();loadEarth();
   }catch(e){alert("Restore failed: "+e.message)}
 }
 async function printReport(type){
@@ -3240,8 +3182,8 @@ async function printReport(type){
     const since=new Date(Date.now()-30*86400000);
     const r=await db.from("jobs").select("*").gte("created_at",since.toISOString()).order("created_at",{ascending:false}).limit(500);
     if(r.error) return alert(r.error.message);
-    const telecom=new Set(["TELECOM","TOWER"]);
-    const electrical=new Set(["STREET_LIGHT","BATTERY","EARTH_PIT","WIRING","RENOVATION","GENERAL"]);
+    const telecom=new Set(["TELECOM"]);
+    const electrical=new Set(["STREET_LIGHT","BATTERY","EARTH_PIT","GENERAL"]);
     const wanted=type==="month_telecom"?telecom:electrical;
     const rows=(r.data||[]).filter(x=>wanted.has(String(x.job_term||"").toUpperCase()));
     const ids=rows.map(x=>x.id);
@@ -3662,17 +3604,16 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
 }
 async function loadBackupSummary(){
   try{
-    const [p,j,s,b,e,r]=await Promise.all([
+    const [p,j,s,b,e]=await Promise.all([
       db.from("profiles").select("id",{count:"exact",head:true}),
       db.from("jobs").select("id",{count:"exact",head:true}),
       db.from("street_light_surveys").select("id",{count:"exact",head:true}),
       db.from("battery_maintenance").select("id",{count:"exact",head:true}),
-      db.from("earthpit_maintenance").select("id",{count:"exact",head:true}),
-      db.from("renovations").select("id",{count:"exact",head:true})
+      db.from("earthpit_maintenance").select("id",{count:"exact",head:true})
     ]);
     $("backupSummary").innerHTML=[
       ["Users",p.count||0],["Jobs",j.count||0],["Street Surveys",s.count||0],
-      ["Battery",b.count||0],["Earth Pit",e.count||0],["Renovations",r.count||0]
+      ["Battery",b.count||0],["Earth Pit",e.count||0]
     ].map(x=>`<div class="stat"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("");
   }catch(e){}
 }
@@ -3785,7 +3726,7 @@ function currentView(){
 }
 function canAccessView(id){
   const role=String(profile?.role||"").toLowerCase();
-  const maintenanceViews=["street","battery","earth","tower","wiring","renovation"];
+  const maintenanceViews=["street","battery","earth"];
   if(id==="team" || id==="adminTools") return role==="admin";
   if(id==="success") return role==="admin" || role==="engineer";
   if(id==="backup") return role==="admin" || role==="engineer";
@@ -3807,7 +3748,7 @@ function applyRoleNavigation(){
   const successEl=$("success"); if(successEl) successEl.classList.toggle("hidden", !successAllowed && !successEl.classList.contains("hidden"));
   const teamEl=$("team"); if(teamEl) teamEl.classList.toggle("hidden", !teamAllowed && !teamEl.classList.contains("hidden"));
   const adminEl=$("adminTools"); if(adminEl) adminEl.classList.toggle("hidden", !teamAllowed && !adminEl.classList.contains("hidden"));
-  ["street","battery","earth","tower","wiring","renovation"].forEach(id=>{
+  ["street","battery","earth"].forEach(id=>{
     const el=$(id);
     if(el && !maintenanceAllowed && !el.classList.contains("hidden")) el.classList.add("hidden");
   });
@@ -3832,7 +3773,7 @@ function showView(id){
   if(nav){ nav.classList.remove("hidden"); nav.style.display="flex"; nav.style.visibility="visible"; nav.style.opacity="1"; }
   const title=document.getElementById("globalPageTitle");
   if(title){
-    const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",directory:"Telephone Directory",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",tower:"Telecom Tower",wiring:"Wiring Fault",renovation:"Renovation",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
+    const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",directory:"Telephone Directory",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
     title.textContent=titles[id]||"Field Operations";
   }
   closeMenu();
@@ -3850,7 +3791,6 @@ function showView(id){
   if(id==="street")loadStreet().catch?.(()=>{});
   if(id==="battery")loadBattery().catch?.(()=>{});
   if(id==="earth")loadEarth().catch?.(()=>{});
-  if(id==="renovation")loadRenovation().catch?.(()=>{});
   if(id==="backup" && typeof loadBackupSummary==="function")loadBackupSummary();
   setNavButtonState();
   window.scrollTo({top:0,behavior:"instant"});
