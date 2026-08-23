@@ -1055,14 +1055,14 @@ async function loadHome(){
    $("pend").textContent=open;
    $("homeRecentJobs").innerHTML=renderRecentJobs(rows.slice(0,6));
    $("homeUsers").innerHTML=users.slice(0,6).map(x=>`<div class="miniUser"><b>${esc(x.full_name||"User")}</b><span>${x.role==="worker"?"Technician":x.role} • ${x.active===false?"Inactive":"Active"}</span></div>`).join("")||`<div class="empty">No users found.</div>`;
-   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/admin_hero.jpg')";
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }else if(role==="engineer"){
    $("engJobs").textContent=total;
    $("engPending").textContent=open;
    $("engDone").textContent=completed;
    $("engNotDone").textContent=rows.filter(x=>x.status==="not_completed").length;
    $("homeRecentJobsEng").innerHTML=renderRecentJobs(rows.slice(0,8));
-   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/engineer_hero.jpg')";
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }else{
    const mine=rows.filter(x=>x.assigned_worker===user.id);
    const md=mine.filter(x=>x.status==="completed").length;
@@ -1071,7 +1071,7 @@ async function loadHome(){
    $("myPending").textContent=mine.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
    $("myRate").textContent=(mine.length?Math.round(md/mine.length*100):0)+"%";
    $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
-   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/technician_hero.jpg')";
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }
  if(role==="admin")$("adminTools").classList.remove("hidden");
 }

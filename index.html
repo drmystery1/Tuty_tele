@@ -2315,7 +2315,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     <div class="modulePhoto" style="--module-bg:url('public/images/team_management_banner.png')"><span class="modulePhotoLabel">Team Management</span></div>
 <div class="card teamCard"><div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">♙</span> Team Management</h1><p class="muted">Add, activate, deactivate, remove and manage all engineers and technicians from one place.</p></div><div class="row teamActions"><button onclick="navigate('adminTools')">＋ Add User</button><button class="secondary" onclick="navigate('adminTools')">▤ Approval Requests</button><button class="secondary" onclick="loadTeam()">↻ Refresh</button></div></div><div id="teamList"></div></div></div>
   <div id="jobs" class="view hidden">
-    <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_banner_new.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
+    <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_clean.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
       <div class="grid jobFormGrid">
@@ -2533,14 +2533,14 @@ async function loadHome(){
    $("pend").textContent=open;
    if($("homeRecentJobs")) $("homeRecentJobs").innerHTML=renderRecentJobs(rows.slice(0,6));
    if($("homeUsers")) $("homeUsers").innerHTML=users.slice(0,6).map(x=>`<div class="miniUser"><b>${esc(x.full_name||"User")}</b><span>${x.role==="worker"?"Technician":x.role} • ${x.active===false?"Inactive":"Active"}</span></div>`).join("")||`<div class="empty">No users found.</div>`;
-   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/admin_hero.jpg')";
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }else if(role==="engineer"){
    $("engJobs").textContent=total;
    $("engPending").textContent=open;
    $("engDone").textContent=completed;
    $("engNotDone").textContent=rows.filter(x=>x.status==="not_completed").length;
    if($("homeRecentJobsEng")) $("homeRecentJobsEng").innerHTML=renderRecentJobs(rows.slice(0,8));
-   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/engineer_hero.jpg')";
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }else{
    const ar=await db.from("job_assignments").select("job_id,status").eq("technician_id",user.id).order("assigned_at",{ascending:false}).limit(100);
    const assignmentRows=ar.data||[];
@@ -2561,7 +2561,7 @@ async function loadHome(){
    $("myPending").textContent=visibleAssignments.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
    $("myRate").textContent=(assignmentRows.length?Math.round(md/assignmentRows.length*100):0)+"%";
    if($("homeRecentJobsTech")) $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
-   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/technician_hero.jpg')";
+   document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }
  if(role==="admin")$("adminTools").classList.remove("hidden");
 }
