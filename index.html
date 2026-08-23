@@ -2846,7 +2846,7 @@ async function loadHome(){
    if($("homeRecentJobsTech")) $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
    document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }
- if(role==="admin")$("adminTools").classList.remove("hidden");
+ 
 }
 function renderRecentJobs(rows){
  if(!rows.length)return `<div class="empty">No jobs found.</div>`;
@@ -4334,6 +4334,41 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
   #jobsListCard .jobStatusTabs button{height:40px!important;min-height:40px!important;border-radius:11px!important;font-size:18px!important;}
 }
 </style>
+
+<style id="v11010-role-view-isolation">
+/* V110.10: Keep every role/page section completely separate. */
+.view.hidden{display:none!important;visibility:hidden!important;}
+.view:not(.hidden){visibility:visible;}
+</style>
+<script id="v11010-role-view-isolation-script">
+(function(){
+  let enforcing=false;
+  function enforceRoleViewIsolation(){
+    if(enforcing) return;
+    enforcing=true;
+    try{
+      const active=(typeof currentView==="function" ? currentView() : "home") || "home";
+      document.querySelectorAll(".view").forEach(function(v){
+        if(v.id===active){
+          if(v.classList.contains("hidden")) v.classList.remove("hidden");
+        }else{
+          if(!v.classList.contains("hidden")) v.classList.add("hidden");
+        }
+      });
+    }finally{ enforcing=false; }
+  }
+  window.enforceRoleViewIsolation=enforceRoleViewIsolation;
+  const start=function(){
+    enforceRoleViewIsolation();
+    const root=document.body;
+    if(!root || !window.MutationObserver) return;
+    const observer=new MutationObserver(function(){ enforceRoleViewIsolation(); });
+    observer.observe(root,{subtree:true,attributes:true,attributeFilter:["class"]});
+  };
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",start,{once:true});
+  else start();
+})();
+</script>
 </body></html>`);
   w.document.close();
 }
@@ -4853,6 +4888,41 @@ body:before,body:after{display:none!important;content:none!important;background:
   #jobsListCard .jobStatusTabs button{height:40px!important;min-height:40px!important;border-radius:11px!important;font-size:18px!important;}
 }
 </style>
+
+<style id="v11010-role-view-isolation">
+/* V110.10: Keep every role/page section completely separate. */
+.view.hidden{display:none!important;visibility:hidden!important;}
+.view:not(.hidden){visibility:visible;}
+</style>
+<script id="v11010-role-view-isolation-script">
+(function(){
+  let enforcing=false;
+  function enforceRoleViewIsolation(){
+    if(enforcing) return;
+    enforcing=true;
+    try{
+      const active=(typeof currentView==="function" ? currentView() : "home") || "home";
+      document.querySelectorAll(".view").forEach(function(v){
+        if(v.id===active){
+          if(v.classList.contains("hidden")) v.classList.remove("hidden");
+        }else{
+          if(!v.classList.contains("hidden")) v.classList.add("hidden");
+        }
+      });
+    }finally{ enforcing=false; }
+  }
+  window.enforceRoleViewIsolation=enforceRoleViewIsolation;
+  const start=function(){
+    enforceRoleViewIsolation();
+    const root=document.body;
+    if(!root || !window.MutationObserver) return;
+    const observer=new MutationObserver(function(){ enforceRoleViewIsolation(); });
+    observer.observe(root,{subtree:true,attributes:true,attributeFilter:["class"]});
+  };
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",start,{once:true});
+  else start();
+})();
+</script>
 </body></html>
 <style id="v99-new-tele-tuty-login-visual">
 /* New TELE TUTY login artwork */
