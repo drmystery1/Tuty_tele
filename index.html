@@ -4650,3 +4650,51 @@ body:before,body:after{display:none!important;content:none!important;background:
 </style>
 
 </body></html>
+<style id="v99-new-tele-tuty-login-visual">
+/* New TELE TUTY login artwork */
+#login .loginVisual{
+  position:relative!important;
+  overflow:hidden!important;
+  background:#0b1b2e!important;
+  border-radius:28px!important;
+}
+#login .loginVisual img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+}
+#login .loginVisual .loginFormCard{
+  position:absolute!important;
+  left:50%!important;
+  bottom:28px!important;
+  transform:translateX(-50%)!important;
+  width:min(620px,calc(100% - 40px))!important;
+  margin:0!important;
+  background:rgba(255,255,255,.97)!important;
+  color:#172033!important;
+  border:1px solid rgba(255,255,255,.9)!important;
+  border-radius:24px!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.28)!important;
+  z-index:5!important;
+}
+@media(max-width:700px){
+  #login .loginVisual{border-radius:22px!important}
+  #login .loginVisual img{width:100%!important;height:auto!important}
+  #login .loginVisual .loginFormCard{
+    position:absolute!important;
+    left:50%!important;
+    bottom:18px!important;
+    transform:translateX(-50%)!important;
+    width:calc(100% - 24px)!important;
+    margin:0!important;
+    padding:18px 14px!important;
+    border-radius:20px!important;
+  }
+  #login .loginVisual .loginFormCard h2{font-size:22px!important}
+  #login .loginVisual .loginFormCard input{font-size:13px!important;padding:11px 12px!important}
+  #login .loginVisual .loginFormCard .loginPrimary{font-size:15px!important;padding:12px!important}
+}
+</style>
