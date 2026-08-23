@@ -1,3 +1,1 @@
-Tele Tuty V110
-Shared Extra Work visibility across Admin, Engineer, and Technician job views.
-Shows who added extra work; preserves technician add/update controls; refreshes shared role job rendering.
+V110.1 - Dashboard telephone job display aligned with Jobs page: telephone/telecom jobs show customer number only; non-telephone jobs retain existing summary. Applied to admin, engineer, and technician dashboard recent jobs.

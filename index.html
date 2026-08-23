@@ -2708,12 +2708,20 @@ async function login(){
 
 async function loadHome(){
  const [q,p]=await Promise.all([
-   db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,created_at").order("created_at",{ascending:false}).limit(40),
+   db.from("jobs").select("id,status,assigned_worker,job_term,job_code,work_description,location,customer_id,created_at").order("created_at",{ascending:false}).limit(40),
    db.from("profiles").select("id,full_name,role,approval_status,active").order("created_at",{ascending:false}).limit(9)
  ]);
  if(q.error) console.warn("Jobs summary error",q.error);
  if(p.error) console.warn("Users summary error",p.error);
- const rows=q.data||[];
+ let rows=q.data||[];
+ // Dashboard recent-job cards must use the same telephone-number display rule as the Jobs page.
+ const dashboardCustomerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))];
+ const dashboardCustomerMap={};
+ if(dashboardCustomerIds.length){
+   const dc=await db.from("customers").select("id,phone").in("id",dashboardCustomerIds);
+   if(!dc.error)(dc.data||[]).forEach(c=>dashboardCustomerMap[c.id]=c);
+ }
+ rows=rows.map(x=>({...x,customer_phone:dashboardCustomerMap[x.customer_id]?.phone||null}));
  const total=rows.length, completed=rows.filter(x=>x.status==="completed").length, open=rows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
  const users=p.data||[];
  const role=profile.role;
@@ -2769,7 +2777,13 @@ function renderRecentJobs(rows){
    const st=String(j.status||"pending");
    const label=st.replaceAll("_"," ");
    const icon=st==="completed"?"✓":st==="pending"?"◷":st==="not_completed"?"!":st==="in_progress"?"↻":"•";
-   return `<div class="recentItem status-${st}"><span class="stripe ${st}"></span><span class="recentStatusIcon ${st}" aria-label="${esc(label)}">${icon}</span><div class="recentJobText"><b class="recentJobTitle">${esc(j.job_term||j.job_code||"JOB")}</b><div class="recentJobDesc">${esc(j.work_description||"Field maintenance job")}</div><div class="muted recentJobLocation">${esc(j.location||"")}</div></div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
+   const jobType=String(j.job_term||"").toLowerCase().replaceAll("_"," ");
+   const isTelephone=/telephone|telecom/.test(jobType);
+   const phone=j.customer_phone||j.customer_phone_number||"Number not set";
+   const title=isTelephone ? phone : (j.job_term||j.job_code||"JOB");
+   const desc=isTelephone ? "" : (j.work_description||"Field maintenance job");
+   const location=isTelephone ? "" : (j.location||"");
+   return `<div class="recentItem status-${st}"><span class="stripe ${st}"></span><span class="recentStatusIcon ${st}" aria-label="${esc(label)}">${icon}</span><div class="recentJobText"><b class="recentJobTitle">${esc(title)}</b>${desc?`<div class="recentJobDesc">${esc(desc)}</div>`:""}${location?`<div class="muted recentJobLocation">${esc(location)}</div>`:""}</div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
  }).join("");
 }
 let notificationChannel=null, notificationPoll=null, notificationInitialized=false, lastNotificationCreatedAt=null;
