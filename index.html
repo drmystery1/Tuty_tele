@@ -4,7 +4,7 @@
 <meta name="google-site-verification" content="pO25UPI23xdClRjKE92WkTJiSwzrJ9PEYCd8z7h5E9w" />
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="90.0">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="110.0">
   <title>Tele Tuty</title>
   <meta name="description" content="Tele Tuty - Professional telecom maintenance and field service management application.">
 <link rel="canonical" href="https://teletuty.vercel.app/">
@@ -2627,7 +2627,7 @@ body{margin:0!important;}
     </div>
   </div>
 
-<style id="v88-extra-work-ui">
+<style id="v110-shared-extra-work-ui">
 .extraWorkSection{margin-top:16px;padding:14px;border:1px solid #dbe4ef;border-radius:16px;background:#f8fbff}
 .extraWorkHead{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:#172033;margin-bottom:10px}
 .extraWorkList{display:grid;gap:8px}.extraWorkItem{display:flex;gap:10px;align-items:flex-start;padding:10px 11px;background:#fff;border:1px solid #e3eaf2;border-radius:12px}
@@ -2640,7 +2640,7 @@ body{margin:0!important;}
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=92");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=110");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"smooth",block:"center"});}}),80)}else navigate("notifications");}});</script>
 <script>
@@ -3234,11 +3234,18 @@ async function loadExtraWork(jobId){
     if(r.error)throw r.error;
     const rows=r.data||[];
     if(count)count.textContent=String(rows.length);
+    const ids=[...new Set(rows.map(x=>x.added_by).filter(Boolean))];
+    const names={};
+    if(ids.length){
+      const pr=await db.from("profiles").select("id,full_name,role").in("id",ids);
+      if(!pr.error)(pr.data||[]).forEach(p=>names[p.id]=p);
+    }
     list.innerHTML=rows.map((x,i)=>{
       const st=String(x.status||"pending");
+      const who=names[x.added_by]?.full_name || (x.added_by===user?.id ? (profile?.full_name||"You") : "Technician");
       const when=x.completed_at?`Completed ${new Date(x.completed_at).toLocaleString()}`:`Added ${new Date(x.created_at).toLocaleString()}`;
       const updateBtn=profile?.role==="worker" && user?.id===x.added_by && st!=="completed" ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px"><button type="button" class="secondary" onclick="event.stopPropagation();updateExtraWork(${x.id},'in_progress')">In Progress</button><button type="button" onclick="event.stopPropagation();updateExtraWork(${x.id},'completed')">Complete</button><button type="button" class="bad" onclick="event.stopPropagation();updateExtraWork(${x.id},'not_completed')">Not Completed</button></div>` : "";
-      return `<div class="extraWorkItem"><span class="extraWorkNo">${i+1}</span><div class="extraWorkText"><b>${esc(x.description)}</b><small>${esc(when)}${x.remarks?` • ${esc(x.remarks)}`:""}</small>${updateBtn}</div><span class="extraWorkStatus ${esc(st)}">${esc(st.replaceAll("_"," "))}</span></div>`;
+      return `<div class="extraWorkItem" data-extra-work-role="${esc(names[x.added_by]?.role||"worker")}"><span class="extraWorkNo">${i+1}</span><div class="extraWorkText"><b>${esc(x.description)}</b><small>By ${esc(who)} • ${esc(when)}${x.remarks?` • ${esc(x.remarks)}`:""}</small>${updateBtn}</div><span class="extraWorkStatus ${esc(st)}">${esc(st.replaceAll("_"," "))}</span></div>`;
     }).join("")||`<div class="muted">No extra work added.</div>`;
   }catch(e){list.innerHTML=`<div class="muted">Could not load extra work.</div>`;console.warn("Extra work load",e)}
 }

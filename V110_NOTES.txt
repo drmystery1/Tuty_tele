@@ -1,0 +1,3 @@
+Tele Tuty V110
+Shared Extra Work visibility across Admin, Engineer, and Technician job views.
+Shows who added extra work; preserves technician add/update controls; refreshes shared role job rendering.
