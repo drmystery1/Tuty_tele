@@ -376,6 +376,24 @@ document.addEventListener('keydown', function(e){
 .royalNavTitle{flex:1;min-width:0;text-align:center;color:#f4f2ff;font-size:13px;font-weight:900;letter-spacing:.7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .royalNavTitle .crown{display:inline-block;margin-right:6px;color:#ffd45d;text-shadow:0 0 13px rgba(255,193,48,.35)}
 .pageNav{display:none!important}
+/* Compact job list: newest job is always #1. Keep the collapsed card focused on the useful summary only. */
+.compactJobCard{padding:7px!important;margin:7px 0!important;border-radius:14px!important}
+.compactJobSummary{padding:7px 5px!important;min-height:48px!important}
+.compactJobMain{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important}
+.jobNumberBadge{width:28px!important;height:28px!important;min-width:28px!important;border-radius:9px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#f1f5f9!important;border:1px solid #d7dde6!important;color:#172033!important;font-size:13px!important;font-weight:800!important}
+.compactJobInfo{display:flex!important;align-items:center!important;gap:8px!important;min-width:0!important;flex-wrap:wrap!important}
+.compactJobValue{font-size:14px!important;line-height:1.2!important;font-weight:750!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:230px!important;color:#172033!important}
+.compactJobStatus{font-size:11px!important;line-height:1!important;padding:5px 8px!important;border-radius:999px!important;white-space:nowrap!important}
+.compactJobCard .jobExpandIcon{font-size:16px!important}
+.compactJobCard .jobTop{margin-top:4px!important}
+@media(max-width:600px){
+  .compactJobCard{padding:6px!important;margin:6px 0!important}
+  .compactJobSummary{padding:6px 4px!important;min-height:44px!important}
+  .jobNumberBadge{width:26px!important;height:26px!important;min-width:26px!important;font-size:12px!important}
+  .compactJobValue{font-size:13px!important;max-width:205px!important}
+  .compactJobStatus{font-size:10px!important;padding:4px 7px!important}
+}
+
 @media(max-width:600px){
   .globalPageNav{gap:7px;padding:8px;border-radius:18px;margin-bottom:10px}
   .royalNavBtn{min-width:88px;height:42px!important;padding:0 11px!important;border-radius:13px!important;font-size:13px}
@@ -2912,7 +2930,7 @@ async function loadJobs(){
     const roleName=id=>profileMap[id]?.full_name||"Not assigned";
     const rolePhone=id=>profileMap[id]?.phone||"";
     const labelStatus=st=>String(st||"pending").replaceAll("_"," ").replace(/\\b\\w/g,m=>m.toUpperCase());
-    box.innerHTML=rows.map(j=>{
+    box.innerHTML=rows.map((j,idx)=>{
       const st=String(j.status||"pending");
       const c=customerMap[j.customer_id]||{};
       const engineerId=j.assigned_engineer || (profileMap[j.created_by]?.role==="engineer" ? j.created_by : null);
@@ -2926,19 +2944,24 @@ async function loadJobs(){
       const when=[j.scheduled_date,j.scheduled_time].filter(Boolean).join(" • ");
       const canUpdate=profile?.role==="worker" && !!myAssignment && myAssignment.status!=="completed" && st!=="completed";
       const canManage=["engineer","admin"].includes(profile?.role) && (profile?.role==="admin" || j.created_by===user.id || j.assigned_engineer===user.id);
-      const shortTitle=(j.job_term||j.work_description||j.job_code||"Field Job").replaceAll("_"," ");
-      return `<article class="jobCard cardMini jobCardReadable" id="jobCard${j.id}">
-        <button class="jobSummaryButton" type="button" aria-expanded="false" aria-controls="jobExpanded${j.id}" onclick="toggleJobDetails(${j.id})">
-          <span>
-            <span class="jobCollapsedTitle">${esc(shortTitle)}</span>
-            <span class="jobCollapsedMeta"><span class="pill">${esc(j.job_code||"JOB")}</span><span class="recentStatus ${esc(st)} jobStatusReadable">${esc(labelStatus(st))}</span></span>
+      const jobType=String(j.job_term||"").toLowerCase().replaceAll("_"," ");
+      const isTelephone=/telephone|telecom/.test(jobType);
+      const summaryValue=isTelephone ? (c.phone||j.customer_phone||"Number not set") : (c.address||j.location||"Area not set");
+      const summaryStatus=st==="completed" ? "Completed" : "Pending";
+      return `<article class="jobCard cardMini jobCardReadable compactJobCard" id="jobCard${j.id}">
+        <button class="jobSummaryButton compactJobSummary" type="button" aria-expanded="false" aria-controls="jobExpanded${j.id}" onclick="toggleJobDetails(${j.id})">
+          <span class="compactJobMain">
+            <span class="jobNumberBadge">${idx+1}</span>
+            <span class="compactJobInfo">
+              <span class="compactJobValue">${esc(summaryValue)}</span>
+              <span class="recentStatus ${esc(st)} jobStatusReadable compactJobStatus">${esc(summaryStatus)}</span>
+            </span>
           </span>
           <span class="jobExpandIcon" aria-hidden="true">⌄</span>
         </button>
         <div id="jobExpanded${j.id}" class="jobExpanded hidden">
           <div class="jobTop jobTopReadable">
             <div class="jobTitleBlock">
-              <div class="jobCodeReadable">${esc(j.job_code||"JOB")}</div>
               <div class="jobTypeReadable">${esc((j.job_term||"Field Job").replaceAll("_"," "))}</div>
             </div>
             <span class="recentStatus ${esc(st)} jobStatusReadable">${esc(labelStatus(st))}</span>
@@ -2954,7 +2977,6 @@ async function loadJobs(){
               <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}</div>
               <div class="jobDetailItem"><span>👷 Technicians</span><strong>${esc(technician||"Not assigned")}</strong>${completedBy?`<small style="color:#15803d;font-weight:800">✓ Completed by: ${esc(completedBy)}</small>`:""}</div>
               <div class="jobDetailItem"><span>🗓️ Schedule</span><strong>${esc(when||"Not scheduled")}</strong></div>
-              <div class="jobDetailItem"><span>🆔 Job ID</span><strong>${esc(j.job_code||String(j.id))}</strong></div>
             </section>
             ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong></section>`:""}
             ${j.pending_reason?`<section class="jobNote pendingNote"><span>⚠️ Pending reason</span><strong>${esc(j.pending_reason)}</strong></section>`:""}
