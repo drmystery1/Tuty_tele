@@ -1,0 +1,1 @@
+V110.8 - Final override for Jobs filter bar: exactly four compact icon filters (All Jobs, Pending, Completed, Not Completed) fixed at the true bottom of the viewport. Removed conflicting earlier positioning/display rules by overriding them last. Shared across Admin, Engineer and Technician Jobs pages.
