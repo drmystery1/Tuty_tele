@@ -2534,11 +2534,20 @@ async function loadHome(){
    const ar=await db.from("job_assignments").select("job_id,status").eq("technician_id",user.id).order("assigned_at",{ascending:false}).limit(100);
    const assignmentRows=ar.data||[];
    const mineIds=new Set(assignmentRows.map(a=>a.job_id));
-   const mine=rows.filter(x=>mineIds.has(x.id));
+   const mine=rows.filter(x=>{
+     if(!mineIds.has(x.id)) return false;
+     if(String(x.status||"")!=="completed") return true;
+     const mineAssignment=assignmentRows.find(a=>a.job_id===x.id);
+     return mineAssignment?.status==="completed";
+   });
+   const visibleAssignments=assignmentRows.filter(a=>{
+     const job=rows.find(x=>x.id===a.job_id);
+     return !job || String(job.status||"")!=="completed" || a.status==="completed";
+   });
    const md=assignmentRows.filter(x=>x.status==="completed").length;
-   $("myJobs").textContent=assignmentRows.length;
+   $("myJobs").textContent=visibleAssignments.length;
    $("myDone").textContent=md;
-   $("myPending").textContent=assignmentRows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
+   $("myPending").textContent=visibleAssignments.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
    $("myRate").textContent=(assignmentRows.length?Math.round(md/assignmentRows.length*100):0)+"%";
    if($("homeRecentJobsTech")) $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
    document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/technician_hero.jpg')";
@@ -2845,7 +2854,13 @@ async function loadJobs(){
       const ids=[...new Set(assignmentRows.map(a=>a.job_id).filter(Boolean))];
       if(ids.length){
         const r=await db.from("jobs").select("*").in("id",ids).order("created_at",{ascending:false}).limit(100);
-        if(r.error) throw r.error; rows=r.data||[];
+        if(r.error) throw r.error;
+        const jobRows=r.data||[];
+        const assignmentByJob={};
+        assignmentRows.forEach(a=>{assignmentByJob[a.job_id]=a;});
+        // If a multi-technician job is completed by someone else, hide it from
+        // the remaining technicians. The technician who completed it still sees it.
+        rows=jobRows.filter(j=>String(j.status||"")!=="completed" || assignmentByJob[j.id]?.status==="completed");
       }
     }else{
       let q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);
@@ -3763,6 +3778,50 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
 #app #home .dashKpi.red *,#app #home .quick.red *,#app #home .analyticsKpi.red *{color:#172033!important;-webkit-text-fill-color:#172033!important}
 #app #home .dashKpi.red .kpiIcon{background:#f1f5f9!important;color:#2563eb!important;border-color:#e2e8f0!important;-webkit-text-fill-color:#2563eb!important}
 #success .analyticsKpi,#success .successRow{background:#fff!important;background-image:none!important}
+
+#app .dashKpi.red,#app #home .dashKpi.red{
+  background:#fff!important;
+  background-image:none!important;
+  color:#172033!important;
+  border:1px solid #d7dee8!important;
+  box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+}
+#app .dashKpi.red::before,#app .dashKpi.red::after,#app #home .dashKpi.red::before,#app #home .dashKpi.red::after{
+  display:none!important;
+  content:none!important;
+}
+#app .dashKpi.red strong,#app .dashKpi.red small{
+  color:#172033!important;
+  -webkit-text-fill-color:#172033!important;
+}
+#app .dashKpi.red .kpiIcon{
+  background:#f1f5f9!important;
+  color:#2563eb!important;
+  border-color:#e2e8f0!important;
+  -webkit-text-fill-color:#2563eb!important;
+}
+</style>
+
+<style id="v101-final-dashboard-job-visibility">
+/* Final dashboard neutralization and multi-technician visibility rules. */
+#app #home .dashKpi.red,
+#app .dashKpi.red{
+  background:#fff!important;
+  background-image:none!important;
+  color:#172033!important;
+  border:1px solid #d7dee8!important;
+  box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+}
+#app #home .dashKpi.red::before,
+#app #home .dashKpi.red::after,
+#app .dashKpi.red::before,
+#app .dashKpi.red::after{display:none!important;content:none!important;}
+#app #home .dashKpi.red strong,
+#app #home .dashKpi.red small,
+#app .dashKpi.red strong,
+#app .dashKpi.red small{color:#172033!important;-webkit-text-fill-color:#172033!important;}
+#app #home .dashKpi.red .kpiIcon,
+#app .dashKpi.red .kpiIcon{background:#f1f5f9!important;color:#2563eb!important;border-color:#e2e8f0!important;-webkit-text-fill-color:#2563eb!important;}
 </style>
 </body></html>`);
   w.document.close();
@@ -4213,5 +4272,27 @@ body:before,body:after{display:none!important;content:none!important;background:
   #app .royalNavTitle{font-size:11px!important}
   #app .teamUser{padding:10px!important}
 }
+</style>
+
+<style id="v101-final-dashboard-job-visibility">
+/* Final dashboard neutralization and multi-technician visibility rules. */
+#app #home .dashKpi.red,
+#app .dashKpi.red{
+  background:#fff!important;
+  background-image:none!important;
+  color:#172033!important;
+  border:1px solid #d7dee8!important;
+  box-shadow:0 3px 14px rgba(15,23,42,.06)!important;
+}
+#app #home .dashKpi.red::before,
+#app #home .dashKpi.red::after,
+#app .dashKpi.red::before,
+#app .dashKpi.red::after{display:none!important;content:none!important;}
+#app #home .dashKpi.red strong,
+#app #home .dashKpi.red small,
+#app .dashKpi.red strong,
+#app .dashKpi.red small{color:#172033!important;-webkit-text-fill-color:#172033!important;}
+#app #home .dashKpi.red .kpiIcon,
+#app .dashKpi.red .kpiIcon{background:#f1f5f9!important;color:#2563eb!important;border-color:#e2e8f0!important;-webkit-text-fill-color:#2563eb!important;}
 </style>
 </body></html>
