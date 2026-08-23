@@ -1,1 +1,6 @@
-V110.1 - Dashboard telephone job display aligned with Jobs page: telephone/telecom jobs show customer number only; non-telephone jobs retain existing summary. Applied to admin, engineer, and technician dashboard recent jobs.
+V110.2 - Dashboard Job Details
+
+- Admin, Engineer and Technician dashboard job cards are now clickable.
+- Clicking a dashboard job opens the Jobs page, expands that exact job and scrolls it into view.
+- Uses the same job-detail component/data as the Jobs page so details stay consistent across roles.
+- Telephone jobs keep the phone-number-only dashboard summary while full details are available after opening.

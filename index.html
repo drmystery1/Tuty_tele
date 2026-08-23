@@ -2783,8 +2783,30 @@ function renderRecentJobs(rows){
    const title=isTelephone ? phone : (j.job_term||j.job_code||"JOB");
    const desc=isTelephone ? "" : (j.work_description||"Field maintenance job");
    const location=isTelephone ? "" : (j.location||"");
-   return `<div class="recentItem status-${st}"><span class="stripe ${st}"></span><span class="recentStatusIcon ${st}" aria-label="${esc(label)}">${icon}</span><div class="recentJobText"><b class="recentJobTitle">${esc(title)}</b>${desc?`<div class="recentJobDesc">${esc(desc)}</div>`:""}${location?`<div class="muted recentJobLocation">${esc(location)}</div>`:""}</div><span class="recentStatus ${st}">${esc(label)}</span></div>`;
+   return `<button type="button" class="recentItem status-${st} recentJobClickable" aria-label="Open job details" onclick='openDashboardJobDetails(${JSON.stringify(String(j.id))})'><span class="stripe ${st}"></span><span class="recentStatusIcon ${st}" aria-label="${esc(label)}">${icon}</span><span class="recentJobText"><b class="recentJobTitle">${esc(title)}</b>${desc?`<span class="recentJobDesc">${esc(desc)}</span>`:""}${location?`<span class="muted recentJobLocation">${esc(location)}</span>`:""}</span><span class="recentStatus ${st}">${esc(label)}</span><span class="recentJobArrow" aria-hidden="true">›</span></button>`;
  }).join("");
+}
+
+function openDashboardJobDetails(jobId){
+  if(!jobId) return;
+  currentJobFilter="all";
+  globalJobSearchTerm="";
+  const input=$("globalJobSearchInput");
+  if(input) input.value="";
+  navigate("jobs");
+  setTimeout(async()=>{
+    try{
+      await loadJobs();
+      setTimeout(()=>{
+        const card=$("jobCard"+jobId);
+        if(card){
+          const panel=$("jobExpanded"+jobId);
+          if(panel?.classList.contains("hidden")) toggleJobDetails(jobId);
+          card.scrollIntoView({behavior:"smooth",block:"center"});
+        }
+      },80);
+    }catch(e){ console.error("Dashboard job open error",e); }
+  },0);
 }
 let notificationChannel=null, notificationPoll=null, notificationInitialized=false, lastNotificationCreatedAt=null;
 async function showMobileNotification(title,body,jobId=null){
@@ -4081,6 +4103,13 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
 #app .view:not(.hidden) *,#app .view:not(.hidden) *::before,#app .view:not(.hidden) *::after{opacity:1!important;filter:none!important;text-shadow:none!important}
 
 #homeRecentJobs,#homeRecentJobsTech,.recentList{background:#fff!important;color:#172033!important;opacity:1!important}
+.recentJobClickable{position:relative;display:flex;align-items:center;width:100%;border:0;text-align:left;cursor:pointer;font:inherit;padding:14px 16px;gap:10px;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.recentJobClickable:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(15,23,42,.08);background:#f8fafc!important}
+.recentJobClickable:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+.recentJobClickable .recentJobText{min-width:0;flex:1}
+.recentJobClickable .recentJobDesc,.recentJobClickable .recentJobLocation{display:block}
+.recentJobArrow{font-size:25px;font-weight:900;color:#64748b;margin-left:2px}
+
 .recentItem,.recentItem > div,.recentItem > div > div,.recentItem b,.recentItem .muted,
 .recentItem span:not(.stripe):not(.recentStatus){color:#172033!important;opacity:1!important;text-shadow:none!important;filter:none!important}
 .recentItem{background:#fff!important;background-image:none!important;border:1px solid #dfe4eb!important;border-left:4px solid #22c55e!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important}
