@@ -158,6 +158,14 @@ body *{
   .globalJobSearch{top:70px!important;}
 }
 </style>
+<style id="job-action-toast">
+#jobActionToast{position:fixed;left:50%;top:78px;transform:translate(-50%,-12px) scale(.96);z-index:99999;display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;background:#ffffff;color:#172033;border:1px solid #d7dde6;box-shadow:0 10px 28px rgba(15,23,42,.18);font-size:14px;font-weight:800;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+#jobActionToast.show{opacity:1;transform:translate(-50%,0) scale(1)}
+#jobActionToast .toastThumb{font-size:22px;line-height:1}
+.compactJobType{display:block;font-size:10px;line-height:1.1;font-weight:900;letter-spacing:.5px;color:#64748b;margin-bottom:3px;text-transform:uppercase}
+.compactJobValue{display:block;font-size:13px!important;line-height:1.15!important;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:520px){#jobActionToast{top:68px;font-size:13px;padding:10px 14px}.compactJobType{font-size:9px}.compactJobValue{font-size:12px!important;max-width:170px}}
+</style>
 <style id="v77-notification-job-completion">
 #notificationsList .notificationItem{cursor:pointer;display:flex;align-items:flex-start;gap:12px;padding:16px 8px;border-bottom:1px solid #e5e7eb;transition:background .15s ease}
 #notificationsList .notificationItem:active{background:#f8fafc}
@@ -2863,6 +2871,16 @@ function bindGlobalJobSearch(){
 }
 bindGlobalJobSearch();
 
+let jobActionToastTimer=null;
+function showJobActionToast(message="Saved"){
+  const el=$("jobActionToast"), text=$("jobActionToastText");
+  if(!el)return;
+  if(text)text.textContent=message;
+  clearTimeout(jobActionToastTimer);
+  el.classList.add("show");
+  jobActionToastTimer=setTimeout(()=>el.classList.remove("show"),1700);
+}
+
 let currentJobFilter="all";
 function setJobFilter(status="all"){ currentJobFilter=status; document.querySelectorAll("#jobStatusTabs button").forEach(b=>b.classList.toggle("active",b.dataset.status===status)); loadJobs(); }
 function openJobsFiltered(status="all"){ currentJobFilter=status; navigate("jobs"); setTimeout(()=>setJobFilter(status),0); }
@@ -2953,6 +2971,7 @@ async function loadJobs(){
           <span class="compactJobMain">
             <span class="jobNumberBadge">${idx+1}</span>
             <span class="compactJobInfo">
+              <span class="compactJobType">${esc(isTelephone ? "TELEPHONE" : jobType.includes("general") ? "GENERAL" : (j.job_term||"FIELD JOB").replaceAll("_"," "))}</span>
               <span class="compactJobValue">${esc(summaryValue)}</span>
               <span class="recentStatus ${esc(st)} jobStatusReadable compactJobStatus">${esc(summaryStatus)}</span>
             </span>
@@ -3017,7 +3036,7 @@ async function saveJobEdit(id,customerId){
     if(customerId){ const cr=await db.from("customers").update({name:customer,phone,address:location}).eq("id",customerId); if(cr.error) throw cr.error; }
     const r=await db.from("jobs").update({work_description:work,location,job_term,assigned_worker,scheduled_date,scheduled_time}).eq("id",id);
     if(r.error) throw r.error;
-    alert("Job updated successfully.");
+    showJobActionToast("Job updated");
     await Promise.all([loadJobs(),loadHome(),loadSuccessRate()]);
   }catch(e){ console.error("Job edit error",e); alert("Could not update job: "+(e?.message||e)); }
 }
@@ -3029,7 +3048,7 @@ async function deleteJob(id,code){
     const r=await db.from("jobs").delete().eq("id",id);
     if(r.error) throw r.error;
     $("jobCard"+id)?.remove();
-    alert(`${code} deleted successfully.`);
+    showJobActionToast("Job deleted");
     await Promise.all([loadHome(),loadSuccessRate()]);
     if(!$("jobsList")?.children.length) await loadJobs();
   }catch(e){ console.error("Job delete error",e); alert("Could not delete job: "+(e?.message||e)); }
@@ -3068,7 +3087,7 @@ async function addExtraWork(jobId){
     }
     if(input)input.value="";
     await loadExtraWork(jobId);
-    alert("Extra work added to the same job. Engineer notified.");
+    showJobActionToast("Extra work added");
   }catch(e){console.error("Add extra work",e);alert("Could not add extra work: "+(e?.message||e))}
 }
 async function updateExtraWork(id,status){
@@ -3087,6 +3106,7 @@ async function updateExtraWork(id,status){
       await db.from("notifications").insert({recipient_id:recipient,job_id:er.data.job_id,title:"Extra work updated",body:`Extra work in ${jr.data?.job_code||"job"} is now ${status.replaceAll("_"," ")}: ${er.data.description}`});
     }
     await loadExtraWork(er.data.job_id);
+    showJobActionToast("Extra work updated");
   }catch(e){console.error("Extra work update",e);alert("Could not update extra work: "+(e?.message||e))}
 }
 
@@ -3096,6 +3116,7 @@ async function updateJob(assignmentId,jobId,status){
   if(status==="not_completed"&&!p)return alert("Pending reason required");
   const r=await db.rpc("update_job_assignment_status",{p_assignment_id:Number(assignmentId),p_status:status,p_remarks:m,p_pending_reason:p});
   if(r.error)return alert(r.error.message);
+  showJobActionToast(status==="completed" ? "Job completed" : "Job updated");
   await Promise.all([loadJobs(),loadHome(),loadSuccessRate()]);
 }
 
@@ -3291,6 +3312,7 @@ async function engineerCreateJob(){
     }
     const count=technicians.length;
     if(msg)msg.textContent=urgent?`Urgent job created as one job and assigned to ${count} technicians.`:`Job ${r.data.job_code||"created"}${selectedTech?" and assigned":" created"}.`;
+    showJobActionToast("Job created");
     await loadJobs(); await loadHome();
     const listCard=$("jobsListCard");
     if(listCard) listCard.classList.add("hidden");
@@ -3899,6 +3921,7 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
 }
 </style>
 
+<div id="jobActionToast" role="status" aria-live="polite"><span class="toastThumb">👍</span><span id="jobActionToastText">Saved</span></div>
 </body></html>`);
   w.document.close();
 }
