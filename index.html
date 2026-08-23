@@ -2054,6 +2054,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 #engineerCreateJobCard.streetLightMode .jobFormGrid > #jobDateWrap,#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobTimeWrap{order:5}
 #engineerCreateJobCard.streetLightMode #jobDirectoryHint{display:none}
 </style>
+<meta name="app-build" content="V103-soft-remove-tech-history">
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -2761,22 +2762,22 @@ async function setUserActive(userId,name,active,button){
 async function removeUser(userId,name,button){
   if(profile?.role!=="admin") return alert("Admin access required");
   if(!userId || userId===user?.id) return alert("You cannot remove your own account.");
-  if(!confirm(`Remove ${name}?\n\nThe user will lose app access immediately.`)) return;
+  if(!confirm(`Remove ${name} from the active technician list?\n\nTheir previous jobs, reports and history will be kept.`)) return;
   const btn=button||null, oldText=btn?.textContent||"Remove";
   try{
     if(btn){btn.disabled=true;btn.textContent="Removing…";}
-    const sr=await db.auth.getSession(), token=sr.data?.session?.access_token;
-    if(!token) throw new Error("Your login session expired. Please login again.");
-    const r=await db.functions.invoke("admin-remove-user",{body:{user_id:userId},headers:{Authorization:`Bearer ${token}`}});
-    const serverError=r?.data?.error || r?.error?.message || null;
-    if(serverError || !r?.data?.ok){
-      throw new Error(serverError || "Backend did not permanently remove the user.");
-    }
+    const r=await db.from("profiles").update({
+      active:false,
+      approval_status:"rejected"
+    }).eq("id",userId).select("id").single();
+    if(r.error) throw r.error;
+    // Do NOT delete the profile or any job/job_assignment records.
+    // Historical jobs remain linked to the original technician ID.
     await Promise.all([loadTeam(),loadHome()]);
-    alert(`${name} removed successfully.`);
+    alert(`${name} removed from active technicians. Previous jobs and history are saved.`);
   }catch(e){
-    console.error("Remove user error",e);
-    alert("Could not remove user: "+(e?.message||e));
+    console.error("Remove technician error",e);
+    alert("Could not remove technician: "+(e?.message||e));
     await loadTeam();
   }finally{
     if(btn){btn.disabled=false;btn.textContent=oldText;}
