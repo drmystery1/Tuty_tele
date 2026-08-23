@@ -3368,10 +3368,19 @@ async function printReport(type){
     const kind=type==="month_telecom"?"Telephone / Telecom Work":"Electrical Work";
     title=`Tele Tuty - 30 Day ${kind}`;
     body+=`<h2>${esc(kind)}</h2><div class="meta">Period: ${since.toLocaleDateString()} - ${new Date().toLocaleDateString()} • Total jobs: ${rows.length}</div>`;
-    body+=`<table><tr><th>Date</th><th>Job ID</th><th>Customer</th><th>Location</th><th>Work</th><th>Status</th><th>Extra Work</th></tr>`;
     const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))]; let cmap={};
-    if(customerIds.length){const cr=await db.from("customers").select("id,name").in("id",customerIds); if(!cr.error)(cr.data||[]).forEach(c=>cmap[c.id]=c.name);}
-    body+=rows.map(x=>{const ex=(extraMap[x.id]||[]).map(e=>`${esc(e.description)} [${esc(e.status)}]`).join("<br>")||"—";return `<tr><td>${new Date(x.created_at).toLocaleDateString()}</td><td>${esc(x.job_code||x.id)}</td><td>${esc(cmap[x.customer_id]||"")}</td><td>${esc(x.location||"")}</td><td>${esc(x.work_description||"")}</td><td>${esc(x.status||"")}</td><td>${ex}</td></tr>`}).join("")+`</table>`;
+    if(customerIds.length){const cr=await db.from("customers").select("id,name,phone").in("id",customerIds); if(!cr.error)(cr.data||[]).forEach(c=>cmap[c.id]=c);}
+    const jobIdsForReport=rows.map(x=>x.id).filter(Boolean); let assignmentReportMap={};
+    if(jobIdsForReport.length){
+      const ar=await db.from("job_assignments").select("job_id,technician_id,status,remarks,assigned_at,status_updated_at").in("job_id",jobIdsForReport).order("assigned_at",{ascending:true});
+      if(!ar.error){
+        const techIds=[...new Set((ar.data||[]).map(a=>a.technician_id).filter(Boolean))]; let tmap={};
+        if(techIds.length){const tr=await db.from("profiles").select("id,full_name").in("id",techIds); if(!tr.error)(tr.data||[]).forEach(t=>tmap[t.id]=t.full_name);}
+        (ar.data||[]).forEach(a=>{const report=(a.remarks||"").trim(); if(!report)return; (assignmentReportMap[a.job_id]??=[]).push(`${tmap[a.technician_id]||"Technician"}: ${report}`);});
+      }
+    }
+    body+=`<table><tr><th>Date</th><th>Customer Name</th><th>Customer Number</th><th>Location</th><th>Fault / Complaint</th><th>Technician Job Report</th><th>Status</th><th>Extra Work</th></tr>`;
+    body+=rows.map(x=>{const c=cmap[x.customer_id]||{};const ex=(extraMap[x.id]||[]).map(e=>`${esc(e.description)} [${esc(e.status)}]`).join("<br>")||"—";const reports=(assignmentReportMap[x.id]||[]);const jobReport=reports.length?reports.map(esc).join("<br>"):(x.worker_remarks?esc(x.worker_remarks):"—");return `<tr><td>${new Date(x.created_at).toLocaleDateString()}</td><td>${esc(c.name||"")}</td><td>${esc(c.phone||"—")}</td><td>${esc(x.location||"")}</td><td>${esc(x.work_description||"")}</td><td>${jobReport}</td><td>${esc(x.status||"")}</td><td>${ex}</td></tr>`}).join("")+`</table>`;
   }
   if(type==="jobs"||type==="history"||type==="full"){
     const r=await db.from("jobs").select("*").order("created_at",{ascending:false}).limit(500);
