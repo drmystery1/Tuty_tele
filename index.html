@@ -2044,6 +2044,16 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 #engineerCreateJobCard.generalMode #jobDescriptionLabel,#engineerCreateJobCard.generalMode #jobDescription{display:none}
 #engineerCreateJobCard .autoField{background:#f0fdf4!important;border-color:#86efac!important}
 </style>
+
+<style id="street-light-job-layout">
+#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobTypeWrap{order:0}
+#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobCustomerWrap{order:1}
+#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobLocationWrap{order:2}
+#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobPhoneWrap{order:3}
+#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobFaultWrap{order:4;grid-column:1/-1}
+#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobDateWrap,#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobTimeWrap{order:5}
+#engineerCreateJobCard.streetLightMode #jobDirectoryHint{display:none}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -2307,14 +2317,14 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_banner_new.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
-      <div class="grid">
-        <div><label>Job Type <b class="req">*</b></label><select id="jobType" onchange="updateEngineerJobFields()"><option value="TELECOM" selected>Telephone</option><option value="GENERAL">General Job</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option></select></div>
-        <div id="jobPhoneWrap"><label>Customer Number <b class="req">*</b></label><input id="jobPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupEngineerCustomer()"><small id="jobDirectoryHint" class="muted">Telephone job: enter number to find the customer in Directory.</small></div>
+      <div class="grid jobFormGrid">
+        <div id="jobTypeWrap"><label>Job Type <b class="req">*</b></label><select id="jobType" onchange="updateEngineerJobFields()"><option value="TELECOM" selected>Telephone</option><option value="GENERAL">General Job</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option></select></div>
+        <div id="jobPhoneWrap"><label id="jobPhoneLabel">Customer Number <b class="req">*</b></label><input id="jobPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupEngineerCustomer()"><small id="jobDirectoryHint" class="muted">Telephone job: enter number to find the customer in Directory.</small></div>
         <div id="jobFaultWrap" class="hidden"><label>Fault / Complaint <b class="req">*</b></label><textarea id="jobFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
-        <div id="jobCustomerWrap"><label>Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
-        <div id="jobLocationWrap"><label>Location / Area <b class="req">*</b></label><input id="jobLocation" placeholder="Site / area / address"></div>
-        <div><label>Created Date</label><input id="jobDate" type="date" readonly></div>
-        <div><label>Created Time</label><input id="jobTime" type="time" readonly></div>
+        <div id="jobCustomerWrap"><label id="jobCustomerLabel">Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
+        <div id="jobLocationWrap"><label id="jobLocationLabel">Location / Area <b class="req">*</b></label><input id="jobLocation" placeholder="Site / area / address"></div>
+        <div id="jobDateWrap"><label>Created Date</label><input id="jobDate" type="date" readonly></div>
+        <div id="jobTimeWrap"><label>Created Time</label><input id="jobTime" type="time" readonly></div>
       </div>
       <label id="jobDescriptionLabel">Work Description <b class="req">*</b></label>
       <textarea id="jobDescription" placeholder="Describe the work, fault or requirement..."></textarea>
@@ -3137,17 +3147,34 @@ function updateEngineerJobFields(){
   if(!card)return;
   card.classList.toggle("telecomMode",type==="TELECOM");
   card.classList.toggle("generalMode",type==="GENERAL");
+  card.classList.toggle("streetLightMode",type==="STREET_LIGHT");
   const fault=$("jobFaultWrap"), phoneWrap=$("jobPhoneWrap"), desc=$("jobDescription"), descLabel=$("jobDescriptionLabel"), phoneHint=$("jobDirectoryHint");
-  if(fault) fault.classList.toggle("hidden",type!=="GENERAL");
-  if(phoneWrap) phoneWrap.classList.toggle("hidden",type!=="TELECOM");
+  const phoneLabel=$("jobPhoneLabel"), customerLabel=$("jobCustomerLabel"), locationLabel=$("jobLocationLabel");
+  const customer=$("jobCustomer"), location=$("jobLocation"), phone=$("jobPhone");
+  const street=type==="STREET_LIGHT", general=type==="GENERAL", telecom=type==="TELECOM";
+
+  if(fault) fault.classList.toggle("hidden",!(general||street));
+  if(phoneWrap) phoneWrap.classList.toggle("hidden",!(telecom||street));
   if(desc) desc.value="";
   if(descLabel) descLabel.style.display="none";
   if(desc) desc.style.display="none";
+
+  if(phoneLabel) phoneLabel.innerHTML=street?'Number <b class="req">*</b>':'Customer Number <b class="req">*</b>';
+  if(customerLabel) customerLabel.innerHTML=street?'Area <b class="req">*</b>':'Customer Name <b class="req">*</b>';
+  if(locationLabel) locationLabel.innerHTML=street?'Post Location <b class="req">*</b>':'Location / Area <b class="req">*</b>';
+  if(customer) customer.placeholder=street?'Area / street name':'Customer / company name';
+  if(location) location.placeholder=street?'Post location / pole location':'Site / area / address';
+  if(phone) phone.placeholder=street?'Street light / contact number':'Enter customer number';
+  if(fault) {
+    const ta=$("jobFault");
+    if(ta) ta.placeholder=street?'Enter the fault / complaint...':'Type the customer complaint / fault...';
+  }
+
   if(phoneHint){
     phoneHint.className="muted";
-    phoneHint.textContent=type==="TELECOM"?"Enter customer number. If it exists in Directory, name and area will fill automatically.":"Not required for General Job.";
+    phoneHint.textContent=telecom?"Enter customer number. If it exists in Directory, name and area will fill automatically.":street?"Enter the street-light number.":"Not required for General Job.";
   }
-  if(type!=="TELECOM"){
+  if(!telecom){
     ["jobCustomer","jobLocation"].forEach(id=>{const el=$(id);if(el){el.readOnly=false;el.classList.remove("autoField");el.style.fontSize="";}});
   }
   setEngineerJobDateTime();
@@ -3204,12 +3231,12 @@ async function engineerCreateJob(){
   const type=$("jobType")?.value||"TELECOM";
   const customer=$("jobCustomer")?.value.trim(), phone=$("jobPhone")?.value.trim()||null, location=$("jobLocation")?.value.trim();
   const fault=$("jobFault")?.value.trim()||"";
-  const work=type==="GENERAL"?fault:(($("jobDescription")?.value.trim())||`${type.replaceAll("_"," ")} work`);
+  const work=(type==="GENERAL"||type==="STREET_LIGHT")?fault:(($("jobDescription")?.value.trim())||`${type.replaceAll("_"," ")} work`);
   const selectedTech=$("jobTechnician")?.value||null;
   const date=$("jobDate")?.value||null, time=$("jobTime")?.value||null, urgent=!!$("jobUrgent")?.checked;
-  if(!customer||!location)return alert("Customer name and area/location are required.");
-  if(type==="TELECOM" && !phone)return alert("Customer number is required for Telephone jobs.");
-  if(!work)return alert(type==="GENERAL"?"Fault / complaint is required.":"Work description is required.");
+  if(!customer||!location)return alert(type==="STREET_LIGHT"?"Area and post location are required.":"Customer name and area/location are required.");
+  if((type==="TELECOM"||type==="STREET_LIGHT") && !phone)return alert(type==="STREET_LIGHT"?"Number is required for Street Light jobs.":"Customer number is required for Telephone jobs.");
+  if(!work)return alert((type==="GENERAL"||type==="STREET_LIGHT")?"Fault / complaint is required.":"Work description is required.");
   const btn=$("createJobBtn"),msg=$("engineerJobMsg");
   if(btn)btn.disabled=true;if(msg)msg.textContent="Creating job…";
   let customerId=null;
