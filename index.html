@@ -4835,3 +4835,55 @@ body:before,body:after{display:none!important;content:none!important;background:
   #login .loginVisual .loginFormCard .loginPrimary{font-size:15px!important;padding:12px!important}
 }
 </style>
+
+<style id="v1105-sticky-job-filters">
+/* V110.5: Keep job status filters available while scrolling on every role's Jobs page. */
+#jobsListCard{padding-bottom:112px!important;}
+#jobsListCard .jobStatusTabs{
+  position:fixed!important;
+  left:50%!important;
+  bottom:86px!important;
+  transform:translateX(-50%)!important;
+  z-index:360!important;
+  width:min(650px,calc(100vw - 24px))!important;
+  display:flex!important;
+  gap:6px!important;
+  padding:7px!important;
+  margin:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scrollbar-width:none!important;
+  background:rgba(255,255,255,.96)!important;
+  border:1px solid #d9e0e8!important;
+  border-radius:18px!important;
+  box-shadow:0 10px 28px rgba(15,23,42,.14)!important;
+  backdrop-filter:blur(14px)!important;
+}
+#jobsListCard .jobStatusTabs::-webkit-scrollbar{display:none!important;}
+#jobsListCard .jobStatusTabs button{
+  flex:1 0 auto!important;
+  min-width:92px!important;
+  min-height:42px!important;
+  padding:8px 10px!important;
+  margin:0!important;
+  border-radius:13px!important;
+  white-space:nowrap!important;
+  font-size:12px!important;
+  line-height:1.1!important;
+  border:1px solid #e1e6ee!important;
+  background:#fff!important;
+  color:#334155!important;
+  box-shadow:none!important;
+}
+#jobsListCard .jobStatusTabs button.active{
+  background:#eff6ff!important;
+  border-color:#bfdbfe!important;
+  color:#2563eb!important;
+  font-weight:800!important;
+}
+@media(max-width:520px){
+  #jobsListCard{padding-bottom:108px!important;}
+  #jobsListCard .jobStatusTabs{bottom:82px!important;width:calc(100vw - 18px)!important;border-radius:16px!important;padding:6px!important;}
+  #jobsListCard .jobStatusTabs button{min-width:76px!important;min-height:38px!important;padding:7px 8px!important;font-size:11px!important;}
+}
+</style>
