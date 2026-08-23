@@ -2517,15 +2517,15 @@ async function loadHome(){
    $("totalJobsCount").textContent=total;
    $("done").textContent=completed;
    $("pend").textContent=open;
-   $("homeRecentJobs").innerHTML=renderRecentJobs(rows.slice(0,6));
-   $("homeUsers").innerHTML=users.slice(0,6).map(x=>`<div class="miniUser"><b>${esc(x.full_name||"User")}</b><span>${x.role==="worker"?"Technician":x.role} • ${x.active===false?"Inactive":"Active"}</span></div>`).join("")||`<div class="empty">No users found.</div>`;
+   if($("homeRecentJobs")) $("homeRecentJobs").innerHTML=renderRecentJobs(rows.slice(0,6));
+   if($("homeUsers")) $("homeUsers").innerHTML=users.slice(0,6).map(x=>`<div class="miniUser"><b>${esc(x.full_name||"User")}</b><span>${x.role==="worker"?"Technician":x.role} • ${x.active===false?"Inactive":"Active"}</span></div>`).join("")||`<div class="empty">No users found.</div>`;
    document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/admin_hero.jpg')";
  }else if(role==="engineer"){
    $("engJobs").textContent=total;
    $("engPending").textContent=open;
    $("engDone").textContent=completed;
    $("engNotDone").textContent=rows.filter(x=>x.status==="not_completed").length;
-   $("homeRecentJobsEng").innerHTML=renderRecentJobs(rows.slice(0,8));
+   if($("homeRecentJobsEng")) $("homeRecentJobsEng").innerHTML=renderRecentJobs(rows.slice(0,8));
    document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/engineer_hero.jpg')";
  }else{
    const mine=rows.filter(x=>x.assigned_worker===user.id);
@@ -2534,7 +2534,7 @@ async function loadHome(){
    $("myDone").textContent=md;
    $("myPending").textContent=mine.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
    $("myRate").textContent=(mine.length?Math.round(md/mine.length*100):0)+"%";
-   $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
+   if($("homeRecentJobsTech")) $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
    document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/technician_hero.jpg')";
  }
  if(role==="admin")$("adminTools").classList.remove("hidden");
@@ -3173,7 +3173,7 @@ async function engineerCreateJob(){
     if(msg)msg.textContent=`Job ${r.data?.job_code||"created"} created successfully${tech?" and assigned":""}.`;
     await loadJobs(); await loadHome();
     const listCard=$("jobsListCard");
-    if(listCard) listCard.classList.remove("hidden");
+    if(listCard) listCard.classList.add("hidden");
     setTimeout(clearEngineerJobForm,250);
   }catch(e){
     if(customerId) await db.from("customers").delete().eq("id",customerId);
