@@ -2031,6 +2031,16 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 .dir90-empty{text-align:center;padding:25px;border:1px dashed #cbd5e1;border-radius:16px;color:#64748b;background:#fff}
 @media(max-width:560px){.dir90-title{flex-direction:column}.dir90-grid{grid-template-columns:1fr}}
 </style>
+
+<style id="v95-job-create-flow">
+#engineerCreateJobCard .jobDirectoryFound{color:#15803d;font-weight:700;display:block;margin-top:4px}
+#engineerCreateJobCard .jobDirectoryManual{color:#b45309;font-weight:700;display:block;margin-top:4px}
+#engineerCreateJobCard #jobFaultWrap{grid-column:1/-1}
+#engineerCreateJobCard #jobDescriptionLabel,#engineerCreateJobCard #jobDescription{display:none}
+#engineerCreateJobCard.telecomMode #jobDescriptionLabel,#engineerCreateJobCard.telecomMode #jobDescription{display:none}
+#engineerCreateJobCard.generalMode #jobDescriptionLabel,#engineerCreateJobCard.generalMode #jobDescription{display:none}
+#engineerCreateJobCard .autoField{background:#f0fdf4!important;border-color:#86efac!important}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -2295,14 +2305,15 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
       <div class="grid">
-        <div><label>Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
-        <div><label>Customer Phone</label><input id="jobPhone" type="tel" placeholder="Phone number"></div>
-        <div><label>Location / Address <b class="req">*</b></label><input id="jobLocation" placeholder="Site / address"></div>
-        <div><label>Job Type</label><select id="jobType"><option value="GENERAL">General Job</option><option value="TELECOM">Telephone</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option></select></div>
-        <div><label>Preferred Date</label><input id="jobDate" type="date"></div>
-        <div><label>Preferred Time</label><input id="jobTime" type="time"></div>
+        <div><label>Job Type <b class="req">*</b></label><select id="jobType" onchange="updateEngineerJobFields()"><option value="GENERAL">General Job</option><option value="TELECOM">Telephone</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option></select></div>
+        <div id="jobPhoneWrap"><label>Customer Number <b class="req">*</b></label><input id="jobPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupEngineerCustomer()"><small id="jobDirectoryHint" class="muted">Telephone job: enter number to find the customer in Directory.</small></div>
+        <div id="jobCustomerWrap"><label>Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
+        <div id="jobLocationWrap"><label>Location / Area <b class="req">*</b></label><input id="jobLocation" placeholder="Site / area / address"></div>
+        <div id="jobFaultWrap" class="hidden"><label>Fault / Complaint <b class="req">*</b></label><textarea id="jobFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
+        <div><label>Created Date</label><input id="jobDate" type="date" readonly></div>
+        <div><label>Created Time</label><input id="jobTime" type="time" readonly></div>
       </div>
-      <label>Work Description <b class="req">*</b></label>
+      <label id="jobDescriptionLabel">Work Description <b class="req">*</b></label>
       <textarea id="jobDescription" placeholder="Describe the work, fault or requirement..."></textarea>
       <div class="grid">
         <div><label>Assign Technician</label><select id="jobTechnician"><option value="">Unassigned</option></select></div>
@@ -3069,19 +3080,83 @@ function focusEngineerJobForm(){
   card.scrollIntoView({behavior:"smooth",block:"start"});
   setTimeout(()=>$("jobCustomer")?.focus(),250);
 }
+function setEngineerJobDateTime(){
+  const now=new Date();
+  const d=new Intl.DateTimeFormat("en-CA",{year:"numeric",month:"2-digit",day:"2-digit"}).format(now);
+  const t=new Intl.DateTimeFormat("en-GB",{hour:"2-digit",minute:"2-digit",hour12:false}).format(now);
+  if($("jobDate")) $("jobDate").value=d;
+  if($("jobTime")) $("jobTime").value=t;
+}
+function updateEngineerJobFields(){
+  const type=$("jobType")?.value||"GENERAL", card=$("engineerCreateJobCard");
+  if(!card)return;
+  card.classList.toggle("telecomMode",type==="TELECOM");
+  card.classList.toggle("generalMode",type==="GENERAL");
+  const fault=$("jobFaultWrap"), desc=$("jobDescription"), descLabel=$("jobDescriptionLabel"), phoneHint=$("jobDirectoryHint");
+  if(fault) fault.classList.toggle("hidden",type!=="GENERAL");
+  if(desc) desc.value="";
+  if(descLabel) descLabel.style.display="none";
+  if(desc) desc.style.display="none";
+  if(phoneHint){
+    phoneHint.className="muted";
+    phoneHint.textContent=type==="TELECOM"?"Enter customer number. If it exists in Directory, name and area will fill automatically.":"For non-telephone jobs, customer number is optional.";
+  }
+  setEngineerJobDateTime();
+  if(type!=="TELECOM"){
+    ["jobCustomer","jobLocation"].forEach(id=>{const el=$(id);if(el){el.readOnly=false;el.classList.remove("autoField");}});
+  }
+}
+async function lookupEngineerCustomer(){
+  const type=$("jobType")?.value||"GENERAL";
+  const phone=$("jobPhone")?.value.trim()||"";
+  const name=$("jobCustomer"), location=$("jobLocation"), hint=$("jobDirectoryHint");
+  if(!name||!location||!hint)return;
+  if(type!=="TELECOM")return;
+  if(!phone){name.value="";location.value="";name.readOnly=false;location.readOnly=false;name.classList.remove("autoField");location.classList.remove("autoField");hint.className="muted";hint.textContent="Enter customer number to search Directory.";return;}
+  try{
+    if(!directoryLoaded) await loadDirectory(true);
+    const digits=directoryDigits(phone);
+    const row=directoryRows.find(r=>[...(r.phone_numbers||[]),r.office_phone,r.residence_phone].some(v=>directoryPhones(v).some(p=>directoryDigits(p)===digits)));
+    if(row){
+      name.value=row.name||"";
+      location.value=row.section||row.designation||row.source||"";
+      name.readOnly=true; location.readOnly=true;
+      name.classList.add("autoField");location.classList.add("autoField");
+      hint.className="jobDirectoryFound";
+      hint.textContent=`✓ Directory match: ${row.name||"Customer"}${row.designation?" • "+row.designation:""}`;
+    }else{
+      name.readOnly=false;location.readOnly=false;
+      name.classList.remove("autoField");location.classList.remove("autoField");
+      hint.className="jobDirectoryManual";
+      hint.textContent="No Directory match — enter customer name and area manually.";
+    }
+  }catch(e){
+    console.error("Directory lookup",e);
+    name.readOnly=false;location.readOnly=false;
+    name.classList.remove("autoField");location.classList.remove("autoField");
+    hint.className="jobDirectoryManual";hint.textContent="Directory unavailable — enter customer details manually.";
+  }
+}
 function clearEngineerJobForm(){
-  ["jobCustomer","jobPhone","jobLocation","jobDescription","jobDate","jobTime"].forEach(id=>{if($(id))$(id).value=""});
+  ["jobCustomer","jobPhone","jobLocation","jobDescription","jobFault"].forEach(id=>{if($(id))$(id).value=""});
   if($("jobType"))$("jobType").value="GENERAL";
   if($("jobTechnician"))$("jobTechnician").value="";
   if($("jobUrgent"))$("jobUrgent").checked=false;
+  if($("jobCustomer")){ $("jobCustomer").readOnly=false;$("jobCustomer").classList.remove("autoField"); }
+  if($("jobLocation")){ $("jobLocation").readOnly=false;$("jobLocation").classList.remove("autoField"); }
   if($("engineerJobMsg"))$("engineerJobMsg").textContent="";
+  updateEngineerJobFields();
 }
 async function engineerCreateJob(){
   if(!profile || !["engineer","admin"].includes(profile.role)) return alert("Only Engineer/Admin can create jobs.");
+  const type=$("jobType")?.value||"GENERAL";
   const customer=$("jobCustomer")?.value.trim(), phone=$("jobPhone")?.value.trim()||null, location=$("jobLocation")?.value.trim();
-  const work=$("jobDescription")?.value.trim(), type=$("jobType")?.value||"GENERAL", tech=$("jobTechnician")?.value||null;
+  const fault=$("jobFault")?.value.trim()||"";
+  const work=type==="GENERAL"?fault:(($("jobDescription")?.value.trim())||`${type.replaceAll("_"," ")} work`);
+  const tech=$("jobTechnician")?.value||null;
   const date=$("jobDate")?.value||null, time=$("jobTime")?.value||null, urgent=!!$("jobUrgent")?.checked;
-  if(!customer||!location||!work)return alert("Customer name, location and work description are required.");
+  if(!customer||!location)return alert("Customer name and area/location are required.");
+  if(!work)return alert(type==="GENERAL"?"Fault / complaint is required.":"Work description is required.");
   const btn=$("createJobBtn"),msg=$("engineerJobMsg");
   if(btn)btn.disabled=true;if(msg)msg.textContent="Creating job…";
   let customerId=null;
@@ -3093,10 +3168,8 @@ async function engineerCreateJob(){
     const r=await db.from("jobs").insert(payload).select("id,job_code").single();
     if(r.error)throw r.error;
     if(msg)msg.textContent=`Job ${r.data?.job_code||"created"} created successfully${tech?" and assigned":""}.`;
-    clearEngineerJobForm();
-    if(msg)msg.textContent=`Job ${r.data?.job_code||"created"} created successfully${tech?" and assigned":""}.`;
-    await loadJobs();
-    await loadHome();
+    await loadJobs(); await loadHome();
+    setTimeout(clearEngineerJobForm,250);
   }catch(e){
     if(customerId) await db.from("customers").delete().eq("id",customerId);
     console.error("Engineer create job error",e);
@@ -3861,6 +3934,7 @@ function clearHomeDirectorySearch(){const i=document.getElementById("homeDirecto
 /* V90 Telephone Directory */
 let directoryRows=[], directoryLoaded=false;
 document.addEventListener("DOMContentLoaded",()=>{const i=document.getElementById("homeDirectoryInput");if(i){i.addEventListener("input",renderHomeDirectoryResults);}});
+document.addEventListener("DOMContentLoaded",()=>{ if(document.getElementById("jobType")){ setEngineerJobDateTime(); updateEngineerJobFields(); }});
 function directoryDigits(v){return String(v??"").replace(/\D/g,"");}
 function directoryPhones(v){return (String(v??"").match(/\d{3,15}/g)||[]).filter((x,i,a)=>a.indexOf(x)===i);}
 function directoryMatches(row,q){
