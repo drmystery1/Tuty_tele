@@ -2611,7 +2611,7 @@ body{margin:0!important;}
       <div class="row"><button id="createJobBtn" onclick="engineerCreateJob()">＋ Create & Assign Job</button><button class="secondary" onclick="clearEngineerJobForm()">Clear</button></div>
       <p id="engineerJobMsg" class="muted"></p>
     </div>
-    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" onclick="setJobFilter('all')">All Jobs</button><button type="button" data-status="pending" onclick="setJobFilter('pending')">Pending</button><button type="button" data-status="completed" onclick="setJobFilter('completed')">Completed</button><button type="button" data-status="not_completed" onclick="setJobFilter('not_completed')">Not Completed</button><button type="button" data-status="in_progress" onclick="setJobFilter('in_progress')">In Progress</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
+    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button><button type="button" data-status="in_progress" aria-label="In Progress" title="In Progress" onclick="setJobFilter('in_progress')">↻</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
   </div>
 
   <div id="success" class="view hidden">
@@ -4297,6 +4297,43 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
 </style>
 
 <div id="jobActionToast" role="status" aria-live="polite"><span class="toastThumb">👍</span><span id="jobActionToastText">Saved</span></div>
+
+<style id="v1106-compact-job-filter-icons">
+/* V110.6: Compact icon-only job filters for Admin, Engineer and Technician. */
+#jobsListCard{padding-bottom:112px!important;}
+#jobsListCard .jobStatusTabs{
+  position:fixed!important;left:50%!important;bottom:86px!important;transform:translateX(-50%)!important;
+  z-index:360!important;width:min(310px,calc(100vw - 28px))!important;
+  display:grid!important;grid-template-columns:repeat(5,1fr)!important;gap:6px!important;
+  padding:6px!important;margin:0!important;overflow:visible!important;
+  background:rgba(255,255,255,.97)!important;border:1px solid #d9e0e8!important;
+  border-radius:17px!important;box-shadow:0 9px 26px rgba(15,23,42,.14)!important;
+  backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;
+}
+#jobsListCard .jobStatusTabs button{
+  width:100%!important;min-width:0!important;height:42px!important;min-height:42px!important;
+  padding:0!important;margin:0!important;border-radius:12px!important;
+  display:grid!important;place-items:center!important;
+  font-size:19px!important;font-weight:900!important;line-height:1!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
+  background:#f8fafc!important;color:#334155!important;border:1px solid #e1e6ee!important;
+  box-shadow:none!important;
+}
+#jobsListCard .jobStatusTabs button:hover{background:#f1f5f9!important;}
+#jobsListCard .jobStatusTabs button.active{
+  background:#eff6ff!important;border-color:#93c5fd!important;color:#2563eb!important;
+  box-shadow:inset 0 0 0 1px rgba(37,99,235,.06)!important;
+}
+#jobsListCard .jobStatusTabs button[data-status="pending"].active{color:#b45309!important;background:#fff7ed!important;border-color:#fdba74!important;}
+#jobsListCard .jobStatusTabs button[data-status="completed"].active{color:#15803d!important;background:#f0fdf4!important;border-color:#86efac!important;}
+#jobsListCard .jobStatusTabs button[data-status="not_completed"].active{color:#b91c1c!important;background:#fef2f2!important;border-color:#fca5a5!important;}
+#jobsListCard .jobStatusTabs button[data-status="in_progress"].active{color:#1d4ed8!important;background:#eff6ff!important;border-color:#93c5fd!important;}
+@media(max-width:520px){
+  #jobsListCard{padding-bottom:108px!important;}
+  #jobsListCard .jobStatusTabs{bottom:82px!important;width:calc(100vw - 28px)!important;max-width:310px!important;border-radius:16px!important;padding:6px!important;gap:5px!important;}
+  #jobsListCard .jobStatusTabs button{height:40px!important;min-height:40px!important;border-radius:11px!important;font-size:18px!important;}
+}
+</style>
 </body></html>`);
   w.document.close();
 }

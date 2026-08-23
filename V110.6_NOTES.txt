@@ -1,0 +1,4 @@
+V110.6
+- Replaced the Jobs status filter bar with five compact icon-only controls: All, Pending, Completed, Not Completed, In Progress.
+- Kept the controls fixed above the bottom navigation while scrolling.
+- Applied through the shared Jobs view so Admin, Engineer and Technician get the same UI.
