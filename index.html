@@ -122,6 +122,8 @@ body *{
 }
 .progress i[style*="gradient"]{background:#2563eb!important;background-image:none!important}
 
+
+.dirHistoryItem{padding:10px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:10px}.dirHistoryItem:last-child{border-bottom:0}.dirHistoryDetail{font-size:12px;color:#475569;margin-top:3px}
 </style>
 
 <style id="printStyles">
@@ -2169,15 +2171,15 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 
       <div id="homeDirectorySearch" class="homeDirectorySearch">
         <div class="homeDirectoryHead">
-          <div><h2>☎ Directory Search</h2><p>Search a company telephone / extension number.</p></div>
+          <div><h2>☎ Directory Search</h2><p>Search by name, telephone / extension number, position or section.</p></div>
           <button type="button" onclick="navigate('directory')">Open Directory</button>
         </div>
         <div class="homeDirectorySearchRow">
           <span>⌕</span>
-          <input id="homeDirectoryInput" type="search" inputmode="numeric" autocomplete="off" placeholder="Enter number / extension…" aria-label="Search telephone directory">
+          <input id="homeDirectoryInput" type="search" autocomplete="off" placeholder="Search name / number / extension…" aria-label="Search telephone directory">
           <button type="button" class="homeDirectoryClear" onclick="clearHomeDirectorySearch()" aria-label="Clear directory search">×</button>
         </div>
-        <div id="homeDirectoryResults" class="homeDirectoryResults"><div class="homeDirectoryHint">Type a number to search the directory.</div></div>
+        <div id="homeDirectoryResults" class="homeDirectoryResults"><div class="homeDirectoryHint">Type a name, number, position or section to search the directory.</div></div>
       </div>
 
       <div id="adminDashboard" class="rolePane hidden">
@@ -2371,7 +2373,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 
   <div id="adminTools" class="view hidden">
     <div class="modulePhoto" style="--module-bg:url('public/images/technician_avatar.png')"><span class="modulePhotoLabel">Admin Controls</span></div>
-<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div></div>
+<div class="card"><h1 class="moduleTitle"><span class="moduleIcon">♛</span> Admin Controls</h1><h3>Create Engineer / Technician</h3><input id="newname" placeholder="Full name"><input id="newemail" type="email" placeholder="Email"><input id="newpass" type="password" placeholder="Temporary password (8+ characters)"><select id="newrole"><option value="worker">Technician</option><option value="engineer">Engineer</option></select><button onclick="adminCreateUser()">Create User</button><p id="createResult" class="muted"></p></div><div class="card"><h3>Pending Approvals</h3><div id="approvals"></div></div><div class="card" id="directoryHistoryCard"><div class="panelHead"><h3>☎ Directory Change History</h3><button class="secondary" onclick="loadDirectoryHistory()">↻ Refresh</button></div><p class="muted">Admin only — shows who changed the directory and when.</p><div id="directoryHistoryList"><div class="muted">Loading…</div></div></div></div>
 
 
   <div id="directory" class="view hidden">
@@ -2386,7 +2388,7 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
         </div>
         <div class="dir90-search">
           <span>⌕</span>
-          <input id="directorySearch" oninput="renderDirectory()" type="search" inputmode="numeric" autocomplete="off" placeholder="Enter telephone number…">
+          <input id="directorySearch" oninput="renderDirectory()" type="search" autocomplete="off" placeholder="Search name / number / extension / section…">
           <button class="dir90-edit" onclick="clearDirectorySearch()">Clear</button>
         </div>
         <div class="dir90-meta"><span id="directoryCount">Loading…</span><span>Admin • Engineer • Technician — Edit / Add enabled</span></div>
@@ -3842,7 +3844,7 @@ function showView(id){
   if(id==="jobs" && canCreate) loadEngineerTechnicians().catch?.(()=>{});
   if(id==="notifications")loadNotifications().catch?.(()=>{});
   if(id==="team")loadTeam().catch?.(()=>{});
-  if(id==="adminTools"){loadApprovals().catch?.(()=>{});}
+  if(id==="adminTools"){loadApprovals().catch?.(()=>{}); if(String(profile?.role||"").toLowerCase()==="admin") loadDirectoryHistory().catch?.(()=>{});}
   if(id==="jobs")loadJobs().catch?.(()=>{});
   if(id==="success")loadSuccessRate().catch?.(()=>{});
   if(id==="street")loadStreet().catch?.(()=>{});
@@ -3904,10 +3906,10 @@ db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()
 function renderHomeDirectoryResults(){
   const box=document.getElementById("homeDirectoryResults"); if(!box)return;
   const input=document.getElementById("homeDirectoryInput"); const q=input?.value?.trim()||"";
-  if(!q){box.innerHTML='<div class="homeDirectoryHint">Type a number to search the directory.</div>';return;}
+  if(!q){box.innerHTML='<div class="homeDirectoryHint">Type a name, number, position or section to search the directory.</div>';return;}
   if(!directoryLoaded){box.innerHTML='<div class="homeDirectoryHint">Loading directory…</div>'; loadDirectory(true).then(renderHomeDirectoryResults).catch(()=>{}); return;}
   const rows=directoryRows.filter(r=>directoryMatches(r,q)).slice(0,5);
-  if(!rows.length){box.innerHTML='<div class="homeDirectoryHint">No matching number found. Try another extension.</div>';return;}
+  if(!rows.length){box.innerHTML='<div class="homeDirectoryHint">No matching directory entry. Try a name, number, position or section.</div>';return;}
   box.innerHTML=rows.map(r=>{
     const title=r.name||r.designation||"Directory entry";
     const phones=(r.phone_numbers?.length?r.phone_numbers:[...directoryPhones(r.office_phone),...directoryPhones(r.residence_phone)]).filter((x,i,a)=>a.indexOf(x)===i);
@@ -3922,15 +3924,12 @@ document.addEventListener("DOMContentLoaded",()=>{const i=document.getElementByI
 function directoryDigits(v){return String(v??"").replace(/\D/g,"");}
 function directoryPhones(v){return (String(v??"").match(/\d{3,15}/g)||[]).filter((x,i,a)=>a.indexOf(x)===i);}
 function directoryMatches(row,q){
-  q=String(q||"").trim();
+  q=String(q||"").trim().toLowerCase();
   if(!q)return true;
-  const d=directoryDigits(q);
-  if(d){
-    const nums=[...(row.phone_numbers||[]),row.office_phone,row.residence_phone].map(directoryDigits);
-    return nums.some(n=>n.includes(d));
-  }
-  return [row.name,row.designation,row.section,row.source,row.office_phone,row.residence_phone].map(x=>String(x||"").toLowerCase()).join(" ").includes(q.toLowerCase());
+  const hay=[row.name,row.designation,row.section,row.source,row.office_phone,row.residence_phone,...(row.phone_numbers||[])].map(x=>String(x||"").toLowerCase());
+  return hay.some(v=>v.includes(q));
 }
+
 async function loadDirectory(force=false){
   if(directoryLoaded&&!force){renderDirectory();return;}
   const r=await db.from("telephone_directory").select("*").order("source").order("section").order("name").limit(1000);
@@ -3945,7 +3944,7 @@ function renderDirectory(){
   const q=$("directorySearch")?.value||"";
   const rows=directoryRows.filter(x=>directoryMatches(x,q));
   const count=$("directoryCount");if(count)count.textContent=`${rows.length} result${rows.length===1?"":"s"}${q?' for "'+q+'"':""}`;
-  if(!rows.length){list.innerHTML='<div class="dir90-empty">No matching number found.<br>Try another telephone / extension number.</div>';return;}
+  if(!rows.length){list.innerHTML='<div class="dir90-empty">No matching directory entry.<br>Try a name, number, position or section.</div>';return;}
   list.innerHTML=rows.map(r=>{
     const title=r.name||r.designation||"Directory entry";
     const phones=(r.phone_numbers?.length?r.phone_numbers:[...directoryPhones(r.office_phone),...directoryPhones(r.residence_phone)]).filter((x,i,a)=>a.indexOf(x)===i);
@@ -3999,6 +3998,28 @@ async function deleteDirectoryEntry(id){
   const r=await db.from("telephone_directory").delete().eq("id",id);
   if(r.error){alert(r.error.message);return;}
   await loadDirectory(true);
+}
+
+
+async function loadDirectoryHistory(){
+  const box=$("directoryHistoryList");
+  if(!box || String(profile?.role||"").toLowerCase()!=="admin") return;
+  box.innerHTML='<div class="muted">Loading history…</div>';
+  const r=await db.from("telephone_directory_history").select("id,directory_id,action,changed_by,changed_at,old_data,new_data").order("changed_at",{ascending:false}).limit(200);
+  if(r.error){box.innerHTML='<div class="muted">Unable to load history: '+esc(r.error.message)+'</div>';return;}
+  const rows=r.data||[];
+  if(!rows.length){box.innerHTML='<div class="muted">No directory changes recorded yet.</div>';return;}
+  const ids=[...new Set(rows.map(x=>x.changed_by).filter(Boolean))];
+  let names={};
+  if(ids.length){const pr=await db.from("profiles").select("id,full_name,role").in("id",ids); if(!pr.error)(pr.data||[]).forEach(p=>names[p.id]=p);}
+  box.innerHTML=rows.map(x=>{
+    const p=names[x.changed_by]; const d=x.new_data||x.old_data||{}; const who=p?.full_name||x.changed_by||"Unknown";
+    const when=new Date(x.changed_at).toLocaleString();
+    const label=x.action==="ADD"?"Added":x.action==="DELETE"?"Deleted":"Updated";
+    const name=d.name||d.designation||"Directory entry";
+    const detail=[d.designation,d.office_phone,d.section].filter(Boolean).join(" • ");
+    return `<div class="dirHistoryItem"><div><b>${esc(label)}: ${esc(name)}</b><div class="muted">By ${esc(who)}${p?.role?` (${esc(p.role)})`:""} • ${esc(when)}</div>${detail?`<div class="dirHistoryDetail">${esc(detail)}</div>`:""}</div></div>`;
+  }).join("");
 }
 
 </script>
