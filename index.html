@@ -2305,11 +2305,11 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
       <div class="grid">
-        <div><label>Job Type <b class="req">*</b></label><select id="jobType" onchange="updateEngineerJobFields()"><option value="GENERAL">General Job</option><option value="TELECOM">Telephone</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option></select></div>
+        <div><label>Job Type <b class="req">*</b></label><select id="jobType" onchange="updateEngineerJobFields()"><option value="TELECOM" selected>Telephone</option><option value="GENERAL">General Job</option><option value="STREET_LIGHT">Street Light</option><option value="BATTERY">Battery</option><option value="EARTH_PIT">Earth Pit</option></select></div>
         <div id="jobPhoneWrap"><label>Customer Number <b class="req">*</b></label><input id="jobPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupEngineerCustomer()"><small id="jobDirectoryHint" class="muted">Telephone job: enter number to find the customer in Directory.</small></div>
+        <div id="jobFaultWrap" class="hidden"><label>Fault / Complaint <b class="req">*</b></label><textarea id="jobFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
         <div id="jobCustomerWrap"><label>Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
         <div id="jobLocationWrap"><label>Location / Area <b class="req">*</b></label><input id="jobLocation" placeholder="Site / area / address"></div>
-        <div id="jobFaultWrap" class="hidden"><label>Fault / Complaint <b class="req">*</b></label><textarea id="jobFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
         <div><label>Created Date</label><input id="jobDate" type="date" readonly></div>
         <div><label>Created Time</label><input id="jobTime" type="time" readonly></div>
       </div>
@@ -3081,7 +3081,7 @@ function focusEngineerJobForm(){
   // Create Job is a standalone screen: do not show the Jobs list underneath it.
   if(jobsListCard) jobsListCard.classList.add("hidden");
   card.scrollIntoView({behavior:"smooth",block:"start"});
-  setTimeout(()=>$("jobCustomer")?.focus(),250);
+  setTimeout(()=>($('jobType')?.value==='TELECOM'?$('jobPhone'):$('jobFault'))?.focus(),250);
 }
 function setEngineerJobDateTime(){
   const now=new Date();
@@ -3091,23 +3091,29 @@ function setEngineerJobDateTime(){
   if($("jobTime")) $("jobTime").value=t;
 }
 function updateEngineerJobFields(){
-  const type=$("jobType")?.value||"GENERAL", card=$("engineerCreateJobCard");
+  const type=$("jobType")?.value||"TELECOM", card=$("engineerCreateJobCard");
   if(!card)return;
   card.classList.toggle("telecomMode",type==="TELECOM");
   card.classList.toggle("generalMode",type==="GENERAL");
-  const fault=$("jobFaultWrap"), desc=$("jobDescription"), descLabel=$("jobDescriptionLabel"), phoneHint=$("jobDirectoryHint");
+  const fault=$("jobFaultWrap"), phoneWrap=$("jobPhoneWrap"), desc=$("jobDescription"), descLabel=$("jobDescriptionLabel"), phoneHint=$("jobDirectoryHint");
   if(fault) fault.classList.toggle("hidden",type!=="GENERAL");
+  if(phoneWrap) phoneWrap.classList.toggle("hidden",type!=="TELECOM");
   if(desc) desc.value="";
   if(descLabel) descLabel.style.display="none";
   if(desc) desc.style.display="none";
   if(phoneHint){
     phoneHint.className="muted";
-    phoneHint.textContent=type==="TELECOM"?"Enter customer number. If it exists in Directory, name and area will fill automatically.":"For non-telephone jobs, customer number is optional.";
+    phoneHint.textContent=type==="TELECOM"?"Enter customer number. If it exists in Directory, name and area will fill automatically.":"Not required for General Job.";
+  }
+  if(type!=="TELECOM"){
+    ["jobCustomer","jobLocation"].forEach(id=>{const el=$(id);if(el){el.readOnly=false;el.classList.remove("autoField");el.style.fontSize="";}});
   }
   setEngineerJobDateTime();
-  if(type!=="TELECOM"){
-    ["jobCustomer","jobLocation"].forEach(id=>{const el=$(id);if(el){el.readOnly=false;el.classList.remove("autoField");}});
-  }
+}
+function fitDirectoryField(el){
+  if(!el)return;
+  const n=(el.value||"").trim().length;
+  el.style.fontSize=n>34?"10px":n>28?"11px":n>22?"12px":n>16?"13px":"15px";
 }
 async function lookupEngineerCustomer(){
   const type=$("jobType")?.value||"GENERAL";
@@ -3125,6 +3131,7 @@ async function lookupEngineerCustomer(){
       location.value=row.section||row.designation||row.source||"";
       name.readOnly=true; location.readOnly=true;
       name.classList.add("autoField");location.classList.add("autoField");
+      fitDirectoryField(name); fitDirectoryField(location);
       hint.className="jobDirectoryFound";
       hint.textContent=`✓ Directory match: ${row.name||"Customer"}${row.designation?" • "+row.designation:""}`;
     }else{
@@ -3142,7 +3149,7 @@ async function lookupEngineerCustomer(){
 }
 function clearEngineerJobForm(){
   ["jobCustomer","jobPhone","jobLocation","jobDescription","jobFault"].forEach(id=>{if($(id))$(id).value=""});
-  if($("jobType"))$("jobType").value="GENERAL";
+  if($("jobType"))$("jobType").value="TELECOM";
   if($("jobTechnician"))$("jobTechnician").value="";
   if($("jobUrgent"))$("jobUrgent").checked=false;
   if($("jobCustomer")){ $("jobCustomer").readOnly=false;$("jobCustomer").classList.remove("autoField"); }
@@ -3152,13 +3159,14 @@ function clearEngineerJobForm(){
 }
 async function engineerCreateJob(){
   if(!profile || !["engineer","admin"].includes(profile.role)) return alert("Only Engineer/Admin can create jobs.");
-  const type=$("jobType")?.value||"GENERAL";
+  const type=$("jobType")?.value||"TELECOM";
   const customer=$("jobCustomer")?.value.trim(), phone=$("jobPhone")?.value.trim()||null, location=$("jobLocation")?.value.trim();
   const fault=$("jobFault")?.value.trim()||"";
   const work=type==="GENERAL"?fault:(($("jobDescription")?.value.trim())||`${type.replaceAll("_"," ")} work`);
-  const tech=$("jobTechnician")?.value||null;
+  const selectedTech=$("jobTechnician")?.value||null;
   const date=$("jobDate")?.value||null, time=$("jobTime")?.value||null, urgent=!!$("jobUrgent")?.checked;
   if(!customer||!location)return alert("Customer name and area/location are required.");
+  if(type==="TELECOM" && !phone)return alert("Customer number is required for Telephone jobs.");
   if(!work)return alert(type==="GENERAL"?"Fault / complaint is required.":"Work description is required.");
   const btn=$("createJobBtn"),msg=$("engineerJobMsg");
   if(btn)btn.disabled=true;if(msg)msg.textContent="Creating job…";
@@ -3167,10 +3175,22 @@ async function engineerCreateJob(){
     const c=await db.from("customers").insert({name:customer,phone,address:location}).select("id").single();
     if(c.error)throw c.error;
     customerId=c.data.id;
-    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:user.id,assigned_worker:tech,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent};
-    const r=await db.from("jobs").insert(payload).select("id,job_code").single();
+
+    let technicians=[];
+    if(urgent){
+      const tr=await db.from("profiles").select("id,full_name").eq("role","worker").eq("active",true).eq("approval_status","approved").order("full_name");
+      if(tr.error)throw tr.error;
+      technicians=tr.data||[];
+      if(!technicians.length) throw new Error("No active approved technicians are available.");
+    }else{
+      technicians=[{id:selectedTech||null,full_name:""}];
+    }
+
+    const payloads=technicians.map(t=>({customer_id:customerId,work_description:work,location,assigned_engineer:user.id,assigned_worker:t.id||null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent}));
+    const r=await db.from("jobs").insert(payloads).select("id,job_code,assigned_worker");
     if(r.error)throw r.error;
-    if(msg)msg.textContent=`Job ${r.data?.job_code||"created"} created successfully${tech?" and assigned":""}.`;
+    const count=r.data?.length||payloads.length;
+    if(msg)msg.textContent=urgent?`Urgent job created and assigned to ${count} technicians.`:`Job ${r.data?.[0]?.job_code||"created"}${selectedTech?" and assigned":" created"}.`;
     await loadJobs(); await loadHome();
     const listCard=$("jobsListCard");
     if(listCard) listCard.classList.add("hidden");
@@ -3561,6 +3581,23 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 .settingsHero .moduleTitle{display:flex!important;align-items:center!important}
 .card h3{display:flex!important;align-items:center!important}
 @media(max-width:520px){.menuImgIcon{width:28px!important;height:28px!important;flex-basis:28px!important}.sectionImgIcon{width:38px!important;height:38px!important}}
+</style>
+
+<style id="v98-job-flow-ui">
+/* V98: job flow + consistent white theme across all three role views */
+#engineerCreateJobCard .hidden{display:none!important}
+#engineerCreateJobCard .jobDirectoryFound,#engineerCreateJobCard .jobDirectoryManual{font-size:12px!important;line-height:1.35!important}
+#engineerCreateJobCard input.autoField{font-size:13px!important;letter-spacing:-.15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
+#engineerCreateJobCard #jobCustomerWrap,#engineerCreateJobCard #jobLocationWrap,#engineerCreateJobCard #jobPhoneWrap,#engineerCreateJobCard #jobFaultWrap{min-width:0}
+/* Normalize the single red dashboard/card column so all three role pages use the same neutral card treatment. */
+#app .dashKpi.red,#app .quick.red,#app .analyticsKpi.red{background:#fff!important;background-image:none!important;color:#172033!important;border:1px solid #d7dee8!important;box-shadow:0 3px 14px rgba(15,23,42,.06)!important}
+#app .dashKpi.red *,#app .quick.red *,#app .analyticsKpi.red *{color:#172033!important;-webkit-text-fill-color:#172033!important}
+#app .dashKpi.red .kpiIcon,#app .quick.red i{color:#2563eb!important;-webkit-text-fill-color:#2563eb!important}
+@media(max-width:520px){
+  #engineerCreateJobCard .grid{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  #engineerCreateJobCard input.autoField{font-size:12px!important}
+}
+@media(max-width:390px){#engineerCreateJobCard .grid{grid-template-columns:1fr!important}}
 </style>
 </head><body><main class="report"><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></main>
 <style id="tele-tuty-v52-visibility-fix">
