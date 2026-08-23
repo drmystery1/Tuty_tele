@@ -1,0 +1,2 @@
+V110.3 - Compact multi-open job details across Admin, Engineer and Technician views.
+Reduced card/detail spacing and tightened mobile 2-column detail layout so multiple open jobs remain visible on one screen.

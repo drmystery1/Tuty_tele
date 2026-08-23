@@ -2253,6 +2253,54 @@ body{margin:0!important;}
   #login .loginVisual .loginFormCard .loginWelcome{font-size:12px!important;}
 }
 </style>
+
+<style id="v1103-compact-job-details">
+/* V110.3 — compact multi-open job details, shared by Admin / Engineer / Technician */
+.jobCard.compactJobCard{margin:7px 0!important;padding:8px!important;border-radius:18px!important}
+.compactJobSummary{padding:7px 3px!important;min-height:48px!important;gap:8px!important}
+.compactJobMain{display:flex!important;align-items:center!important;gap:8px!important;min-width:0!important}
+.jobNumberBadge{width:28px!important;height:28px!important;min-width:28px!important;display:grid!important;place-items:center!important;border-radius:9px!important;font-size:12px!important;background:#eef4ff!important;color:#174ea6!important;font-weight:850!important}
+.compactJobInfo{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:6px!important;min-width:0!important;width:100%!important}
+.compactJobType{font-size:11px!important;font-weight:900!important;letter-spacing:.05em!important;white-space:nowrap!important}
+.compactJobValue{font-size:14px!important;font-weight:850!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;min-width:0!important}
+.compactJobStatus{font-size:9px!important;padding:4px 7px!important;white-space:nowrap!important}
+.jobExpanded{padding:3px 0 0!important}
+.jobTopReadable{padding:6px 2px!important;margin-bottom:5px!important;min-height:32px!important}
+.jobTopReadable .jobTypeReadable{font-size:13px!important;font-weight:900!important}
+.jobTopReadable .jobStatusReadable{font-size:9px!important;padding:4px 7px!important}
+.jobDetailsReadable{display:block!important}
+.primaryJobDetail{padding:8px 10px!important;margin:0 0 6px!important;border-radius:12px!important}
+.primaryJobDetail .detailLabel{font-size:9px!important;margin-bottom:3px!important}
+.jobWorkReadable{font-size:12px!important;line-height:1.3!important}
+.jobDetailGrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+.jobDetailItem{padding:7px 8px!important;min-height:52px!important;border-radius:11px!important}
+.jobDetailItem span{font-size:8px!important;letter-spacing:.04em!important}
+.jobDetailItem strong{display:block!important;font-size:11px!important;line-height:1.25!important;margin-top:2px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.jobDetailItem small{font-size:9px!important;margin-top:2px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.jobNote{padding:7px 9px!important;margin-top:6px!important;border-radius:11px!important}
+.jobNote span{font-size:8px!important}.jobNote strong{font-size:10px!important}
+.completionTime{font-size:9px!important;padding:5px 7px!important}
+.extraWorkSection{margin-top:7px!important;padding:8px!important;border-radius:12px!important}
+.extraWorkHead{font-size:10px!important;margin-bottom:6px!important}.extraWorkList{gap:5px!important}
+.extraWorkItem{padding:6px 7px!important;border-radius:9px!important;gap:7px!important}
+.extraWorkNo{width:20px!important;height:20px!important;font-size:9px!important}
+.extraWorkText b{font-size:10px!important}.extraWorkText small{font-size:8px!important;margin-top:1px!important}
+.extraWorkStatus{font-size:8px!important;padding:3px 5px!important}
+.extraWorkAdd{margin-top:6px!important;gap:5px!important}.extraWorkAdd input{padding:7px 8px!important;font-size:10px!important}.extraWorkAdd button{padding:7px 9px!important;font-size:10px!important}
+.jobActions{gap:5px!important;margin-top:6px!important}.jobActions input,.jobActions button{min-height:32px!important;padding:6px 8px!important;font-size:10px!important}
+@media(max-width:650px){
+  .jobCard.compactJobCard{margin:5px 0!important;padding:6px!important;border-radius:16px!important}
+  .compactJobSummary{min-height:42px!important;padding:5px 2px!important}
+  .jobNumberBadge{width:25px!important;height:25px!important;min-width:25px!important;border-radius:8px!important;font-size:11px!important}
+  .compactJobInfo{grid-template-columns:auto minmax(0,1fr) auto!important;gap:5px!important}
+  .compactJobType{font-size:9px!important}.compactJobValue{font-size:12px!important}.compactJobStatus{font-size:8px!important;padding:3px 6px!important}
+  .jobTopReadable{padding:4px 1px!important;margin-bottom:4px!important}.jobTopReadable .jobTypeReadable{font-size:11px!important}.jobTopReadable .jobStatusReadable{font-size:8px!important;padding:3px 6px!important}
+  .primaryJobDetail{padding:6px 8px!important;margin-bottom:5px!important}.primaryJobDetail .detailLabel{font-size:8px!important}.jobWorkReadable{font-size:10px!important}
+  .jobDetailGrid{gap:4px!important}.jobDetailItem{padding:5px 6px!important;min-height:43px!important}.jobDetailItem span{font-size:7px!important}.jobDetailItem strong{font-size:9px!important}.jobDetailItem small{font-size:8px!important}
+  .jobNote{padding:5px 7px!important;margin-top:4px!important}.jobNote span{font-size:7px!important}.jobNote strong{font-size:9px!important}
+  .extraWorkSection{padding:6px!important;margin-top:5px!important}.extraWorkHead{font-size:8px!important}.extraWorkItem{padding:5px 6px!important}.extraWorkText b{font-size:9px!important}.extraWorkText small{font-size:7px!important}.extraWorkStatus{font-size:7px!important}
+}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
