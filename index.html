@@ -4,7 +4,7 @@
 <meta name="google-site-verification" content="pO25UPI23xdClRjKE92WkTJiSwzrJ9PEYCd8z7h5E9w" />
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="113.1">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="115.0">
   <title>Tele Tuty</title>
   <meta name="description" content="Tele Tuty - Professional telecom maintenance and field service management application.">
 <link rel="canonical" href="https://teletuty.vercel.app/">
@@ -2617,7 +2617,6 @@ body{margin:0!important;}
       <textarea id="jobDescription" placeholder="Describe the work, fault or requirement..."></textarea>
       <div class="grid">
         <div class="muted" style="font-size:12px">👷 Technician assignment: <b>All available technicians</b></div>
-        
       </div>
       <div class="row"><button id="createJobBtn" onclick="engineerCreateJob()">＋ Create & Assign Job</button><button class="secondary" onclick="clearEngineerJobForm()">Clear</button></div>
       <p id="engineerJobMsg" class="muted"></p>
@@ -3595,7 +3594,7 @@ async function engineerCreateJob(){
     if(tr.error)throw tr.error;
     const technicians=tr.data||[];
     if(!technicians.length) throw new Error("No active approved technicians are available.");
-    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:null,assigned_worker:null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent:false};
+    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:null,assigned_worker:null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time};
     const r=await db.from("jobs").insert(payload).select("id,job_code").single();
     if(r.error)throw r.error;
     const jobId=r.data.id;
