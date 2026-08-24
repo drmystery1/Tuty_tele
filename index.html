@@ -4,7 +4,7 @@
 <meta name="google-site-verification" content="pO25UPI23xdClRjKE92WkTJiSwzrJ9PEYCd8z7h5E9w" />
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="110.0">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="113.0">
   <title>Tele Tuty</title>
   <meta name="description" content="Tele Tuty - Professional telecom maintenance and field service management application.">
 <link rel="canonical" href="https://teletuty.vercel.app/">
@@ -3594,7 +3594,7 @@ async function engineerCreateJob(){
     if(tr.error)throw tr.error;
     const technicians=tr.data||[];
     if(!technicians.length) throw new Error("No active approved technicians are available.");
-    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:user.id,assigned_worker:null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent};
+    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:null,assigned_worker:null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent};
     const r=await db.from("jobs").insert(payload).select("id,job_code").single();
     if(r.error)throw r.error;
     const jobId=r.data.id;
@@ -4109,7 +4109,7 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 })();
 </script>
 
-</head><body><main class="report"><h1>${title}</h1><div class="meta">Generated ${new Date().toLocaleString()} • ${esc(profile?.full_name||"User")}</div>${body}<button class="noprint" onclick="window.print()">🖨️ Print / Save as PDF</button></main>
+
 <style id="tele-tuty-v52-visibility-fix">
 
 html,body,#app,.wrap{background:#fff!important;background-image:none!important;color:#172033!important}
