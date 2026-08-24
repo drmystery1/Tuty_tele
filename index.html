@@ -2341,6 +2341,24 @@ body{margin:0!important;}
 })();
 </script>
 
+
+<style id="service-request-ui-v1">
+.serviceRequestCard{border:1px solid rgba(70,180,255,.28);margin-bottom:16px}
+.serviceRequestCard .srTitle{display:flex;align-items:center;gap:10px}
+.serviceRequestCard .srBadge{padding:6px 10px;border-radius:999px;background:#123e63;color:#9fe6ff;font-size:11px;font-weight:900}
+.serviceRequestActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.serviceRequestActions button{width:auto!important;min-width:105px}
+.srRequestItem{padding:14px;border:1px solid rgba(121,164,224,.15);border-radius:14px;margin:9px 0;background:rgba(11,23,39,.75)}
+.srRequestHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.srRequestHead b{font-size:15px}.srMeta{font-size:12px;color:#9bb2c8;margin-top:4px}
+.srDescription{margin-top:9px;line-height:1.45}
+.srStatus{display:inline-block;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:850}
+.srStatus.pending{background:rgba(245,158,11,.14);color:#ffc45b}
+.srStatus.approved{background:rgba(34,197,94,.14);color:#55e795}
+.srStatus.rejected{background:rgba(239,59,79,.14);color:#ff7180}
+.approvedByBadge{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:5px 9px;border-radius:999px;background:rgba(34,197,94,.10);color:#4be28b;font-size:11px;font-weight:850}
+@media(max-width:600px){.serviceRequestActions button{flex:1 1 100%}}
+</style>
 </head>
 
 <style id="v37-menu-overlay-hard-fix">
@@ -2534,6 +2552,11 @@ body{margin:0!important;}
             <span><b>Create Job</b><small>Create and assign a new job to the technician team</small></span>
             <strong>›</strong>
           </button>
+          <button class="dashboardShortcut" onclick="navigate('jobs'); setTimeout(focusServiceRequests, 120)">
+            <span class="shortcutIcon createIcon">✓</span>
+            <span><b>Service Requests</b><small>Review and approve technician requests</small></span>
+            <strong>›</strong>
+          </button>
         </div>
       </div>
 
@@ -2549,6 +2572,7 @@ body{margin:0!important;}
           <div id="homeRecentJobsTech" class="recentList"></div>
         </div>
         <div class="featureRibbon">
+          <button onclick="navigate('jobs'); setTimeout(focusServiceRequestForm, 120)"><b>＋</b><span>New Service Request</span><small>Send a request for Engineer approval</small></button>
           <button onclick="navigate('jobs')"><b>✓</b><span>Job Updates</span><small>Update job status in real-time</small></button>
           <button onclick="navigate('success')"><b>◷</b><span>Job History</span><small>View your past job history</small></button>
         </div>
@@ -2620,6 +2644,30 @@ body{margin:0!important;}
       </div>
       <div class="row"><button id="createJobBtn" onclick="engineerCreateJob()">＋ Create & Assign Job</button><button class="secondary" onclick="clearEngineerJobForm()">Clear</button></div>
       <p id="engineerJobMsg" class="muted"></p>
+    </div>
+
+    <div id="technicianServiceRequestCard" class="card serviceRequestCard hidden">
+      <div class="panelHead">
+        <div><div class="srTitle"><h1 class="moduleTitle" style="margin:0"><span class="moduleIcon">＋</span> New Service Request</h1><span class="srBadge">Engineer Approval</span></div>
+        <p class="muted">Add a service request for work that needs Engineer approval before it becomes a Job.</p></div>
+      </div>
+      <div class="grid jobFormGrid">
+        <div><label>Job Type <b class="req">*</b></label><select id="srJobType"><option value="SERVICE_REQUEST" selected>Service Request</option><option value="GENERAL">General</option><option value="TELECOM">Telephone</option><option value="STREET_LIGHT">Street Light</option></select></div>
+        <div><label>Customer Number</label><input id="srPhone" type="tel" placeholder="Customer number"></div>
+        <div><label>Customer Name <b class="req">*</b></label><input id="srCustomer" placeholder="Customer / company name"></div>
+        <div><label>Location / Area <b class="req">*</b></label><input id="srLocation" placeholder="Site / area / address"></div>
+        <div><label>Requested Date</label><input id="srDate" type="date"></div>
+        <div><label>Requested Time</label><input id="srTime" type="time"></div>
+      </div>
+      <label>Work Description / Complaint <b class="req">*</b></label>
+      <textarea id="srDescription" placeholder="Describe the work or complaint..."></textarea>
+      <div class="row"><button id="submitServiceRequestBtn" onclick="submitServiceRequest()">＋ Submit Service Request</button><button class="secondary" onclick="clearServiceRequestForm()">Clear</button></div>
+      <p id="serviceRequestMsg" class="muted"></p>
+    </div>
+
+    <div id="engineerServiceRequestsCard" class="card serviceRequestCard hidden">
+      <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">✓</span> Service Requests</h1><p class="muted">Technician requests waiting for Engineer approval.</p></div><button class="secondary" style="width:auto" onclick="loadServiceRequests()">↻ Refresh</button></div>
+      <div id="serviceRequestsList"><div class="empty">Loading…</div></div>
     </div>
     <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
   </div>
@@ -3184,6 +3232,125 @@ function openJobsFiltered(status="all"){ currentJobFilter=status; navigate("jobs
 function applyJobFilter(rows){ if(currentJobFilter==="all") return rows; return rows.filter(j=>String(j.status||"pending")==currentJobFilter); }
 function labelFilter(s){ return String(s||"all").replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase()); }
 
+
+async function submitServiceRequest(){
+  if(profile?.role!=="worker") return alert("Technician access required.");
+  const btn=$("submitServiceRequestBtn"), msg=$("serviceRequestMsg");
+  const customer=$("srCustomer")?.value.trim(), phone=$("srPhone")?.value.trim()||null;
+  const location=$("srLocation")?.value.trim(), description=$("srDescription")?.value.trim();
+  const date=$("srDate")?.value||null, time=$("srTime")?.value||null;
+  if(!customer||!location||!description) return alert("Customer name, location and work description are required.");
+  if(btn) btn.disabled=true;
+  if(msg) msg.textContent="Submitting for Engineer approval...";
+  try{
+    let customerId=null;
+    const existing=phone?await db.from("customers").select("id").eq("phone",phone).maybeSingle():{data:null,error:null};
+    if(existing.error) throw existing.error;
+    if(existing.data?.id){
+      customerId=existing.data.id;
+      const upd=await db.from("customers").update({name:customer,address:location}).eq("id",customerId);
+      if(upd.error) throw upd.error;
+    }else{
+      const cr=await db.from("customers").insert({name:customer,phone,address:location}).select("id").single();
+      if(cr.error) throw cr.error;
+      customerId=cr.data.id;
+    }
+    const r=await db.from("service_requests").insert({
+      customer_id:customerId,work_description:description,location,
+      scheduled_date:date,scheduled_time:time,job_term:"service_request",
+      created_by:user.id,status:"pending"
+    }).select("id").single();
+    if(r.error) throw r.error;
+    if(msg) msg.textContent="Service Request submitted. Waiting for Engineer approval.";
+    clearServiceRequestForm();
+    await loadJobs();
+  }catch(e){
+    console.error("Service request submit error",e);
+    if(msg) msg.textContent="Could not submit request.";
+    alert("Could not submit Service Request: "+(e?.message||e));
+  }finally{if(btn)btn.disabled=false;}
+}
+
+function clearServiceRequestForm(){
+  ["srCustomer","srPhone","srLocation","srDescription"].forEach(id=>{if($(id)) $(id).value="";});
+  if($("srDate")) $("srDate").value="";
+  if($("srTime")) $("srTime").value="";
+  if($("serviceRequestMsg")) $("serviceRequestMsg").textContent="";
+}
+
+function focusServiceRequestForm(){
+  const card=$("technicianServiceRequestCard");
+  if(!card)return;
+  card.classList.remove("hidden");
+  card.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function focusServiceRequests(){
+  const card=$("engineerServiceRequestsCard");
+  if(!card)return;
+  card.classList.remove("hidden");
+  card.scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function loadServiceRequests(){
+  const box=$("serviceRequestsList");
+  if(!box || !["engineer","admin"].includes(profile?.role)) return;
+  box.innerHTML=`<div class="empty">Loading Service Requests…</div>`;
+  try{
+    const r=await db.from("service_requests").select("*").order("created_at",{ascending:false}).limit(100);
+    if(r.error) throw r.error;
+    const rows=r.data||[];
+    if(!rows.length){box.innerHTML=`<div class="empty">No Service Requests yet.</div>`;return;}
+    const ids=[...new Set(rows.flatMap(x=>[x.created_by,x.approved_by]).filter(Boolean))];
+    const names={};
+    if(ids.length){
+      const pr=await db.from("profiles").select("id,full_name,role,phone").in("id",ids);
+      if(!pr.error)(pr.data||[]).forEach(p=>names[p.id]=p);
+    }
+    const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))], customers={};
+    if(customerIds.length){
+      const cr=await db.from("customers").select("id,name,phone,address").in("id",customerIds);
+      if(!cr.error)(cr.data||[]).forEach(c=>customers[c.id]=c);
+    }
+    box.innerHTML=rows.map(x=>{
+      const creator=names[x.created_by]?.full_name||"Technician";
+      const approver=names[x.approved_by]?.full_name||"";
+      const c=customers[x.customer_id]||{};
+      const st=String(x.status||"pending");
+      const canApprove=profile?.role==="engineer" && st==="pending";
+      return `<article class="srRequestItem">
+        <div class="srRequestHead"><div><b>${esc(c.name||"Customer")}</b><div class="srMeta">Requested by ${esc(creator)} • ${esc(x.location||"Location not set")}</div></div><span class="srStatus ${esc(st)}">${esc(st.replaceAll("_"," "))}</span></div>
+        <div class="srDescription">${esc(x.work_description||"No description")}</div>
+        <div class="srMeta">${esc([x.scheduled_date,x.scheduled_time].filter(Boolean).join(" • ")||"No schedule")} ${c.phone?`• ${esc(c.phone)}`:""}</div>
+        ${approver?`<div class="approvedByBadge">✓ Approved By: ${esc(approver)}</div>`:""}
+        ${x.rejection_reason?`<div class="srMeta" style="color:#ff7180;margin-top:7px">Reason: ${esc(x.rejection_reason)}</div>`:""}
+        ${canApprove?`<div class="serviceRequestActions"><button class="ok" onclick="approveServiceRequest(${x.id})">✓ Approve & Add to Jobs</button><button class="bad" onclick="rejectServiceRequest(${x.id})">✕ Reject</button></div>`:""}
+      </article>`;
+    }).join("");
+  }catch(e){
+    console.error("Service requests load error",e);
+    box.innerHTML=`<div class="empty">Could not load Service Requests: ${esc(e?.message||e)}</div>`;
+  }
+}
+async function approveServiceRequest(id){
+  if(profile?.role!=="engineer") return alert("Engineer approval required.");
+  if(!confirm("Approve this Service Request and add it to Jobs for all technicians?")) return;
+  try{
+    const r=await db.rpc("approve_service_request",{p_request_id:id});
+    if(r.error) throw r.error;
+    showJobActionToast("Service Request approved");
+    await Promise.all([loadServiceRequests(),loadJobs(),loadHome()]);
+  }catch(e){console.error("Service request approval error",e);alert("Could not approve request: "+(e?.message||e));}
+}
+async function rejectServiceRequest(id){
+  if(profile?.role!=="engineer") return alert("Engineer access required.");
+  const reason=prompt("Reason for rejection (optional):")||null;
+  try{
+    const r=await db.from("service_requests").update({status:"rejected",approved_by:null,rejection_reason:reason,updated_at:new Date().toISOString()}).eq("id",id).eq("status","pending");
+    if(r.error) throw r.error;
+    showJobActionToast("Service Request rejected");
+    await loadServiceRequests();
+  }catch(e){console.error("Service request rejection error",e);alert("Could not reject request: "+(e?.message||e));}
+}
+
 async function loadJobs(){
   const box=$("jobsList");
   if(!box) return;
@@ -3204,6 +3371,12 @@ async function loadJobs(){
         assignmentRows.forEach(a=>{assignmentByJob[a.job_id]=a;});
         rows=jobRows;
       }
+      const sr=await db.from("jobs").select("*").eq("job_term","service_request").not("approved_by","is",null).order("created_at",{ascending:false}).limit(100);
+      if(!sr.error){
+        const seen=new Set(rows.map(x=>x.id));
+        (sr.data||[]).forEach(x=>{if(!seen.has(x.id)) rows.push(x);});
+        rows.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+      }
     }else{
       const q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);
       const r=await q;
@@ -3213,7 +3386,7 @@ async function loadJobs(){
 
     const jobIds=[...new Set(rows.map(x=>x.id).filter(Boolean))];
     const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))];
-    const profileIds=[...new Set(rows.flatMap(x=>[x.assigned_worker,x.assigned_engineer,x.created_by]).filter(Boolean))];
+    const profileIds=[...new Set(rows.flatMap(x=>[x.assigned_worker,x.assigned_engineer,x.created_by,x.approved_by]).filter(Boolean))];
     const customerMap={}, profileMap={}, assignmentMap={};
     if(jobIds.length){
       const ar=await db.from("job_assignments").select("id,job_id,technician_id,status,remarks,pending_reason,assigned_at,status_updated_at").in("job_id",jobIds).order("assigned_at",{ascending:true});
@@ -3245,8 +3418,10 @@ async function loadJobs(){
     box.innerHTML=rows.map((j,idx)=>{
       const st=String(j.status||"pending");
       const c=customerMap[j.customer_id]||{};
+      const isServiceRequest=String(j.job_term||"").toLowerCase()==="service_request";
       const engineerId=j.assigned_engineer || (profileMap[j.created_by]?.role==="engineer" ? j.created_by : null);
       const engineer=roleName(engineerId);
+      const approvedBy=roleName(j.approved_by);
       const assignments=assignmentMap[j.id]||[];
       const techNames=assignments.map(a=>({a,name:roleName(a.technician_id)}));
       const completedTechs=techNames.filter(x=>x.a.status==="completed");
@@ -3287,7 +3462,7 @@ async function loadJobs(){
             <section class="jobDetailGrid">
               <div class="jobDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small>📞 ${esc(c.phone)}</small>`:""}</div>
               <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
-              <div class="jobDetailItem"><span>👨‍💼 Engineer</span><strong>${esc(engineer)}</strong>${rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}</div>
+              <div class="jobDetailItem"><span>${isServiceRequest?"✅ Approved By":"👨‍💼 Engineer"}</span><strong>${esc(isServiceRequest?approvedBy:engineer)}</strong>${!isServiceRequest && rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}${isServiceRequest?`<small class="approvedByBadge">✓ Engineer approved</small>`:""}</div>
               <div class="jobDetailItem"><span>👷 Technicians</span><strong>${esc(technician||"Not assigned")}</strong>${completedBy?`<small style="color:#15803d;font-weight:800">✓ Completed by: ${esc(completedBy)}</small>`:""}</div>
               <div class="jobDetailItem"><span>🗓️ Schedule</span><strong>${esc(when||"Not scheduled")}</strong></div>
             </section>
@@ -4568,7 +4743,7 @@ function showView(id){
   if(nav){ nav.classList.remove("hidden"); nav.style.display="flex"; nav.style.visibility="visible"; nav.style.opacity="1"; }
   const title=document.getElementById("globalPageTitle");
   if(title){
-    const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",directory:"Telephone Directory",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
+    const titles={home:"Field Operations",jobs:"Jobs & Service Requests",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",directory:"Telephone Directory",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
     title.textContent=titles[id]||"Field Operations";
   }
   closeMenu();
@@ -4578,8 +4753,13 @@ function showView(id){
   const canCreate=profile?.role==="engineer" || profile?.role==="admin";
   if(createCard) createCard.classList.add("hidden");
   if(jobsListCard) jobsListCard.classList.remove("hidden");
+  const srTechCard=document.getElementById("technicianServiceRequestCard");
+  const srEngCard=document.getElementById("engineerServiceRequestsCard");
+  if(srTechCard) srTechCard.classList.toggle("hidden", !(id==="jobs" && profile?.role==="worker"));
+  if(srEngCard) srEngCard.classList.toggle("hidden", !(id==="jobs" && ["engineer","admin"].includes(profile?.role)));
   if(newJobTopBtn) newJobTopBtn.classList.toggle("hidden", !(id==="jobs" && canCreate));
   if(id==="jobs" && canCreate) loadEngineerTechnicians().catch?.(()=>{});
+  if(id==="jobs" && ["engineer","admin"].includes(profile?.role)) loadServiceRequests().catch?.(()=>{});
   if(id==="notifications")loadNotifications().catch?.(()=>{});
   if(id==="team")loadTeam().catch?.(()=>{});
   if(id==="adminTools"){loadApprovals().catch?.(()=>{}); if(String(profile?.role||"").toLowerCase()==="admin") loadDirectoryHistory().catch?.(()=>{});}
