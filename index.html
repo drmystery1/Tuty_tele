@@ -2849,6 +2849,20 @@ async function registerFCMToken(forcePermission=false){
  }catch(e){console.warn("FCM registration failed",e);return false;}
 }
 window.registerFCMToken=registerFCMToken;
+
+/* Keep FCM registration resilient after login/reload and on devices that
+   temporarily suspend the page. Permission is never requested automatically. */
+async function ensureFCMRegistration(){
+  try{
+    if(!window.user?.id) return false;
+    if(!('Notification' in window) || Notification.permission!=="granted") return false;
+    return await registerFCMToken(false);
+  }catch(e){
+    console.warn("FCM ensure failed",e);
+    return false;
+  }
+}
+window.ensureFCMRegistration=ensureFCMRegistration;
 </script>
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
@@ -2876,7 +2890,10 @@ async function load(){
     show("app");
     window.user=user;
     if($("menuBtn"))$("menuBtn").classList.remove("hidden");
-    try{ setTimeout(()=>window.registerFCMToken?.(false),300); }catch(e){}
+    try{
+      setTimeout(()=>window.ensureFCMRegistration?.(),300);
+      setTimeout(()=>window.ensureFCMRegistration?.(),2500);
+    }catch(e){}
     if($("rolePill"))$("rolePill").textContent=role==="worker"?"Technician":(profile.role||"User");
     if($("hello"))$("hello").textContent="Welcome, "+(profile.full_name||user.email||"User");
     if($("role"))$("role").textContent=(role==="worker"?"Technician":(profile.role||"User"))+" • "+(user.email||"");
@@ -3066,7 +3083,13 @@ async function handleNotificationButton(){
   const searchBox=$("globalJobSearch");
   if(searchBox) searchBox.classList.add("hidden");
   try{
-    if('Notification' in window && Notification.permission==="default") await requestMobileNotifications();
+    if('Notification' in window){
+      if(Notification.permission==="default"){
+        await requestMobileNotifications();
+      }else if(Notification.permission==="granted"){
+        await window.registerFCMToken?.(false);
+      }
+    }
   }catch(e){console.warn("Notification button error",e)}
   navigate('notifications');
 }
@@ -3170,6 +3193,7 @@ document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState==="visible" && user?.id){
     loadNotifications(true);
     if(!notificationChannel) startNotificationWatch();
+    window.ensureFCMRegistration?.();
   }
 });
 window.addEventListener("focus",()=>{
