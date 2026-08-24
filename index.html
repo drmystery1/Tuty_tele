@@ -2817,8 +2817,42 @@ body:before,body:after{display:none!important}
 <script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=1133");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"auto",block:"center"});}}),80)}else navigate("notifications");}});</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getMessaging, getToken, isSupported } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js";
+const firebaseConfig={apiKey:"AIzaSyC2JpGC7fQAyy1YxKtFPDljhC3ZxNRIlo8",authDomain:"tele-tuty.firebaseapp.com",projectId:"tele-tuty",storageBucket:"tele-tuty.firebasestorage.app",messagingSenderId:"402402168587",appId:"1:402402168587:web:2c889bfe2feaa037b05c0e",measurementId:"G-0LL3M53V8F"};
+const FCM_VAPID_KEY="BITbK7SPyt6nrO5G2ak2AwxTBVv6Map9L-hjPjVONyY3Opdanen6GCR2vM07IQ5CRMD-3satVXI2Zlctio_bJcU";
+let fcmMessaging=null, fcmApp=null;
+async function registerFCMToken(forcePermission=false){
+ try{
+  const currentUser=window.user; if(!currentUser?.id||!window.db)return false;
+  if(!(await isSupported())||!("Notification" in window))return false;
+  let perm=Notification.permission;
+  if(perm==="default" && forcePermission) perm=await Notification.requestPermission();
+  if(perm!=="granted")return false;
+  const reg=await navigator.serviceWorker.ready;
+  if(!fcmApp)fcmApp=initializeApp(firebaseConfig);
+  if(!fcmMessaging)fcmMessaging=getMessaging(fcmApp);
+  const token=await getToken(fcmMessaging,{vapidKey:FCM_VAPID_KEY,serviceWorkerRegistration:reg});
+  if(!token)return false;
+  const existing=await window.db.from("fcm_tokens").select("id").eq("token",token).maybeSingle();
+  if(existing.error && existing.error.code!=="PGRST116")throw existing.error;
+  if(existing.data?.id){
+   const u=await window.db.from("fcm_tokens").update({user_id:currentUser.id,platform:"web",updated_at:new Date().toISOString()}).eq("id",existing.data.id);
+   if(u.error)throw u.error;
+  }else{
+   const i=await window.db.from("fcm_tokens").insert({user_id:currentUser.id,token,platform:"web"});
+   if(i.error)throw i.error;
+  }
+  localStorage.setItem("tele_tuty_fcm_registered","1");
+  return true;
+ }catch(e){console.warn("FCM registration failed",e);return false;}
+}
+window.registerFCMToken=registerFCMToken;
+</script>
 <script>
 const db=supabase.createClient("https://xzjyrrkhgmtrfkhyxfxy.supabase.co", "sb_publishable_Pej2qGcsvSfKURuKD1mMZg_tocqoCAe", { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
+window.db=db;
 let user=null,profile=null,$=id=>document.getElementById(id),esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 let navHistory=["home"], routerBusy=false;
 function show(id){["login","pending","app"].forEach(x=>{const el=$(x);if(el)el.classList.add("hidden")});const el=$(id);if(el)el.classList.remove("hidden");}
@@ -2828,6 +2862,7 @@ async function load(){
       const session=await db.auth.getSession();
       user=session.data?.session?.user||null;
     }
+    window.user=user;
     if(!user){ show("login"); return; }
     const profilePromise=db.from("profiles").select("*").eq("id",user.id).maybeSingle();
     const timeoutPromise=new Promise(resolve=>setTimeout(()=>resolve({data:null,error:{message:"Profile request timed out. Check internet connection and try again."}}),12000));
@@ -2839,7 +2874,9 @@ async function load(){
     const approved=String(profile.approval_status||"").toLowerCase()==="approved" || profile.approval_status==null || profile.approval_status==="";
     if(profile.active===false || !approved){ if($("menuBtn"))$("menuBtn").classList.add("hidden"); show("pending"); return; }
     show("app");
+    window.user=user;
     if($("menuBtn"))$("menuBtn").classList.remove("hidden");
+    try{ setTimeout(()=>window.registerFCMToken?.(false),300); }catch(e){}
     if($("rolePill"))$("rolePill").textContent=role==="worker"?"Technician":(profile.role||"User");
     if($("hello"))$("hello").textContent="Welcome, "+(profile.full_name||user.email||"User");
     if($("role"))$("role").textContent=(role==="worker"?"Technician":(profile.role||"User"))+" • "+(user.email||"");
@@ -2877,6 +2914,7 @@ async function login(){
    const r=await db.auth.signInWithPassword({email:e,password:p});
    if(r.error){ if(msg) msg.textContent=r.error.message||"Invalid email or password"; return; }
    user=r.data?.user||null;
+   window.user=user;
    if(!user){ if(msg) msg.textContent="Login failed. Please try again."; return; }
    await load();
  }catch(err){ console.error(err); if(msg) msg.textContent=err?.message||"Login failed"; }
@@ -3038,7 +3076,7 @@ async function requestMobileNotifications(){
     if(!('Notification' in window)) return;
     const perm=await Notification.requestPermission();
     updateNotificationUI();
-    if(perm==="granted") await showMobileNotification("Tele Tuty","Mobile notifications are enabled.");
+    if(perm==="granted") { await showMobileNotification("Tele Tuty","Mobile notifications are enabled."); await window.registerFCMToken?.(true); }
   }catch(e){console.warn("Notification permission error",e)}
 }
 
