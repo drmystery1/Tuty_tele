@@ -2358,6 +2358,23 @@ body{margin:0!important;}
 .srStatus.rejected{background:rgba(239,59,79,.14);color:#ff7180}
 .approvedByBadge{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:5px 9px;border-radius:999px;background:rgba(34,197,94,.10);color:#4be28b;font-size:11px;font-weight:850}
 @media(max-width:600px){.serviceRequestActions button{flex:1 1 100%}}
+#technicianServiceRequestCard .jobDirectoryFound{color:#15803d;font-weight:700;display:block;margin-top:4px}
+#technicianServiceRequestCard .jobDirectoryManual{color:#b45309;font-weight:700;display:block;margin-top:4px}
+#technicianServiceRequestCard #srFaultWrap{grid-column:1/-1}
+#technicianServiceRequestCard.telecomMode #srFaultWrap,
+#technicianServiceRequestCard.telecomMode #srDescriptionLabel,
+#technicianServiceRequestCard.telecomMode #srDescription{display:none!important}
+#technicianServiceRequestCard.generalMode #srDescriptionLabel,
+#technicianServiceRequestCard.generalMode #srDescription,
+#technicianServiceRequestCard.streetLightMode #srDescriptionLabel,
+#technicianServiceRequestCard.streetLightMode #srDescription{display:none!important}
+#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srTypeWrap{order:0}
+#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srCustomerWrap{order:1}
+#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srLocationWrap{order:2}
+#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srPhoneWrap{order:3}
+#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srFaultWrap{order:4;grid-column:1/-1}
+#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srDateWrap,
+#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srTimeWrap{order:5}
 </style>
 </head>
 
@@ -2649,18 +2666,19 @@ body{margin:0!important;}
     <div id="technicianServiceRequestCard" class="card serviceRequestCard hidden">
       <div class="panelHead">
         <div><div class="srTitle"><h1 class="moduleTitle" style="margin:0"><span class="moduleIcon">＋</span> New Service Request</h1><span class="srBadge">Engineer Approval</span></div>
-        <p class="muted">Add a service request for work that needs Engineer approval before it becomes a Job.</p></div>
+        <p class="muted">Same job-type flow as Engineer Create Job. Select Telephone, General Job or Street Light and the relevant fields will appear.</p></div>
       </div>
       <div class="grid jobFormGrid">
-        <div><label>Job Type <b class="req">*</b></label><select id="srJobType"><option value="SERVICE_REQUEST" selected>Service Request</option><option value="GENERAL">General</option><option value="TELECOM">Telephone</option><option value="STREET_LIGHT">Street Light</option></select></div>
-        <div><label>Customer Number</label><input id="srPhone" type="tel" placeholder="Customer number"></div>
-        <div><label>Customer Name <b class="req">*</b></label><input id="srCustomer" placeholder="Customer / company name"></div>
-        <div><label>Location / Area <b class="req">*</b></label><input id="srLocation" placeholder="Site / area / address"></div>
-        <div><label>Requested Date</label><input id="srDate" type="date"></div>
-        <div><label>Requested Time</label><input id="srTime" type="time"></div>
+        <div id="srTypeWrap"><label>Job Type <b class="req">*</b></label><select id="srJobType" onchange="updateServiceRequestFields()"><option value="TELECOM" selected>Telephone</option><option value="GENERAL">General Job</option><option value="STREET_LIGHT">Street Light</option></select></div>
+        <div id="srPhoneWrap"><label id="srPhoneLabel">Customer Number <b class="req">*</b></label><input id="srPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupServiceRequestCustomer()"><small id="srDirectoryHint" class="muted">Enter customer number. If it exists in Directory, name and area will fill automatically.</small></div>
+        <div id="srFaultWrap" class="hidden"><label id="srFaultLabel">Fault / Complaint <b class="req">*</b></label><textarea id="srFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
+        <div id="srCustomerWrap"><label id="srCustomerLabel">Customer Name <b class="req">*</b></label><input id="srCustomer" placeholder="Customer / company name"></div>
+        <div id="srLocationWrap"><label id="srLocationLabel">Location / Area <b class="req">*</b></label><input id="srLocation" placeholder="Site / area / address"></div>
+        <div id="srDateWrap"><label>Requested Date</label><input id="srDate" type="date"></div>
+        <div id="srTimeWrap"><label>Requested Time</label><input id="srTime" type="time"></div>
       </div>
-      <label>Work Description / Complaint <b class="req">*</b></label>
-      <textarea id="srDescription" placeholder="Describe the work or complaint..."></textarea>
+      <label id="srDescriptionLabel" style="display:none">Work Description / Complaint <b class="req">*</b></label>
+      <textarea id="srDescription" style="display:none" placeholder="Describe the work or complaint..."></textarea>
       <div class="row"><button id="submitServiceRequestBtn" onclick="submitServiceRequest()">＋ Submit Service Request</button><button class="secondary" onclick="clearServiceRequestForm()">Clear</button></div>
       <p id="serviceRequestMsg" class="muted"></p>
     </div>
@@ -3197,7 +3215,8 @@ function jobMatchesSearch(j,customer,profileMap,term){
   const worker=profileMap[j.assigned_worker]?.full_name||"";
   const engineer=profileMap[j.assigned_engineer]?.full_name||"";
   const creator=profileMap[j.created_by]?.full_name||"";
-  const hay=[j.job_code,j.job_term,j.work_description,j.location,j.status,j.scheduled_date,j.scheduled_time,j.worker_remarks,j.pending_reason,customer?.name,customer?.phone,customer?.address,worker,engineer,creator].join(" ").toLowerCase();
+  const approver=profileMap[j.approved_by]?.full_name||"";
+  const hay=[j.job_code,j.job_term,j.work_description,j.location,j.status,j.scheduled_date,j.scheduled_time,j.worker_remarks,j.pending_reason,customer?.name,customer?.phone,customer?.address,worker,engineer,creator,approver].join(" ").toLowerCase();
   return hay.includes(term);
 }
 function bindGlobalJobSearch(){
@@ -3233,49 +3252,190 @@ function applyJobFilter(rows){ if(currentJobFilter==="all") return rows; return 
 function labelFilter(s){ return String(s||"all").replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase()); }
 
 
+function updateServiceRequestFields(){
+  const type=$("srJobType")?.value||"TELECOM", card=$("technicianServiceRequestCard");
+  if(!card)return;
+  card.classList.toggle("telecomMode",type==="TELECOM");
+  card.classList.toggle("generalMode",type==="GENERAL");
+  card.classList.toggle("streetLightMode",type==="STREET_LIGHT");
+
+  const fault=$("srFaultWrap"), phoneWrap=$("srPhoneWrap");
+  const desc=$("srDescription"), descLabel=$("srDescriptionLabel");
+  const phoneLabel=$("srPhoneLabel"), customerLabel=$("srCustomerLabel"), locationLabel=$("srLocationLabel");
+  const customer=$("srCustomer"), location=$("srLocation"), phone=$("srPhone");
+  const phoneHint=$("srDirectoryHint");
+  const street=type==="STREET_LIGHT", general=type==="GENERAL", telecom=type==="TELECOM";
+
+  if(fault) fault.classList.toggle("hidden",!(general||street));
+  if(phoneWrap) phoneWrap.classList.toggle("hidden",!(telecom||street));
+
+  if(desc) desc.value="";
+  if(descLabel) descLabel.style.display="none";
+  if(desc) desc.style.display="none";
+
+  if(phoneLabel) phoneLabel.innerHTML=street?'Number <b class="req">*</b>':'Customer Number <b class="req">*</b>';
+  if(customerLabel) customerLabel.innerHTML=street?'Area <b class="req">*</b>':'Customer Name <b class="req">*</b>';
+  if(locationLabel) locationLabel.innerHTML=street?'Post Location <b class="req">*</b>':'Location / Area <b class="req">*</b>';
+
+  if(customer) customer.placeholder=street?'Area / street name':'Customer / company name';
+  if(location) location.placeholder=street?'Post location / pole location':'Site / area / address';
+  if(phone) phone.placeholder=street?'Street light / contact number':'Enter customer number';
+
+  const faultTa=$("srFault");
+  if(faultTa) faultTa.placeholder=street?'Enter the fault / complaint...':'Type the customer complaint / fault...';
+
+  if(phoneHint){
+    phoneHint.className="muted";
+    phoneHint.textContent=telecom
+      ?"Enter customer number. If it exists in Directory, name and area will fill automatically."
+      :street
+        ?"Enter the street-light number."
+        :"Not required for General Job.";
+  }
+
+  if(!telecom){
+    ["srCustomer","srLocation"].forEach(id=>{
+      const el=$(id);
+      if(el){el.readOnly=false;el.classList.remove("autoField");el.style.fontSize="";}
+    });
+  }
+}
+
+async function lookupServiceRequestCustomer(){
+  const type=$("srJobType")?.value||"GENERAL";
+  const phone=$("srPhone")?.value.trim()||"";
+  const name=$("srCustomer"), location=$("srLocation"), hint=$("srDirectoryHint");
+  if(!name||!location||!hint)return;
+  if(type!=="TELECOM")return;
+
+  if(!phone){
+    name.value="";location.value="";
+    name.readOnly=false;location.readOnly=false;
+    name.classList.remove("autoField");location.classList.remove("autoField");
+    hint.className="muted";
+    hint.textContent="Enter customer number to search Directory.";
+    return;
+  }
+
+  try{
+    if(!directoryLoaded) await loadDirectory(true);
+    const digits=directoryDigits(phone);
+    const row=directoryRows.find(r=>
+      [...(r.phone_numbers||[]),r.office_phone,r.residence_phone]
+        .some(v=>directoryPhones(v).some(p=>directoryDigits(p)===digits))
+    );
+    if(row){
+      name.value=row.name||"";
+      location.value=row.section||row.designation||row.source||"";
+      name.readOnly=true;location.readOnly=true;
+      name.classList.add("autoField");location.classList.add("autoField");
+      fitDirectoryField(name);fitDirectoryField(location);
+      hint.className="jobDirectoryFound";
+      hint.textContent=`✓ Directory match: ${row.name||"Customer"}${row.designation?" • "+row.designation:""}`;
+    }else{
+      name.readOnly=false;location.readOnly=false;
+      name.classList.remove("autoField");location.classList.remove("autoField");
+      hint.className="jobDirectoryManual";
+      hint.textContent="No Directory match — enter customer name and area manually.";
+    }
+  }catch(e){
+    console.error("Service request directory lookup",e);
+    name.readOnly=false;location.readOnly=false;
+    name.classList.remove("autoField");location.classList.remove("autoField");
+    hint.className="jobDirectoryManual";
+    hint.textContent="Directory unavailable — enter customer details manually.";
+  }
+}
+
 async function submitServiceRequest(){
   if(profile?.role!=="worker") return alert("Technician access required.");
+
   const btn=$("submitServiceRequestBtn"), msg=$("serviceRequestMsg");
-  const customer=$("srCustomer")?.value.trim(), phone=$("srPhone")?.value.trim()||null;
-  const location=$("srLocation")?.value.trim(), description=$("srDescription")?.value.trim();
+  const type=$("srJobType")?.value||"TELECOM";
+  const customer=$("srCustomer")?.value.trim();
+  const phone=$("srPhone")?.value.trim()||null;
+  const location=$("srLocation")?.value.trim();
+  const fault=$("srFault")?.value.trim()||"";
+  const description=$("srDescription")?.value.trim()||"";
+  const work=(type==="GENERAL"||type==="STREET_LIGHT")?fault:description;
   const date=$("srDate")?.value||null, time=$("srTime")?.value||null;
-  if(!customer||!location||!description) return alert("Customer name, location and work description are required.");
-  if(btn) btn.disabled=true;
-  if(msg) msg.textContent="Submitting for Engineer approval...";
+
+  if(!customer||!location){
+    return alert(type==="STREET_LIGHT"
+      ?"Area and post location are required."
+      :"Customer name and area/location are required.");
+  }
+  if((type==="TELECOM"||type==="STREET_LIGHT") && !phone){
+    return alert(type==="STREET_LIGHT"
+      ?"Number is required for Street Light service requests."
+      :"Customer number is required for Telephone service requests.");
+  }
+  if(!work){
+    return alert((type==="GENERAL"||type==="STREET_LIGHT")
+      ?"Fault / complaint is required."
+      :"Work description is required.");
+  }
+
+  if(btn)btn.disabled=true;
+  if(msg)msg.textContent="Submitting for Engineer approval...";
+
   try{
     let customerId=null;
-    const existing=phone?await db.from("customers").select("id").eq("phone",phone).maybeSingle():{data:null,error:null};
-    if(existing.error) throw existing.error;
+    const existing=phone
+      ? await db.from("customers").select("id").eq("phone",phone).maybeSingle()
+      : {data:null,error:null};
+    if(existing.error)throw existing.error;
+
     if(existing.data?.id){
       customerId=existing.data.id;
       const upd=await db.from("customers").update({name:customer,address:location}).eq("id",customerId);
-      if(upd.error) throw upd.error;
+      if(upd.error)throw upd.error;
     }else{
       const cr=await db.from("customers").insert({name:customer,phone,address:location}).select("id").single();
-      if(cr.error) throw cr.error;
+      if(cr.error)throw cr.error;
       customerId=cr.data.id;
     }
+
     const r=await db.from("service_requests").insert({
-      customer_id:customerId,work_description:description,location,
-      scheduled_date:date,scheduled_time:time,job_term:"service_request",
-      created_by:user.id,status:"pending"
+      customer_id:customerId,
+      work_description:work,
+      location,
+      scheduled_date:date,
+      scheduled_time:time,
+      job_term:"service_request",
+      request_type:type,
+      created_by:user.id,
+      status:"pending"
     }).select("id").single();
-    if(r.error) throw r.error;
-    if(msg) msg.textContent="Service Request submitted. Waiting for Engineer approval.";
+
+    if(r.error)throw r.error;
+    if(msg)msg.textContent=`${type==="TELECOM"?"Telephone":type==="STREET_LIGHT"?"Street Light":"General Job"} Service Request submitted. Waiting for Engineer approval.`;
     clearServiceRequestForm();
     await loadJobs();
   }catch(e){
     console.error("Service request submit error",e);
-    if(msg) msg.textContent="Could not submit request.";
+    if(msg)msg.textContent="Could not submit request.";
     alert("Could not submit Service Request: "+(e?.message||e));
-  }finally{if(btn)btn.disabled=false;}
+  }finally{
+    if(btn)btn.disabled=false;
+  }
 }
 
 function clearServiceRequestForm(){
-  ["srCustomer","srPhone","srLocation","srDescription"].forEach(id=>{if($(id)) $(id).value="";});
-  if($("srDate")) $("srDate").value="";
-  if($("srTime")) $("srTime").value="";
-  if($("serviceRequestMsg")) $("serviceRequestMsg").textContent="";
+  ["srCustomer","srPhone","srLocation","srFault","srDescription"].forEach(id=>{if($(id))$(id).value="";});
+  if($("srJobType"))$("srJobType").value="TELECOM";
+  if($("srCustomer")){
+    $("srCustomer").readOnly=false;
+    $("srCustomer").classList.remove("autoField");
+  }
+  if($("srLocation")){
+    $("srLocation").readOnly=false;
+    $("srLocation").classList.remove("autoField");
+  }
+  if($("srDate"))$("srDate").value="";
+  if($("srTime"))$("srTime").value="";
+  if($("serviceRequestMsg"))$("serviceRequestMsg").textContent="";
+  updateServiceRequestFields();
 }
 
 function focusServiceRequestForm(){
@@ -3283,13 +3443,10 @@ function focusServiceRequestForm(){
   if(!card)return;
   card.classList.remove("hidden");
   card.scrollIntoView({behavior:"smooth",block:"start"});
+  updateServiceRequestFields();
+  setTimeout(()=>($("srJobType")?.value==="TELECOM"?$("srPhone"):$("srFault"))?.focus(),250);
 }
-function focusServiceRequests(){
-  const card=$("engineerServiceRequestsCard");
-  if(!card)return;
-  card.classList.remove("hidden");
-  card.scrollIntoView({behavior:"smooth",block:"start"});
-}
+
 async function loadServiceRequests(){
   const box=$("serviceRequestsList");
   if(!box || !["engineer","admin"].includes(profile?.role)) return;
@@ -3315,9 +3472,11 @@ async function loadServiceRequests(){
       const approver=names[x.approved_by]?.full_name||"";
       const c=customers[x.customer_id]||{};
       const st=String(x.status||"pending");
+      const requestType=String(x.request_type||"GENERAL");
+      const requestTypeLabel=requestType==="TELECOM"?"Telephone":requestType==="STREET_LIGHT"?"Street Light":"General Job";
       const canApprove=profile?.role==="engineer" && st==="pending";
       return `<article class="srRequestItem">
-        <div class="srRequestHead"><div><b>${esc(c.name||"Customer")}</b><div class="srMeta">Requested by ${esc(creator)} • ${esc(x.location||"Location not set")}</div></div><span class="srStatus ${esc(st)}">${esc(st.replaceAll("_"," "))}</span></div>
+        <div class="srRequestHead"><div><b>${esc(requestTypeLabel)}</b><div class="srMeta">${esc(c.name||"Customer")} • Requested by ${esc(creator)} • ${esc(x.location||"Location not set")}</div></div><span class="srStatus ${esc(st)}">${esc(st.replaceAll("_"," "))}</span></div>
         <div class="srDescription">${esc(x.work_description||"No description")}</div>
         <div class="srMeta">${esc([x.scheduled_date,x.scheduled_time].filter(Boolean).join(" • ")||"No schedule")} ${c.phone?`• ${esc(c.phone)}`:""}</div>
         ${approver?`<div class="approvedByBadge">✓ Approved By: ${esc(approver)}</div>`:""}
@@ -3418,7 +3577,7 @@ async function loadJobs(){
     box.innerHTML=rows.map((j,idx)=>{
       const st=String(j.status||"pending");
       const c=customerMap[j.customer_id]||{};
-      const isServiceRequest=String(j.job_term||"").toLowerCase()==="service_request";
+      const isServiceRequest=!!j.approved_by && profileMap[j.created_by]?.role==="worker";
       const engineerId=j.assigned_engineer || (profileMap[j.created_by]?.role==="engineer" ? j.created_by : null);
       const engineer=roleName(engineerId);
       const approvedBy=roleName(j.approved_by);
