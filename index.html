@@ -2728,7 +2728,7 @@ body{margin:0!important;}
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=1131");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=1132");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"smooth",block:"center"});}}),80)}else navigate("notifications");}});</script>
 <script>
@@ -2743,8 +2743,10 @@ async function load(){
       user=session.data?.session?.user||null;
     }
     if(!user){ show("login"); return; }
-    const r=await db.from("profiles").select("*").eq("id",user.id).maybeSingle();
-    if(r.error){ console.error("Profile load error",r.error); show("login"); if($("loginMsg"))$("loginMsg").textContent="Profile load failed: "+r.error.message; return; }
+    const profilePromise=db.from("profiles").select("*").eq("id",user.id).maybeSingle();
+    const timeoutPromise=new Promise(resolve=>setTimeout(()=>resolve({data:null,error:{message:"Profile request timed out. Check internet connection and try again."}}),12000));
+    const r=await Promise.race([profilePromise,timeoutPromise]);
+    if(r.error){ console.error("Profile load error",r.error); show("login"); if($("loginMsg"))$("loginMsg").textContent="Profile load failed: "+(r.error.message||"Unknown error"); return; }
     if(!r.data){ show("login"); if($("loginMsg"))$("loginMsg").textContent="No profile found for this account. Ask Admin to create/approve your profile."; return; }
     profile=r.data;
     const role=String(profile.role||"").toLowerCase();
@@ -2785,7 +2787,6 @@ async function login(){
  const btn=document.querySelector('#login button[onclick="login()"]');
  if(btn){btn.disabled=true;btn.textContent="Signing in…";}
  try{
-   try{ await db.auth.signOut({scope:"local"}); }catch(_){}
    const r=await db.auth.signInWithPassword({email:e,password:p});
    if(r.error){ if(msg) msg.textContent=r.error.message||"Invalid email or password"; return; }
    user=r.data?.user||null;
@@ -4638,7 +4639,7 @@ window.addEventListener("keydown",function(e){
 });
 
 history.replaceState({teleTutyView:"home"},"",location.pathname+location.search);
-db.auth.getSession().then(x=>{if(x.data.session){user=x.data.session.user;load()}})
+db.auth.getSession().then(x=>{if(x.error){console.error("Session check",x.error);return;}if(x.data.session){user=x.data.session.user;load()}}).catch(e=>console.error("Session check",e))
 
 
 function renderHomeDirectoryResults(){
