@@ -2566,7 +2566,7 @@ body{margin:0!important;}
             <span><b>Create Job</b><small>Create and assign a new job to the technician team</small></span>
             <strong>›</strong>
           </button>
-          <button class="dashboardShortcut" onclick="navigate('jobs'); setTimeout(focusServiceRequests, 120)">
+          <button class="dashboardShortcut" onclick="navigate('serviceRequests')">
             <span class="shortcutIcon createIcon">✓</span>
             <span><b>Service Requests</b><small>Review and approve technician requests</small></span>
             <strong>›</strong>
@@ -2586,7 +2586,7 @@ body{margin:0!important;}
           <div id="homeRecentJobsTech" class="recentList"></div>
         </div>
         <div class="featureRibbon">
-          <button onclick="navigate('jobs'); setTimeout(focusServiceRequestForm, 120)"><b>＋</b><span>New Service Request</span><small>Send a request for Engineer approval</small></button>
+          <button onclick="navigate('serviceRequests')"><b>＋</b><span>New Service Request</span><small>Send a request for Engineer approval</small></button>
           <button onclick="navigate('jobs')"><b>✓</b><span>Job Updates</span><small>Update job status in real-time</small></button>
           <button onclick="navigate('success')"><b>◷</b><span>Job History</span><small>View your past job history</small></button>
         </div>
@@ -2658,6 +2658,12 @@ body{margin:0!important;}
       <p id="engineerJobMsg" class="muted"></p>
     </div>
 
+    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
+  </div>
+
+
+  <div id="serviceRequests" class="view hidden">
+    <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_clean.png')"><span class="modulePhotoLabel">Service Requests</span></div>
     <div id="technicianServiceRequestCard" class="card serviceRequestCard hidden">
       <div class="panelHead">
         <div><div class="srTitle"><h1 class="moduleTitle" style="margin:0"><span class="moduleIcon">＋</span> New Service Request</h1><span class="srBadge">Engineer Approval</span></div>
@@ -2680,7 +2686,6 @@ body{margin:0!important;}
       <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">✓</span> Service Requests</h1><p class="muted">Technician requests waiting for Engineer approval.</p></div><button class="secondary" style="width:auto" onclick="loadServiceRequests()">↻ Refresh</button></div>
       <div id="serviceRequestsList"><div class="empty">Loading…</div></div>
     </div>
-    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
   </div>
 
   <div id="success" class="view hidden">
@@ -3240,6 +3245,21 @@ function showJobActionToast(message="Saved"){
 
 let currentJobFilter="all";
 function setJobFilter(status="all"){ currentJobFilter=status; document.querySelectorAll("#jobStatusTabs button").forEach(b=>b.classList.toggle("active",b.dataset.status===status)); loadJobs(); }
+function focusServiceRequests(){
+  navigate("serviceRequests");
+}
+
+function focusServiceRequestForm(){
+  navigate("serviceRequests");
+  setTimeout(()=>{
+    const card=$("technicianServiceRequestCard");
+    if(!card)return;
+    card.scrollIntoView({behavior:"smooth",block:"start"});
+    updateServiceRequestFields();
+    setTimeout(()=>($('srJobType')?.value==="TELECOM"?$("srPhone"):$('srFault'))?.focus(),250);
+  },80);
+}
+
 function openJobsFiltered(status="all"){ currentJobFilter=status; navigate("jobs"); setTimeout(()=>setJobFilter(status),0); }
 function applyJobFilter(rows){ if(currentJobFilter==="all") return rows; return rows.filter(j=>String(j.status||"pending")==currentJobFilter); }
 function labelFilter(s){ return String(s||"all").replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase()); }
@@ -3426,14 +3446,6 @@ function clearServiceRequestForm(){
   updateServiceRequestFields();
 }
 
-function focusServiceRequestForm(){
-  const card=$("technicianServiceRequestCard");
-  if(!card)return;
-  card.classList.remove("hidden");
-  card.scrollIntoView({behavior:"smooth",block:"start"});
-  updateServiceRequestFields();
-  setTimeout(()=>($("srJobType")?.value==="TELECOM"?$("srPhone"):$("srFault"))?.focus(),250);
-}
 
 async function loadServiceRequests(){
   const box=$("serviceRequestsList");
@@ -4840,6 +4852,7 @@ function canAccessView(id){
   if(id==="team" || id==="adminTools") return role==="admin";
   if(id==="success") return role==="admin" || role==="engineer";
   if(id==="backup") return role==="admin" || role==="engineer";
+  if(id==="serviceRequests") return role==="admin" || role==="engineer" || role==="worker";
   if(maintenanceViews.includes(id)) return role==="admin" || role==="engineer";
   return true;
 }
@@ -4881,7 +4894,7 @@ function showView(id){
   if(nav){ nav.classList.remove("hidden"); nav.style.display="flex"; nav.style.visibility="visible"; nav.style.opacity="1"; }
   const title=document.getElementById("globalPageTitle");
   if(title){
-    const titles={home:"Field Operations",jobs:"Jobs & Service Requests",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",directory:"Telephone Directory",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",profile:"My Profile",settings:"Settings",notifications:"Notifications"};
+    const titles={home:"Field Operations",jobs:"Jobs",success:"Technician Success Rate",adminTools:"Admin Controls",backup:"Backup & Reports",team:"Team Management",directory:"Telephone Directory",street:"Street Light Survey",battery:"Battery Maintenance",earth:"Earth Pit Maintenance",profile:"My Profile",settings:"Settings",notifications:"Notifications",serviceRequests:"Service Requests"};
     title.textContent=titles[id]||"Field Operations";
   }
   closeMenu();
@@ -4893,11 +4906,11 @@ function showView(id){
   if(jobsListCard) jobsListCard.classList.remove("hidden");
   const srTechCard=document.getElementById("technicianServiceRequestCard");
   const srEngCard=document.getElementById("engineerServiceRequestsCard");
-  if(srTechCard) srTechCard.classList.toggle("hidden", !(id==="jobs" && profile?.role==="worker"));
-  if(srEngCard) srEngCard.classList.toggle("hidden", !(id==="jobs" && ["engineer","admin"].includes(profile?.role)));
+  if(srTechCard) srTechCard.classList.toggle("hidden", !(id==="serviceRequests" && profile?.role==="worker"));
+  if(srEngCard) srEngCard.classList.toggle("hidden", !(id==="serviceRequests" && ["engineer","admin"].includes(profile?.role)));
   if(newJobTopBtn) newJobTopBtn.classList.toggle("hidden", !(id==="jobs" && canCreate));
   if(id==="jobs" && canCreate) loadEngineerTechnicians().catch?.(()=>{});
-  if(id==="jobs" && ["engineer","admin"].includes(profile?.role)) loadServiceRequests().catch?.(()=>{});
+  if(id==="serviceRequests" && ["engineer","admin"].includes(profile?.role)) loadServiceRequests().catch?.(()=>{});
   if(id==="notifications")loadNotifications().catch?.(()=>{});
   if(id==="team")loadTeam().catch?.(()=>{});
   if(id==="adminTools"){loadApprovals().catch?.(()=>{}); if(String(profile?.role||"").toLowerCase()==="admin") loadDirectoryHistory().catch?.(()=>{});}
