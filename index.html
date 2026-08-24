@@ -4,7 +4,7 @@
 <meta name="google-site-verification" content="pO25UPI23xdClRjKE92WkTJiSwzrJ9PEYCd8z7h5E9w" />
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff"><link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="113.0">
+<link rel="icon" type="image/png" href="tele-tuty-logo.png"><meta name="tele-tuty-version" content="113.1">
   <title>Tele Tuty</title>
   <meta name="description" content="Tele Tuty - Professional telecom maintenance and field service management application.">
 <link rel="canonical" href="https://teletuty.vercel.app/">
@@ -2728,7 +2728,7 @@ body{margin:0!important;}
 </section>
 </main>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=110");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{const reg=await navigator.serviceWorker.register("/sw.js?v=1131");await reg.update();}catch(e){console.warn("SW",e)}});}</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>navigator.serviceWorker?.addEventListener?.("message",e=>{if(e.data?.type==="OPEN_NOTIFICATION_JOB"){if(e.data.jobId){navigate("jobs");setTimeout(()=>loadJobs().then(()=>{const c=$("jobCard"+e.data.jobId);if(c){if($("jobExpanded"+e.data.jobId)?.classList.contains("hidden"))toggleJobDetails(e.data.jobId);c.scrollIntoView({behavior:"smooth",block:"center"});}}),80)}else navigate("notifications");}});</script>
 <script>
@@ -2785,6 +2785,7 @@ async function login(){
  const btn=document.querySelector('#login button[onclick="login()"]');
  if(btn){btn.disabled=true;btn.textContent="Signing in…";}
  try{
+   try{ await db.auth.signOut({scope:"local"}); }catch(_){}
    const r=await db.auth.signInWithPassword({email:e,password:p});
    if(r.error){ if(msg) msg.textContent=r.error.message||"Invalid email or password"; return; }
    user=r.data?.user||null;
@@ -4109,7 +4110,7 @@ html,body,#app,.wrap{background:#fff!important;background-image:none!important;c
 })();
 </script>
 
-
+</head><body><main class="report" aria-hidden="true" style="display:none!important"></main>
 <style id="tele-tuty-v52-visibility-fix">
 
 html,body,#app,.wrap{background:#fff!important;background-image:none!important;color:#172033!important}
