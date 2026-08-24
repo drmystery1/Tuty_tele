@@ -2668,7 +2668,7 @@ body:before,body:after{display:none!important}
       <div class="grid jobFormGrid">
         <div id="jobTypeWrap"><label>Job Type <b class="req">*</b></label><select id="jobType" onchange="updateEngineerJobFields()"><option value="TELECOM" selected>Telephone</option><option value="GENERAL">General Job</option><option value="STREET_LIGHT">Street Light</option></select></div>
         <div id="jobPhoneWrap"><label id="jobPhoneLabel">Customer Number <b class="req">*</b></label><input id="jobPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupEngineerCustomer()"><small id="jobDirectoryHint" class="muted">Telephone job: enter number to find the customer in Directory.</small></div>
-        <div id="jobFaultWrap" class="hidden"><label>Fault / Complaint <b class="req">*</b></label><textarea id="jobFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
+        <div id="jobFaultWrap"><label id="jobFaultLabel">Complaint / Fault <b class="req">*</b></label><textarea id="jobFault" rows="2" placeholder="Type the customer complaint..."></textarea></div>
         <div id="jobCustomerWrap"><label id="jobCustomerLabel">Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
         <div id="jobLocationWrap"><label id="jobLocationLabel">Location / Area <b class="req">*</b></label><input id="jobLocation" placeholder="Site / area / address"></div>
       </div>
@@ -2695,7 +2695,7 @@ body:before,body:after{display:none!important}
       <div class="grid jobFormGrid">
         <div id="srTypeWrap"><label>Job Type <b class="req">*</b></label><select id="srJobType" onchange="updateServiceRequestFields()"><option value="TELECOM" selected>Telephone</option><option value="GENERAL">General Job</option><option value="STREET_LIGHT">Street Light</option></select></div>
         <div id="srPhoneWrap"><label id="srPhoneLabel">Customer Number <b class="req">*</b></label><input id="srPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupServiceRequestCustomer()"><small id="srDirectoryHint" class="muted">Enter customer number. If it exists in Directory, name and area will fill automatically.</small></div>
-        <div id="srFaultWrap" class="hidden"><label id="srFaultLabel">Fault / Complaint <b class="req">*</b></label><textarea id="srFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
+        <div id="srFaultWrap"><label id="srFaultLabel">Complaint / Fault <b class="req">*</b></label><textarea id="srFault" rows="2" placeholder="Type the customer complaint..."></textarea></div>
         <div id="srCustomerWrap"><label id="srCustomerLabel">Customer Name <b class="req">*</b></label><input id="srCustomer" placeholder="Customer / company name"></div>
         <div id="srLocationWrap"><label id="srLocationLabel">Location / Area <b class="req">*</b></label><input id="srLocation" placeholder="Site / area / address"></div>
       </div>
@@ -3391,11 +3391,15 @@ function updateServiceRequestFields(){
   const fault=$("srFaultWrap"), phoneWrap=$("srPhoneWrap");
   const desc=$("srDescription"), descLabel=$("srDescriptionLabel");
   const phoneLabel=$("srPhoneLabel"), customerLabel=$("srCustomerLabel"), locationLabel=$("srLocationLabel");
+  const faultLabel=$("srFaultLabel");
   const customer=$("srCustomer"), location=$("srLocation"), phone=$("srPhone");
   const phoneHint=$("srDirectoryHint");
-  const street=type==="STREET_LIGHT", general=type==="GENERAL", telecom=type==="TELECOM";
+  const street=type==="STREET_LIGHT", telecom=type==="TELECOM";
 
-  if(fault) fault.classList.toggle("hidden",!(general||street));
+  /* Complaint/Fault is required for Telephone, General and Street Light. */
+  if(fault) fault.classList.remove("hidden");
+  if(faultLabel) faultLabel.innerHTML='Complaint / Fault <b class="req">*</b>';
+
   if(phoneWrap) phoneWrap.classList.toggle("hidden",!(telecom||street));
 
   if(desc) desc.value="";
@@ -3411,7 +3415,11 @@ function updateServiceRequestFields(){
   if(phone) phone.placeholder=street?'Street light / contact number':'Enter customer number';
 
   const faultTa=$("srFault");
-  if(faultTa) faultTa.placeholder=street?'Enter the fault / complaint...':'Type the customer complaint / fault...';
+  if(faultTa) faultTa.placeholder=telecom
+    ? 'Type the customer complaint (e.g. no dial tone, line fault, internet issue)...'
+    : street
+      ? 'Enter the fault / complaint...'
+      : 'Type the job complaint / fault...';
 
   if(phoneHint){
     phoneHint.className="muted";
@@ -3429,7 +3437,6 @@ function updateServiceRequestFields(){
     });
   }
 }
-
 async function lookupServiceRequestCustomer(){
   const type=$("srJobType")?.value||"GENERAL";
   const phone=$("srPhone")?.value.trim()||"";
@@ -3486,7 +3493,7 @@ async function submitServiceRequest(){
   const location=$("srLocation")?.value.trim();
   const fault=$("srFault")?.value.trim()||"";
   const description=$("srDescription")?.value.trim()||"";
-  const work=(type==="GENERAL"||type==="STREET_LIGHT")?fault:description;
+  const work=fault;
 
   if(!customer||!location){
     return alert(type==="STREET_LIGHT"
@@ -3499,9 +3506,7 @@ async function submitServiceRequest(){
       :"Customer number is required for Telephone service requests.");
   }
   if(!work){
-    return alert((type==="GENERAL"||type==="STREET_LIGHT")
-      ?"Fault / complaint is required."
-      :"Work description is required.");
+    return alert("Complaint / fault is required.");
   }
 
   if(btn)btn.disabled=true;
@@ -3550,6 +3555,7 @@ async function submitServiceRequest(){
 function clearServiceRequestForm(){
   ["srCustomer","srPhone","srLocation","srFault","srDescription"].forEach(id=>{if($(id))$(id).value="";});
   if($("srJobType"))$("srJobType").value="TELECOM";
+  updateServiceRequestFields();
   if($("srCustomer")){
     $("srCustomer").readOnly=false;
     $("srCustomer").classList.remove("autoField");
@@ -3938,13 +3944,22 @@ function updateEngineerJobFields(){
   card.classList.toggle("telecomMode",type==="TELECOM");
   card.classList.toggle("generalMode",type==="GENERAL");
   card.classList.toggle("streetLightMode",type==="STREET_LIGHT");
-  const fault=$("jobFaultWrap"), phoneWrap=$("jobPhoneWrap"), desc=$("jobDescription"), descLabel=$("jobDescriptionLabel"), phoneHint=$("jobDirectoryHint");
-  const phoneLabel=$("jobPhoneLabel"), customerLabel=$("jobCustomerLabel"), locationLabel=$("jobLocationLabel");
-  const customer=$("jobCustomer"), location=$("jobLocation"), phone=$("jobPhone");
-  const street=type==="STREET_LIGHT", general=type==="GENERAL", telecom=type==="TELECOM";
 
-  if(fault) fault.classList.toggle("hidden",!(general||street));
+  const fault=$("jobFaultWrap"), phoneWrap=$("jobPhoneWrap"), desc=$("jobDescription");
+  const descLabel=$("jobDescriptionLabel"), phoneHint=$("jobDirectoryHint");
+  const phoneLabel=$("jobPhoneLabel"), customerLabel=$("jobCustomerLabel"), locationLabel=$("jobLocationLabel");
+  const faultLabel=$("jobFaultLabel");
+  const customer=$("jobCustomer"), location=$("jobLocation"), phone=$("jobPhone");
+  const street=type==="STREET_LIGHT", telecom=type==="TELECOM";
+
+  /* Complaint/Fault is required for Telephone, General and Street Light. */
+  if(fault) fault.classList.remove("hidden");
+  if(faultLabel) faultLabel.innerHTML='Complaint / Fault <b class="req">*</b>';
+
+  /* Telephone + Street Light need a number. */
   if(phoneWrap) phoneWrap.classList.toggle("hidden",!(telecom||street));
+
+  /* Keep the old generic work-description box hidden; complaint is the work description. */
   if(desc) desc.value="";
   if(descLabel) descLabel.style.display="none";
   if(desc) desc.style.display="none";
@@ -3952,20 +3967,32 @@ function updateEngineerJobFields(){
   if(phoneLabel) phoneLabel.innerHTML=street?'Number <b class="req">*</b>':'Customer Number <b class="req">*</b>';
   if(customerLabel) customerLabel.innerHTML=street?'Area <b class="req">*</b>':'Customer Name <b class="req">*</b>';
   if(locationLabel) locationLabel.innerHTML=street?'Post Location <b class="req">*</b>':'Location / Area <b class="req">*</b>';
+
   if(customer) customer.placeholder=street?'Area / street name':'Customer / company name';
   if(location) location.placeholder=street?'Post location / pole location':'Site / area / address';
   if(phone) phone.placeholder=street?'Street light / contact number':'Enter customer number';
-  if(fault) {
-    const ta=$("jobFault");
-    if(ta) ta.placeholder=street?'Enter the fault / complaint...':'Type the customer complaint / fault...';
-  }
+
+  const ta=$("jobFault");
+  if(ta) ta.placeholder=telecom
+    ? 'Type the customer complaint (e.g. no dial tone, line fault, internet issue)...'
+    : street
+      ? 'Enter the fault / complaint...'
+      : 'Type the job complaint / fault...';
 
   if(phoneHint){
     phoneHint.className="muted";
-    phoneHint.textContent=telecom?"Enter customer number. If it exists in Directory, name and area will fill automatically.":street?"Enter the street-light number.":"Not required for General Job.";
+    phoneHint.textContent=telecom
+      ?"Enter customer number. If it exists in Directory, name and area will fill automatically."
+      :street
+        ?"Enter the street-light number."
+        :"Not required for General Job.";
   }
+
   if(!telecom){
-    ["jobCustomer","jobLocation"].forEach(id=>{const el=$(id);if(el){el.readOnly=false;el.classList.remove("autoField");el.style.fontSize="";}});
+    ["jobCustomer","jobLocation"].forEach(id=>{
+      const el=$(id);
+      if(el){el.readOnly=false;el.classList.remove("autoField");el.style.fontSize="";}
+    });
   }
 }
 function fitDirectoryField(el){
@@ -4018,11 +4045,11 @@ async function engineerCreateJob(){
   const type=$("jobType")?.value||"TELECOM";
   const customer=$("jobCustomer")?.value.trim(), phone=$("jobPhone")?.value.trim()||null, location=$("jobLocation")?.value.trim();
   const fault=$("jobFault")?.value.trim()||"";
-  const work=(type==="GENERAL"||type==="STREET_LIGHT")?fault:(($("jobDescription")?.value.trim())||`${type.replaceAll("_"," ")} work`);
+  const work=fault;
   const selectedTech=null;
   if(!customer||!location)return alert(type==="STREET_LIGHT"?"Area and post location are required.":"Customer name and area/location are required.");
   if((type==="TELECOM"||type==="STREET_LIGHT") && !phone)return alert(type==="STREET_LIGHT"?"Number is required for Street Light jobs.":"Customer number is required for Telephone jobs.");
-  if(!work)return alert((type==="GENERAL"||type==="STREET_LIGHT")?"Fault / complaint is required.":"Work description is required.");
+  if(!work)return alert("Complaint / fault is required.");
   const btn=$("createJobBtn"),msg=$("engineerJobMsg");
   if(btn)btn.disabled=true;if(msg)msg.textContent="Creating job…";
   let customerId=null;
