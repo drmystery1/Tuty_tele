@@ -2520,7 +2520,7 @@ body{margin:0!important;}
           </button>
           <button class="dashboardShortcut createJobShortcut" onclick="navigate('jobs'); setTimeout(focusEngineerJobForm, 120)">
             <span class="shortcutIcon createIcon">＋</span>
-            <span><b>Create Job</b><small>Create and assign a new job to a technician</small></span>
+            <span><b>Create Job</b><small>Create and assign a new job to the technician team</small></span>
             <strong>›</strong>
           </button>
         </div>
@@ -2592,7 +2592,7 @@ body{margin:0!important;}
   <div id="jobs" class="view hidden">
     <div class="modulePhoto" style="--module-bg:url('public/images/jobs_field_clean.png')"><span class="modulePhotoLabel">Jobs & Field Work</span></div>
     <div id="engineerCreateJobCard" class="card engineerCreateCard hidden">
-      <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it directly to a technician.</p></div><span class="roleBadge">Engineer</span></div>
+      <div class="panelHead"><div><h1 class="moduleTitle"><span class="moduleIcon">＋</span> Create New Job</h1><p class="muted">Create a job and assign it to all available technicians.</p></div><span class="roleBadge">Engineer</span></div>
       <div class="grid jobFormGrid">
         <div id="jobTypeWrap"><label>Job Type <b class="req">*</b></label><select id="jobType" onchange="updateEngineerJobFields()"><option value="TELECOM" selected>Telephone</option><option value="GENERAL">General Job</option><option value="STREET_LIGHT">Street Light</option></select></div>
         <div id="jobPhoneWrap"><label id="jobPhoneLabel">Customer Number <b class="req">*</b></label><input id="jobPhone" type="tel" inputmode="tel" autocomplete="off" placeholder="Enter customer number" oninput="lookupEngineerCustomer()"><small id="jobDirectoryHint" class="muted">Telephone job: enter number to find the customer in Directory.</small></div>
@@ -2605,7 +2605,7 @@ body{margin:0!important;}
       <label id="jobDescriptionLabel">Work Description <b class="req">*</b></label>
       <textarea id="jobDescription" placeholder="Describe the work, fault or requirement..."></textarea>
       <div class="grid">
-        <div><label>Assign Technician</label><select id="jobTechnician"><option value="">Unassigned</option></select></div>
+        <div class="muted" style="font-size:12px">👷 Technician assignment: <b>All available technicians</b></div>
         <div class="checkField"><label><input id="jobUrgent" type="checkbox"> Mark as urgent</label></div>
       </div>
       <div class="row"><button id="createJobBtn" onclick="engineerCreateJob()">＋ Create & Assign Job</button><button class="secondary" onclick="clearEngineerJobForm()">Clear</button></div>
@@ -3190,13 +3190,10 @@ async function loadJobs(){
         const jobRows=r.data||[];
         const assignmentByJob={};
         assignmentRows.forEach(a=>{assignmentByJob[a.job_id]=a;});
-        // If a multi-technician job is completed by someone else, hide it from
-        // the remaining technicians. The technician who completed it still sees it.
-        rows=jobRows.filter(j=>String(j.status||"")!=="completed" || assignmentByJob[j.id]?.status==="completed");
+        rows=jobRows;
       }
     }else{
-      let q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);
-      if(profile?.role==="engineer") q=q.or(`assigned_engineer.eq.${user.id},created_by.eq.${user.id}`);
+      const q=db.from("jobs").select("*").order("created_at",{ascending:false}).limit(100);
       const r=await q;
       if(r.error) throw r.error; rows=r.data||[];
     }
@@ -3557,7 +3554,6 @@ async function lookupEngineerCustomer(){
 function clearEngineerJobForm(){
   ["jobCustomer","jobPhone","jobLocation","jobDescription","jobFault"].forEach(id=>{if($(id))$(id).value=""});
   if($("jobType"))$("jobType").value="TELECOM";
-  if($("jobTechnician"))$("jobTechnician").value="";
   if($("jobUrgent"))$("jobUrgent").checked=false;
   if($("jobCustomer")){ $("jobCustomer").readOnly=false;$("jobCustomer").classList.remove("autoField"); }
   if($("jobLocation")){ $("jobLocation").readOnly=false;$("jobLocation").classList.remove("autoField"); }
@@ -3570,7 +3566,7 @@ async function engineerCreateJob(){
   const customer=$("jobCustomer")?.value.trim(), phone=$("jobPhone")?.value.trim()||null, location=$("jobLocation")?.value.trim();
   const fault=$("jobFault")?.value.trim()||"";
   const work=(type==="GENERAL"||type==="STREET_LIGHT")?fault:(($("jobDescription")?.value.trim())||`${type.replaceAll("_"," ")} work`);
-  const selectedTech=$("jobTechnician")?.value||null;
+  const selectedTech=null;
   const date=$("jobDate")?.value||null, time=$("jobTime")?.value||null, urgent=!!$("jobUrgent")?.checked;
   if(!customer||!location)return alert(type==="STREET_LIGHT"?"Area and post location are required.":"Customer name and area/location are required.");
   if((type==="TELECOM"||type==="STREET_LIGHT") && !phone)return alert(type==="STREET_LIGHT"?"Number is required for Street Light jobs.":"Customer number is required for Telephone jobs.");
@@ -3583,17 +3579,10 @@ async function engineerCreateJob(){
     if(c.error)throw c.error;
     customerId=c.data.id;
 
-    let technicians=[];
-    if(urgent){
-      const tr=await db.from("profiles").select("id,full_name").eq("role","worker").eq("active",true).eq("approval_status","approved").order("full_name");
-      if(tr.error)throw tr.error;
-      technicians=tr.data||[];
-      if(!technicians.length) throw new Error("No active approved technicians are available.");
-    }else if(selectedTech){
-      const tr=await db.from("profiles").select("id,full_name").eq("id",selectedTech).maybeSingle();
-      if(tr.error)throw tr.error;
-      if(tr.data)technicians=[tr.data];
-    }
+    const tr=await db.from("profiles").select("id,full_name").eq("role","worker").eq("active",true).eq("approval_status","approved").order("full_name");
+    if(tr.error)throw tr.error;
+    const technicians=tr.data||[];
+    if(!technicians.length) throw new Error("No active approved technicians are available.");
     const payload={customer_id:customerId,work_description:work,location,assigned_engineer:user.id,assigned_worker:null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time,urgent};
     const r=await db.from("jobs").insert(payload).select("id,job_code").single();
     if(r.error)throw r.error;
@@ -3605,7 +3594,7 @@ async function engineerCreateJob(){
       await Promise.all(technicians.map(t=>db.from("notifications").insert({recipient_id:t.id,job_id:jobId,title:urgent?"Urgent job assigned":"New job assigned",body:`${type.replaceAll("_"," ")} job ${r.data.job_code||"JOB"} has been assigned to you.`})));
     }
     const count=technicians.length;
-    if(msg)msg.textContent=urgent?`Urgent job created as one job and assigned to ${count} technicians.`:`Job ${r.data.job_code||"created"}${selectedTech?" and assigned":" created"}.`;
+    if(msg)msg.textContent=urgent?`Urgent job created and assigned to ${count} technicians.`:`Job ${r.data.job_code||"created"} assigned to ${count} technicians.`;
     showJobActionToast("Job created");
     await loadJobs(); await loadHome();
     const listCard=$("jobsListCard");

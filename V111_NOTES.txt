@@ -1,0 +1,8 @@
+V111 - Shared Technician Assignment
+
+- Removed individual "Assign Technician" selection from Engineer job creation.
+- Every new Engineer/Admin-created job is assigned to all active approved technicians.
+- All technicians keep seeing the shared job, including after another technician completes it.
+- Completion remains per technician assignment; the UI shows the technician name(s) whose assignment is completed.
+- Engineers now see the shared job pool instead of only their own created/assigned jobs.
+- Existing Admin/Engineer/Technician job details, filters, dashboards and Extra Work are preserved.
