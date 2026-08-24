@@ -2085,7 +2085,6 @@ body:before,body:after,html:before,html:after{display:none!important;content:non
 #engineerCreateJobCard.streetLightMode .jobFormGrid > #jobLocationWrap{order:2}
 #engineerCreateJobCard.streetLightMode .jobFormGrid > #jobPhoneWrap{order:3}
 #engineerCreateJobCard.streetLightMode .jobFormGrid > #jobFaultWrap{order:4;grid-column:1/-1}
-#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobDateWrap,#engineerCreateJobCard.streetLightMode .jobFormGrid > #jobTimeWrap{order:5}
 #engineerCreateJobCard.streetLightMode #jobDirectoryHint{display:none}
 </style>
 <meta name="app-build" content="V103-soft-remove-tech-history">
@@ -2373,8 +2372,6 @@ body{margin:0!important;}
 #technicianServiceRequestCard.streetLightMode .jobFormGrid > #srLocationWrap{order:2}
 #technicianServiceRequestCard.streetLightMode .jobFormGrid > #srPhoneWrap{order:3}
 #technicianServiceRequestCard.streetLightMode .jobFormGrid > #srFaultWrap{order:4;grid-column:1/-1}
-#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srDateWrap,
-#technicianServiceRequestCard.streetLightMode .jobFormGrid > #srTimeWrap{order:5}
 </style>
 </head>
 
@@ -2651,8 +2648,6 @@ body{margin:0!important;}
         <div id="jobFaultWrap" class="hidden"><label>Fault / Complaint <b class="req">*</b></label><textarea id="jobFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
         <div id="jobCustomerWrap"><label id="jobCustomerLabel">Customer Name <b class="req">*</b></label><input id="jobCustomer" placeholder="Customer / company name"></div>
         <div id="jobLocationWrap"><label id="jobLocationLabel">Location / Area <b class="req">*</b></label><input id="jobLocation" placeholder="Site / area / address"></div>
-        <div id="jobDateWrap"><label>Created Date</label><input id="jobDate" type="date" readonly></div>
-        <div id="jobTimeWrap"><label>Created Time</label><input id="jobTime" type="time" readonly></div>
       </div>
       <label id="jobDescriptionLabel">Work Description <b class="req">*</b></label>
       <textarea id="jobDescription" placeholder="Describe the work, fault or requirement..."></textarea>
@@ -2674,8 +2669,6 @@ body{margin:0!important;}
         <div id="srFaultWrap" class="hidden"><label id="srFaultLabel">Fault / Complaint <b class="req">*</b></label><textarea id="srFault" rows="2" placeholder="Type the customer complaint / fault..."></textarea></div>
         <div id="srCustomerWrap"><label id="srCustomerLabel">Customer Name <b class="req">*</b></label><input id="srCustomer" placeholder="Customer / company name"></div>
         <div id="srLocationWrap"><label id="srLocationLabel">Location / Area <b class="req">*</b></label><input id="srLocation" placeholder="Site / area / address"></div>
-        <div id="srDateWrap"><label>Requested Date</label><input id="srDate" type="date"></div>
-        <div id="srTimeWrap"><label>Requested Time</label><input id="srTime" type="time"></div>
       </div>
       <label id="srDescriptionLabel" style="display:none">Work Description / Complaint <b class="req">*</b></label>
       <textarea id="srDescription" style="display:none" placeholder="Describe the work or complaint..."></textarea>
@@ -3358,7 +3351,6 @@ async function submitServiceRequest(){
   const fault=$("srFault")?.value.trim()||"";
   const description=$("srDescription")?.value.trim()||"";
   const work=(type==="GENERAL"||type==="STREET_LIGHT")?fault:description;
-  const date=$("srDate")?.value||null, time=$("srTime")?.value||null;
 
   if(!customer||!location){
     return alert(type==="STREET_LIGHT"
@@ -3400,8 +3392,6 @@ async function submitServiceRequest(){
       customer_id:customerId,
       work_description:work,
       location,
-      scheduled_date:date,
-      scheduled_time:time,
       job_term:"service_request",
       request_type:type,
       created_by:user.id,
@@ -3432,8 +3422,6 @@ function clearServiceRequestForm(){
     $("srLocation").readOnly=false;
     $("srLocation").classList.remove("autoField");
   }
-  if($("srDate"))$("srDate").value="";
-  if($("srTime"))$("srTime").value="";
   if($("serviceRequestMsg"))$("serviceRequestMsg").textContent="";
   updateServiceRequestFields();
 }
@@ -3478,7 +3466,7 @@ async function loadServiceRequests(){
       return `<article class="srRequestItem">
         <div class="srRequestHead"><div><b>${esc(requestTypeLabel)}</b><div class="srMeta">${esc(c.name||"Customer")} • Requested by ${esc(creator)} • ${esc(x.location||"Location not set")}</div></div><span class="srStatus ${esc(st)}">${esc(st.replaceAll("_"," "))}</span></div>
         <div class="srDescription">${esc(x.work_description||"No description")}</div>
-        <div class="srMeta">${esc([x.scheduled_date,x.scheduled_time].filter(Boolean).join(" • ")||"No schedule")} ${c.phone?`• ${esc(c.phone)}`:""}</div>
+        <div class="srMeta">${esc(x.created_at ? new Date(x.created_at).toLocaleString() : "Time not available")} ${c.phone?`• ${esc(c.phone)}`:""}</div>
         ${approver?`<div class="approvedByBadge">✓ Approved By: ${esc(approver)}</div>`:""}
         ${x.rejection_reason?`<div class="srMeta" style="color:#ff7180;margin-top:7px">Reason: ${esc(x.rejection_reason)}</div>`:""}
         ${canApprove?`<div class="serviceRequestActions"><button class="ok" onclick="approveServiceRequest(${x.id})">✓ Approve & Add to Jobs</button><button class="bad" onclick="rejectServiceRequest(${x.id})">✕ Reject</button></div>`:""}
@@ -3587,7 +3575,7 @@ async function loadJobs(){
       const technician=techNames.length ? techNames.map(x=>x.name).join(", ") : roleName(j.assigned_worker);
       const completedBy=completedTechs.map(x=>x.name).join(", ");
       const myAssignment=assignments.find(a=>a.technician_id===user?.id);
-      const when=[j.scheduled_date,j.scheduled_time].filter(Boolean).join(" • ");
+      const when=j.created_at ? new Date(j.created_at).toLocaleString() : "Time not available";
       const canUpdate=profile?.role==="worker" && !!myAssignment && myAssignment.status!=="completed" && st!=="completed";
       const canManage=["engineer","admin"].includes(profile?.role) && (profile?.role==="admin" || j.created_by===user.id || j.assigned_engineer===user.id);
       const jobType=String(j.job_term||"").toLowerCase().replaceAll("_"," ");
@@ -3623,7 +3611,7 @@ async function loadJobs(){
               <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
               <div class="jobDetailItem"><span>${isServiceRequest?"✅ Approved By":"👨‍💼 Engineer"}</span><strong>${esc(isServiceRequest?approvedBy:engineer)}</strong>${!isServiceRequest && rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}${isServiceRequest?`<small class="approvedByBadge">✓ Engineer approved</small>`:""}</div>
               <div class="jobDetailItem"><span>👷 Technicians</span><strong>${esc(technician||"Not assigned")}</strong>${completedBy?`<small style="color:#15803d;font-weight:800">✓ Completed by: ${esc(completedBy)}</small>`:""}</div>
-              <div class="jobDetailItem"><span>🗓️ Schedule</span><strong>${esc(when||"Not scheduled")}</strong></div>
+              <div class="jobDetailItem"><span>🕒 Created / History</span><strong>${esc(when)}</strong></div>
             </section>
             ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong></section>`:""}
             ${j.pending_reason?`<section class="jobNote pendingNote"><span>⚠️ Pending reason</span><strong>${esc(j.pending_reason)}</strong></section>`:""}
@@ -3634,7 +3622,7 @@ async function loadJobs(){
               ${profile?.role==="worker" && (assignmentMap[j.id]||[]).some(a=>a.technician_id===user.id) && st!=="completed" ? `<div class="extraWorkAdd"><input id="extraWorkInput${j.id}" placeholder="Extra work found at site…"><button type="button" onclick="event.stopPropagation();addExtraWork(${j.id})">＋ Add Extra Work</button></div>` : ""}
             </section>
           </div>
-          ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","TELECOM","STREET_LIGHT","BATTERY","EARTH_PIT"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><input id="jeDate${j.id}" type="date" value="${esc(j.scheduled_date||"")}"><input id="jeTime${j.id}" type="time" value="${esc(j.scheduled_time||"")}"></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
+          ${canManage?`<div class="jobActions"><button class="secondary" type="button" onclick="event.stopPropagation();toggleJobEdit(${j.id})">✎ Edit</button><button class="bad" type="button" onclick="event.stopPropagation();deleteJob(${j.id},'${esc(j.job_code||"JOB")}')">🗑 Delete</button></div><div id="editJob${j.id}" class="jobEditPanel hidden"><div class="row"><input id="jeCustomer${j.id}" value="${esc(c.name||"")}" placeholder="Customer name"><input id="jePhone${j.id}" value="${esc(c.phone||"")}" placeholder="Customer phone"></div><input id="jeLocation${j.id}" value="${esc(j.location||"")}" placeholder="Location / Address"><textarea id="jeDesc${j.id}" placeholder="Work description">${esc(j.work_description||"")}</textarea><div class="row"><select id="jeType${j.id}">${["GENERAL","TELECOM","STREET_LIGHT","BATTERY","EARTH_PIT"].map(t=>`<option value="${t}" ${j.job_term===t?"selected":""}>${t.replaceAll("_"," ")}</option>`).join("")}</select><select id="jeTech${j.id}">${technicianOptions(j.assigned_worker||"")}</select></div><div class="row"><button type="button" onclick="event.stopPropagation();saveJobEdit(${j.id},'${esc(j.customer_id||"")}')">✓ Save Changes</button><button type="button" class="secondary" onclick="event.stopPropagation();toggleJobEdit(${j.id})">Cancel</button></div></div>`:""}
           ${canUpdate?`<div class="jobActions"><input id="rm${j.id}" placeholder="Completion remarks" onclick="event.stopPropagation()"><input id="pr${j.id}" placeholder="Pending reason" onclick="event.stopPropagation()"><button class="secondary" type="button" onclick="event.stopPropagation();updateJob(${myAssignment.id},${j.id},'in_progress')">In Progress</button><button type="button" onclick="event.stopPropagation();updateJob(${myAssignment.id},${j.id},'completed')">Complete</button><button class="bad" type="button" onclick="event.stopPropagation();updateJob(${myAssignment.id},${j.id},'not_completed')">Not Completed</button></div>`:""}
         </div>
       </article>`;
@@ -3658,11 +3646,11 @@ function toggleJobDetails(id){
 async function saveJobEdit(id,customerId){
   if(!["engineer","admin"].includes(profile?.role)) return alert("Engineer/Admin access required");
   const customer=$("jeCustomer"+id)?.value.trim(), phone=$("jePhone"+id)?.value.trim()||null, location=$("jeLocation"+id)?.value.trim(), work=$("jeDesc"+id)?.value.trim();
-  const job_term=$("jeType"+id)?.value||"GENERAL", assigned_worker=$("jeTech"+id)?.value||null, scheduled_date=$("jeDate"+id)?.value||null, scheduled_time=$("jeTime"+id)?.value||null;
+  const job_term=$("jeType"+id)?.value||"GENERAL", assigned_worker=$("jeTech"+id)?.value||null;
   if(!customer||!location||!work) return alert("Customer, location and work description are required.");
   try{
     if(customerId){ const cr=await db.from("customers").update({name:customer,phone,address:location}).eq("id",customerId); if(cr.error) throw cr.error; }
-    const r=await db.from("jobs").update({work_description:work,location,job_term,assigned_worker,scheduled_date,scheduled_time}).eq("id",id);
+    const r=await db.from("jobs").update({work_description:work,location,job_term,assigned_worker}).eq("id",id);
     if(r.error) throw r.error;
     showJobActionToast("Job updated");
     await Promise.all([loadJobs(),loadHome(),loadSuccessRate()]);
@@ -3816,13 +3804,6 @@ function focusEngineerJobForm(){
   card.scrollIntoView({behavior:"smooth",block:"start"});
   setTimeout(()=>($('jobType')?.value==='TELECOM'?$('jobPhone'):$('jobFault'))?.focus(),250);
 }
-function setEngineerJobDateTime(){
-  const now=new Date();
-  const d=new Intl.DateTimeFormat("en-CA",{year:"numeric",month:"2-digit",day:"2-digit"}).format(now);
-  const t=new Intl.DateTimeFormat("en-GB",{hour:"2-digit",minute:"2-digit",hour12:false}).format(now);
-  if($("jobDate")) $("jobDate").value=d;
-  if($("jobTime")) $("jobTime").value=t;
-}
 function updateEngineerJobFields(){
   const type=$("jobType")?.value||"TELECOM", card=$("engineerCreateJobCard");
   if(!card)return;
@@ -3858,7 +3839,6 @@ function updateEngineerJobFields(){
   if(!telecom){
     ["jobCustomer","jobLocation"].forEach(id=>{const el=$(id);if(el){el.readOnly=false;el.classList.remove("autoField");el.style.fontSize="";}});
   }
-  setEngineerJobDateTime();
 }
 function fitDirectoryField(el){
   if(!el)return;
@@ -3912,7 +3892,6 @@ async function engineerCreateJob(){
   const fault=$("jobFault")?.value.trim()||"";
   const work=(type==="GENERAL"||type==="STREET_LIGHT")?fault:(($("jobDescription")?.value.trim())||`${type.replaceAll("_"," ")} work`);
   const selectedTech=null;
-  const date=$("jobDate")?.value||null, time=$("jobTime")?.value||null;
   if(!customer||!location)return alert(type==="STREET_LIGHT"?"Area and post location are required.":"Customer name and area/location are required.");
   if((type==="TELECOM"||type==="STREET_LIGHT") && !phone)return alert(type==="STREET_LIGHT"?"Number is required for Street Light jobs.":"Customer number is required for Telephone jobs.");
   if(!work)return alert((type==="GENERAL"||type==="STREET_LIGHT")?"Fault / complaint is required.":"Work description is required.");
@@ -3928,7 +3907,7 @@ async function engineerCreateJob(){
     if(tr.error)throw tr.error;
     const technicians=tr.data||[];
     if(!technicians.length) throw new Error("No active approved technicians are available.");
-    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:null,assigned_worker:null,created_by:user.id,status:"pending",job_term:type,scheduled_date:date,scheduled_time:time};
+    const payload={customer_id:customerId,work_description:work,location,assigned_engineer:null,assigned_worker:null,created_by:user.id,status:"pending",job_term:type};
     const r=await db.from("jobs").insert(payload).select("id,job_code").single();
     if(r.error)throw r.error;
     const jobId=r.data.id;
@@ -4997,7 +4976,7 @@ function clearHomeDirectorySearch(){const i=document.getElementById("homeDirecto
 
 let directoryRows=[], directoryLoaded=false;
 document.addEventListener("DOMContentLoaded",()=>{const i=document.getElementById("homeDirectoryInput");if(i){i.addEventListener("input",renderHomeDirectoryResults);}});
-document.addEventListener("DOMContentLoaded",()=>{ if(document.getElementById("jobType")){ setEngineerJobDateTime(); updateEngineerJobFields(); }});
+document.addEventListener("DOMContentLoaded",()=>{ if(document.getElementById("jobType")){ updateEngineerJobFields(); }});
 function directoryDigits(v){return String(v??"").replace(/\D/g,"");}
 function directoryPhones(v){return (String(v??"").match(/\d{3,15}/g)||[]).filter((x,i,a)=>a.indexOf(x)===i);}
 function directoryMatches(row,q){
