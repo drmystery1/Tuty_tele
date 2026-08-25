@@ -3968,11 +3968,25 @@ async function updateJob(assignmentId,jobId,status){
 }
 
 let successCache=[];
+function effectiveTechnicianStatus(assignment, job, technicianId){
+  const asStatus=String(assignment?.status||"pending").toLowerCase();
+  const jobStatus=String(job?.status||"pending").toLowerCase();
+  const isOwnService=String(job?.job_term||"").toLowerCase()==="service_request" && job?.created_by===technicianId && !!job?.approved_by;
+  const isAssignedWorker=job?.assigned_worker===technicianId;
+  // Assignment status is authoritative once the technician has acted.
+  if(asStatus!=="pending") return asStatus;
+  // Some older records have the final status stored on jobs while their assignment
+  // row was left as pending. Use the job status only when this technician is the
+  // actual owner of that completed/not-completed job.
+  if((isOwnService||isAssignedWorker) && ["completed","not_completed","in_progress"].includes(jobStatus)) return jobStatus;
+  return asStatus;
+}
+
 async function loadSuccessRate(){
   try{
     const [p,j,a]=await Promise.all([
       db.from("profiles").select("id,full_name,role,active").eq("role","worker").order("full_name"),
-      db.from("jobs").select("id,job_term,request_type,created_by,approved_by,status,created_at"),
+      db.from("jobs").select("id,job_term,request_type,created_by,approved_by,assigned_worker,worker_remarks,status,created_at"),
       db.from("job_assignments").select("id,job_id,technician_id,status,remarks,assigned_at,status_updated_at")
     ]);
     if(p.error) throw p.error;
@@ -3987,14 +4001,15 @@ async function loadSuccessRate(){
       mineAssignments.forEach(as=>{
         const job=jobMap[as.job_id]; if(!job) return;
         const isOwnService=String(job.job_term||"").toLowerCase()==="service_request" && job.created_by===person.id && !!job.approved_by;
-        const touched = as.status!=="pending" || (as.status_updated_at && as.assigned_at && Math.abs(new Date(as.status_updated_at)-new Date(as.assigned_at))>1000);
+        const effectiveStatus=effectiveTechnicianStatus(as,job,person.id);
+        const touched = as.status!=="pending" || effectiveStatus!=="pending" || (as.status_updated_at && as.assigned_at && Math.abs(new Date(as.status_updated_at)-new Date(as.assigned_at))>1000);
         // A service request belongs to the technician who submitted it after Engineer approval.
-        // An Engineer-created job counts for a technician only after that technician has acted on it.
+        // Other jobs count only for the technician who actually acted on/owns the job.
         if(!isOwnService && !touched) return;
         assigned++;
-        if(as.status==="completed") completed++;
-        else if(as.status==="not_completed") notDone++;
-        else if(["pending","in_progress"].includes(as.status)) pending++;
+        if(effectiveStatus==="completed") completed++;
+        else if(effectiveStatus==="not_completed") notDone++;
+        else if(["pending","in_progress"].includes(effectiveStatus)) pending++;
       });
       totalAssigned+=assigned; totalCompleted+=completed; totalPending+=pending; totalNotDone+=notDone;
       return {...person,assigned,completed,pending,notDone,rate:assigned?Math.round(completed/assigned*100):0};
@@ -4423,9 +4438,24 @@ async function printReport(type){
   }
   if(type==="success"||type==="full"){
     const p=await db.from("profiles").select("id,full_name,role").eq("role","worker");
-    const j=await db.from("job_assignments").select("technician_id,status");
+    const j=await db.from("jobs").select("id,job_term,created_by,approved_by,assigned_worker,status");
+    const a=await db.from("job_assignments").select("job_id,technician_id,status,assigned_at,status_updated_at");
+    if(p.error||j.error||a.error) return alert((p.error||j.error||a.error).message);
+    const jobMap={};(j.data||[]).forEach(x=>jobMap[x.id]=x);
     body+="<h2>Technician Success Rate</h2><table><tr><th>Technician</th><th>Total Jobs</th><th>Completed</th><th>Success Rate</th></tr>"+
-      (p.data||[]).map(x=>{const a=(j.data||[]).filter(y=>y.technician_id===x.id),d=a.filter(y=>y.status==="completed").length,rate=a.length?Math.round(d/a.length*100):0;return `<tr><td>${esc(x.full_name)}</td><td>${a.length}</td><td>${d}</td><td>${rate}%</td></tr>`}).join("")+"</table>";
+      (p.data||[]).map(x=>{
+        let total=0,done=0;
+        (a.data||[]).filter(y=>y.technician_id===x.id).forEach(as=>{
+          const job=jobMap[as.job_id];if(!job)return;
+          const isOwnService=String(job.job_term||"").toLowerCase()==="service_request"&&job.created_by===x.id&&!!job.approved_by;
+          const effectiveStatus=effectiveTechnicianStatus(as,job,x.id);
+          const touched=as.status!=="pending"||effectiveStatus!=="pending"||(as.status_updated_at&&as.assigned_at&&Math.abs(new Date(as.status_updated_at)-new Date(as.assigned_at))>1000);
+          if(!isOwnService&&!touched)return;
+          total++;if(effectiveStatus==="completed")done++;
+        });
+        const rate=total?Math.round(done/total*100):0;
+        return `<tr><td>${esc(x.full_name)}</td><td>${total}</td><td>${done}</td><td>${rate}%</td></tr>`;
+      }).join("")+"</table>";
     title="Tele Tuty - Technician Success Rate";
   }
   const w=window.open("","_blank");
