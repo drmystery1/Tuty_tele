@@ -4269,7 +4269,7 @@ async function printReport(type){
       const jobRows=rows.map((x,i)=>{
         const c=cmap[x.customer_id]||{};
         const assigns=amap[x.id]||[];
-        const tech=assigns.map(a=>`${tmap[a.technician_id]||"Technician"}: ${statusText(a.status)}${a.remarks?` — ${a.remarks}`:""}`).join("<br>") || (x.worker_remarks||"—");
+        const completedTechs=assigns.filter(a=>String(a.status||"").toLowerCase()==="completed"); const tech=completedTechs.map(a=>escHtml(tmap[a.technician_id]||"Technician")).join(", ") || (x.status==="completed" && x.worker_remarks ? escHtml(x.worker_remarks) : "—");
         return `<tr><td>${i+1}</td><td>${escHtml(x.job_term||x.job_code||"")}</td><td>${escHtml(c.name||x.customer_name||"")}</td><td>${escHtml(c.phone||x.customer_number||"")}</td><td>${escHtml(x.location||"")}</td><td>${escHtml(x.work_description||"")}</td><td>${tech}</td><td>${escHtml(statusText(x.status))}</td><td>${x.created_at?escHtml(new Date(x.created_at).toLocaleString()):""}</td></tr>`;
       }).join("");
       sections.push(`<h2>📋 Job List</h2><div class="meta">Total jobs: <b>${rows.length}</b></div><div class="tableWrap"><table><thead><tr><th>#</th><th>Job</th><th>Customer</th><th>Number</th><th>Location</th><th>Complaint / Work</th><th>Technician Update</th><th>Status</th><th>Created</th></tr></thead><tbody>${jobRows||`<tr><td colspan="9" class="emptyRow">No jobs found.</td></tr>`}</tbody></table></div>`);
@@ -4281,7 +4281,7 @@ async function printReport(type){
       const rows=all.filter(x=>new Date(x.created_at)>=since && wanted.has(String(x.job_term||"").toUpperCase()));
       const cmap=await getCustomers(rows), {map:amap,tmap}=await getAssignments(rows);
       title=type==="month_telecom"?"Tele Tuty - 30 Day Telephone / Telecom Work":"Tele Tuty - 30 Day Electrical Work";
-      const body=rows.map((x,i)=>{const c=cmap[x.customer_id]||{}, assigns=amap[x.id]||[];const rep=assigns.map(a=>`${tmap[a.technician_id]||"Technician"}: ${a.remarks||statusText(a.status)}`).join("<br>")||x.worker_remarks||"—";return `<tr><td>${i+1}</td><td>${escHtml(x.job_term||"")}</td><td>${escHtml(c.name||"")}</td><td>${escHtml(c.phone||"")}</td><td>${escHtml(x.location||"")}</td><td>${escHtml(x.work_description||"")}</td><td>${rep}</td><td>${escHtml(statusText(x.status))}</td></tr>`}).join("");
+      const body=rows.map((x,i)=>{const c=cmap[x.customer_id]||{}, assigns=amap[x.id]||[];const completedTechs=assigns.filter(a=>String(a.status||"").toLowerCase()==="completed");const rep=completedTechs.map(a=>escHtml(tmap[a.technician_id]||"Technician")).join(", ") || (x.status==="completed" && x.worker_remarks ? escHtml(x.worker_remarks) : "—");return `<tr><td>${i+1}</td><td>${escHtml(x.job_term||"")}</td><td>${escHtml(c.name||"")}</td><td>${escHtml(c.phone||"")}</td><td>${escHtml(x.location||"")}</td><td>${escHtml(x.work_description||"")}</td><td>${rep}</td><td>${escHtml(statusText(x.status))}</td></tr>`}).join("");
       sections.push(`<h2>${type==="month_telecom"?"☎️ Telephone / Telecom Work":"⚡ Electrical Work"}</h2><div class="meta">Period: ${since.toLocaleDateString()} – ${new Date().toLocaleDateString()} • Total: <b>${rows.length}</b></div><div class="tableWrap"><table><thead><tr><th>#</th><th>Type</th><th>Customer</th><th>Number</th><th>Location</th><th>Complaint / Work</th><th>Technician Report</th><th>Status</th></tr></thead><tbody>${body||`<tr><td colspan="8" class="emptyRow">No jobs found.</td></tr>`}</tbody></table></div>`);
     }
 
