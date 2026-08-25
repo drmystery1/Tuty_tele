@@ -2681,7 +2681,7 @@ body:before,body:after{display:none!important}
       <p id="engineerJobMsg" class="muted"></p>
     </div>
 
-    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
+    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="jobsDateFilter"><label>📅 Job Date</label><div class="jobsDateFilterRow"><input id="jobsDateFilter" type="date" onchange="setJobDateFilter(this.value)"><button type="button" class="secondary" onclick="setJobDateFilter(localDateKey(new Date()))">Today</button><button type="button" class="secondary" onclick="setJobDateFilter('')">All Dates</button><button type="button" onclick="printDailyJobReportFromJobs()">🖨️ Daily PDF</button></div></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
   </div>
 
 
@@ -2823,6 +2823,15 @@ body:before,body:after{display:none!important}
 .extraWorkAdd{display:flex;gap:8px;margin-top:10px}.extraWorkAdd input{margin:0;flex:1}.extraWorkAdd button{margin:0;white-space:nowrap}
 .reportButtons{grid-template-columns:repeat(2,minmax(0,1fr))}.reportButtons button{margin:0}
 @media(max-width:650px){.extraWorkAdd{flex-direction:column}.reportButtons{grid-template-columns:1fr}.extraWorkAdd button{width:100%}}
+
+<style id="jobs-date-filter-ui">
+.jobsDateFilter{margin:0 0 12px;padding:11px 12px;border:1px solid #dbe4ef;border-radius:14px;background:#f8fbff}
+.jobsDateFilter>label{display:block;font-size:12px;font-weight:800;color:#475569;margin-bottom:6px}
+.jobsDateFilterRow{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.jobsDateFilterRow input{margin:0;flex:1;min-width:145px}
+.jobsDateFilterRow button{margin:0;white-space:nowrap}
+@media(max-width:650px){.jobsDateFilterRow{display:grid;grid-template-columns:1fr 1fr}.jobsDateFilterRow input{width:100%;grid-column:1/-1}.jobsDateFilterRow button{width:100%}}
+</style>
 
 <style id="daily-job-report-ui">
 .dailyReportCard{margin-top:12px}.dailyReportControls{align-items:flex-end}.dailyReportControls label{font-size:12px;font-weight:800;color:#64748b}.dailyReportControls input{margin-top:5px}.dailyReportList{display:grid;gap:9px;margin-top:12px}.dailyReportItem{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:start;padding:13px;border:1px solid #dbe4ef;border-radius:14px;background:#fff}.dailyReportNo{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#eff6ff;color:#2563eb;font-weight:900}.dailyReportMain b{display:block;color:#172033}.dailyReportMeta{margin-top:4px;font-size:12px;color:#64748b}.dailyReportStatus{padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap}.dailyReportStatus.completed{background:#dcfce7;color:#15803d}.dailyReportStatus.pending{background:#fef3c7;color:#b45309}.dailyReportStatus.in_progress{background:#dbeafe;color:#1d4ed8}.dailyReportStatus.not_completed{background:#fee2e2;color:#b91c1c}.dailyReportEmpty{padding:18px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px;color:#64748b}@media(max-width:650px){.dailyReportControls{flex-direction:column;align-items:stretch}.dailyReportControls>*{width:100%!important}.dailyReportItem{grid-template-columns:40px 1fr}.dailyReportStatus{grid-column:2;justify-self:start}}
@@ -3415,7 +3424,28 @@ function showJobActionToast(message="Saved"){
 }
 
 let currentJobFilter="all";
+let currentJobDateFilter="";
 function setJobFilter(status="all"){ currentJobFilter=status; document.querySelectorAll("#jobStatusTabs button").forEach(b=>b.classList.toggle("active",b.dataset.status===status)); loadJobs(); }
+function setJobDateFilter(date=""){
+  currentJobDateFilter=String(date||"");
+  const input=$("jobsDateFilter"); if(input) input.value=currentJobDateFilter;
+  loadJobs();
+}
+function jobLocalDateKey(value){
+  if(!value)return "";
+  const d=new Date(value); if(Number.isNaN(d.getTime()))return "";
+  return localDateKey(d);
+}
+function applyJobDateFilter(rows){
+  if(!currentJobDateFilter)return rows;
+  return rows.filter(j=>jobLocalDateKey(j.created_at)===currentJobDateFilter);
+}
+function printDailyJobReportFromJobs(){
+  const date=currentJobDateFilter || $("jobsDateFilter")?.value || localDateKey(new Date());
+  const input=$("dailyReportDate");
+  if(input) input.value=date;
+  printDailyJobReport();
+}
 function focusServiceRequests(){
   navigate("serviceRequests");
 }
@@ -3719,6 +3749,7 @@ async function loadJobs(){
       if(r.error) throw r.error; rows=r.data||[];
     }
     rows=applyJobFilter(rows);
+    rows=applyJobDateFilter(rows);
 
     const jobIds=[...new Set(rows.map(x=>x.id).filter(Boolean))];
     const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))];
@@ -3744,7 +3775,8 @@ async function loadJobs(){
     rows=rows.filter(j=>jobMatchesSearch(j,customerMap[j.customer_id]||{},profileMap,globalJobSearchTerm));
     if($("jobsFilterLabel")){
       const base=currentJobFilter==="all" ? "Showing all jobs" : `Showing ${labelFilter(currentJobFilter)} jobs only`;
-      $("jobsFilterLabel").textContent=globalJobSearchTerm ? `${base} • Search: “${globalJobSearchTerm}”` : base;
+      const dateText=currentJobDateFilter ? ` • Date: ${new Date(`${currentJobDateFilter}T00:00:00`).toLocaleDateString()}` : "";
+      $("jobsFilterLabel").textContent=globalJobSearchTerm ? `${base}${dateText} • Search: “${globalJobSearchTerm}”` : `${base}${dateText}`;
     }
     if(!rows.length){box.innerHTML=`<div class="empty">No matching jobs found.</div>`;return;}
 
