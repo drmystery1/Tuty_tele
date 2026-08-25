@@ -644,6 +644,16 @@ body:before{opacity:.08}
 .analyticsKpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.analyticsKpi{min-height:120px;padding:15px;border-radius:15px;background:#0b1728;border:1px solid var(--line2)}.analyticsKpi small{display:block;color:#a3b1c3}.analyticsKpi b{display:block;font-size:30px;margin:12px 0 6px}.analyticsKpi span{font-size:11px;color:#7f92aa}.analyticsKpi.purple b{color:#a981ff}.analyticsKpi.green b{color:#43db83}.analyticsKpi.orange b{color:#ffb23c}.analyticsKpi.red b{color:#ff6372}.analyticsKpi.blue b{color:#56a9ff}
 .filterBar{display:grid;grid-template-columns:1.5fr .75fr .75fr auto;gap:10px;margin:16px 0}.filterBar input,.filterBar button{height:48px;margin:0!important}.filterBar button{background:#0b1728!important;border:1px solid var(--line2)!important}.filterBar .filterBtn{color:#9e7cff!important}
 .tableHead{display:grid;grid-template-columns:2fr .8fr .8fr .8fr .95fr 1fr;padding:0 14px 9px;color:#899bb1;font-size:11px;text-transform:uppercase;letter-spacing:.5px}.analyticsTable .card{margin:7px 0!important}.analyticsTable #successList>.card{background:#0b1728;border-radius:13px;padding:14px;margin:7px 0}.analyticsTable #successList>.card .kpi{font-size:23px;color:#45d984}.analyticsTable #successList>.card .progress{margin-top:8px}
+.successRow{display:grid;grid-template-columns:2fr .8fr .8fr .8fr .95fr 1fr;align-items:center;gap:8px}
+.successRow .successTech{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.successRow .successNum{font-weight:800;font-variant-numeric:tabular-nums}
+.successRow .successRate{font-weight:900;font-variant-numeric:tabular-nums}
+.successRow .successRate.green{color:#16a34a}.successRow .successRate.orange{color:#f59e0b}.successRow .successRate.red{color:#dc2626}
+@media(max-width:900px){
+  .successRow{grid-template-columns:1fr auto;row-gap:6px}
+  .successRow .successTech{grid-column:1/-1}
+  .successRow .successNum:before{content:attr(data-label)}
+}
 .moduleTitle{font-size:25px;margin:0 0 4px;display:flex;align-items:center;gap:10px}.moduleIcon{width:42px;height:42px;border-radius:13px;display:inline-grid;place-items:center;background:#0e2038;color:#52a9ff;border:1px solid rgba(82,169,255,.2)}.streetIcon{color:#ffcb4b}.batteryIcon{color:#4aa7ff}.earthIcon{color:#35d77f}
 
 input,select,textarea{background:#091727!important;border-color:rgba(103,152,211,.18)!important;border-radius:12px!important}label{color:#a9b7c9;font-size:12px;font-weight:700}
@@ -3607,7 +3617,9 @@ async function submitServiceRequest(){
     ["srCustomer","srPhone","srLocation","srFault","srDescription"].forEach(id=>{if($(id))$(id).value="";});
     if($("srJobType")) $("srJobType").value="TELECOM";
     updateServiceRequestFields();
-    await loadJobs();
+    /* A new request is not a job until an Engineer approves it, so refresh the
+       Service Requests list (for reviewers) instead of the Jobs list. */
+    if(["engineer","admin"].includes(profile?.role)) await loadServiceRequests();
   }catch(e){
     console.error("Service request submit error",e);
     if(msg)msg.textContent="Could not submit request.";
@@ -3760,7 +3772,7 @@ async function loadJobs(){
 
     const roleName=id=>profileMap[id]?.full_name||"Not assigned";
     const rolePhone=id=>profileMap[id]?.phone||"";
-    const labelStatus=st=>String(st||"pending").replaceAll("_"," ").replace(/\\b\\w/g,m=>m.toUpperCase());
+    const labelStatus=st=>String(st||"pending").replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase());
     box.innerHTML=rows.map((j,idx)=>{
       const st=String(j.status||"pending");
       const c=customerMap[j.customer_id]||{};
@@ -3841,6 +3853,16 @@ function toggleJobDetails(id){
   const btn=card.querySelector(".jobSummaryButton");
   if(btn)btn.setAttribute("aria-expanded",String(!open));
   if(!open) loadExtraWork(id);
+}
+
+function toggleJobEdit(id){
+  const panel=$("editJob"+id);
+  if(!panel)return;
+  const opening=panel.classList.contains("hidden");
+  /* Only one edit panel open at a time. */
+  if(opening) document.querySelectorAll(".jobEditPanel").forEach(p=>{if(p!==panel)p.classList.add("hidden")});
+  panel.classList.toggle("hidden",!opening);
+  if(opening) panel.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
 async function saveJobEdit(id,customerId){
@@ -4000,6 +4022,25 @@ async function loadSuccessRate(){
     $("overallRate").textContent="0%"; $("successAssigned").textContent="0"; $("successCompleted").textContent="0"; $("successPending").textContent="0"; $("successNotCompleted").textContent="0";
     $("successList").innerHTML=`<div class="empty">Could not load success rate.</div>`;
   }
+}
+function renderSuccessRows(rows){
+ const box=$("successList");
+ if(!box)return;
+ const list=Array.isArray(rows)?rows:[];
+ if(!list.length){box.innerHTML=`<div class="empty">No technician data yet.</div>`;return;}
+ box.innerHTML=list.map(x=>{
+   const rate=Number(x.rate)||0;
+   const tone=rate>=75?"green":rate>=40?"orange":"red";
+   const inactive=x.active===false;
+   return `<div class="card"><div class="row successRow">
+     <span class="successTech"><b>${esc(x.full_name||"Technician")}</b>${inactive?`<small class="muted"> • Inactive</small>`:""}</span>
+     <span class="successNum">${Number(x.assigned)||0}</span>
+     <span class="successNum">${Number(x.completed)||0}</span>
+     <span class="successNum">${Number(x.pending)||0}</span>
+     <span class="successNum">${Number(x.notDone)||0}</span>
+     <span class="successRate ${tone}">${rate}%</span>
+   </div></div>`;
+ }).join("");
 }
 function filterSuccess(){
  const q=($("techSearch")?.value||"").toLowerCase();
