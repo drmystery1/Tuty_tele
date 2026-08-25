@@ -2790,6 +2790,19 @@ body:before,body:after{display:none!important}
         <button onclick="printReport('street')">💡 Street Light Survey PDF</button>
         <button onclick="printReport('success')">🏆 Technician Success Rate PDF</button>
       </div>
+      <div class="card dailyReportCard">
+        <h3>📅 Daily Job Report</h3>
+        <p class="muted">Jobs மட்டும் date-wise. Job Date = job created date. Directory இதில் சேராது.</p>
+        <div class="row dailyReportControls">
+          <label style="flex:1">Job Date
+            <input id="dailyReportDate" type="date">
+          </label>
+          <button onclick="loadDailyJobReport()">🔎 View Jobs</button>
+          <button class="secondary" onclick="printDailyJobReport()">🖨️ Print / PDF</button>
+        </div>
+        <div id="dailyReportMeta" class="muted"></div>
+        <div id="dailyReportList" class="dailyReportList"><div class="empty">Select a date to view jobs.</div></div>
+      </div>
       <div id="adminOnlyReportButtons" class="hidden">
         <button class="secondary" onclick="printReport('jobs')">📋 Full Jobs Report PDF</button>
         <button class="secondary" onclick="printReport('full')">👑 Full Admin Report PDF</button>
@@ -2810,6 +2823,10 @@ body:before,body:after{display:none!important}
 .extraWorkAdd{display:flex;gap:8px;margin-top:10px}.extraWorkAdd input{margin:0;flex:1}.extraWorkAdd button{margin:0;white-space:nowrap}
 .reportButtons{grid-template-columns:repeat(2,minmax(0,1fr))}.reportButtons button{margin:0}
 @media(max-width:650px){.extraWorkAdd{flex-direction:column}.reportButtons{grid-template-columns:1fr}.extraWorkAdd button{width:100%}}
+
+<style id="daily-job-report-ui">
+.dailyReportCard{margin-top:12px}.dailyReportControls{align-items:flex-end}.dailyReportControls label{font-size:12px;font-weight:800;color:#64748b}.dailyReportControls input{margin-top:5px}.dailyReportList{display:grid;gap:9px;margin-top:12px}.dailyReportItem{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:start;padding:13px;border:1px solid #dbe4ef;border-radius:14px;background:#fff}.dailyReportNo{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#eff6ff;color:#2563eb;font-weight:900}.dailyReportMain b{display:block;color:#172033}.dailyReportMeta{margin-top:4px;font-size:12px;color:#64748b}.dailyReportStatus{padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap}.dailyReportStatus.completed{background:#dcfce7;color:#15803d}.dailyReportStatus.pending{background:#fef3c7;color:#b45309}.dailyReportStatus.in_progress{background:#dbeafe;color:#1d4ed8}.dailyReportStatus.not_completed{background:#fee2e2;color:#b91c1c}.dailyReportEmpty{padding:18px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px;color:#64748b}@media(max-width:650px){.dailyReportControls{flex-direction:column;align-items:stretch}.dailyReportControls>*{width:100%!important}.dailyReportItem{grid-template-columns:40px 1fr}.dailyReportStatus{grid-column:2;justify-self:start}}
+</style>
 </style>
 </section>
 </main>
@@ -4193,6 +4210,61 @@ async function restoreBackup(ev){
     loadHome();loadJobs();loadSuccessRate();loadStreet();loadBattery();loadEarth();
   }catch(e){alert("Restore failed: "+e.message)}
 }
+function localDateKey(d){
+  const x=d instanceof Date?d:new Date(d);
+  if(Number.isNaN(x.getTime())) return "";
+  const y=x.getFullYear(),m=String(x.getMonth()+1).padStart(2,"0"),day=String(x.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function dailyStatusLabel(st){return String(st||"pending").replaceAll("_"," ").replace(/\b\w/g,m=>m.toUpperCase());}
+async function loadDailyJobReport(){
+  if(!user)return alert("Login required");
+  const input=$("dailyReportDate"), box=$("dailyReportList"), meta=$("dailyReportMeta");
+  const date=input?.value || localDateKey(new Date());
+  if(input && !input.value) input.value=date;
+  if(box) box.innerHTML=`<div class="empty">Loading jobs for ${date}…</div>`;
+  try{
+    const start=new Date(`${date}T00:00:00`);
+    const end=new Date(start.getTime()+86400000);
+    const r=await db.from("jobs").select("id,job_code,job_term,work_description,location,status,created_at,customer_id,assigned_worker,assigned_engineer,created_by").gte("created_at",start.toISOString()).lt("created_at",end.toISOString()).order("created_at",{ascending:true}).limit(500);
+    if(r.error)throw r.error;
+    const rows=r.data||[];
+    const customerIds=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))];
+    const profileIds=[...new Set(rows.flatMap(x=>[x.assigned_worker,x.assigned_engineer,x.created_by]).filter(Boolean))];
+    const cmap={},pmap={};
+    if(customerIds.length){const cr=await db.from("customers").select("id,name,phone,address").in("id",customerIds);if(!cr.error)(cr.data||[]).forEach(c=>cmap[c.id]=c);}
+    if(profileIds.length){const pr=await db.from("profiles").select("id,full_name,role").in("id",profileIds);if(!pr.error)(pr.data||[]).forEach(x=>pmap[x.id]=x);}
+    if(meta) meta.textContent=`${new Date(`${date}T00:00:00`).toLocaleDateString()} • Total Jobs: ${rows.length}`;
+    if(!rows.length){box.innerHTML=`<div class="dailyReportEmpty">No jobs found for ${esc(date)}.</div>`;return;}
+    box.innerHTML=rows.map((j,i)=>{
+      const c=cmap[j.customer_id]||{};
+      const tech=pmap[j.assigned_worker]?.full_name||"Not assigned";
+      const eng=pmap[j.assigned_engineer]?.full_name||"Not assigned";
+      const creator=pmap[j.created_by]?.full_name||"—";
+      const code=j.job_code||j.job_term||`Job ${i+1}`;
+      const st=String(j.status||"pending");
+      return `<article class="dailyReportItem"><span class="dailyReportNo">${i+1}</span><div class="dailyReportMain"><b>${esc(code)}</b><div class="dailyReportMeta">${esc(j.work_description||"No work description")} • ${esc(j.location||c.address||"Location not set")}</div><div class="dailyReportMeta">Customer: ${esc(c.name||"—")} • Technician: ${esc(tech)} • Engineer: ${esc(eng)} • Created by: ${esc(creator)} • ${new Date(j.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</div></div><span class="dailyReportStatus ${esc(st)}">${esc(dailyStatusLabel(st))}</span></article>`;
+    }).join("");
+  }catch(e){console.error("Daily job report error",e);if(box)box.innerHTML=`<div class="dailyReportEmpty">Could not load daily report: ${esc(e?.message||e)}</div>`;}
+}
+async function printDailyJobReport(){
+  if(!user)return alert("Login required");
+  const input=$("dailyReportDate"), date=input?.value||localDateKey(new Date());
+  if(input && !input.value)input.value=date;
+  try{
+    const start=new Date(`${date}T00:00:00`),end=new Date(start.getTime()+86400000);
+    const r=await db.from("jobs").select("id,job_code,job_term,work_description,location,status,created_at,customer_id,assigned_worker,assigned_engineer,created_by").gte("created_at",start.toISOString()).lt("created_at",end.toISOString()).order("created_at",{ascending:true}).limit(500);
+    if(r.error)throw r.error;
+    const rows=r.data||[], ids=[...new Set(rows.map(x=>x.customer_id).filter(Boolean))], pids=[...new Set(rows.flatMap(x=>[x.assigned_worker,x.assigned_engineer,x.created_by]).filter(Boolean))], cmap={},pmap={};
+    if(ids.length){const cr=await db.from("customers").select("id,name,phone,address").in("id",ids);if(!cr.error)(cr.data||[]).forEach(c=>cmap[c.id]=c);}
+    if(pids.length){const pr=await db.from("profiles").select("id,full_name,role").in("id",pids);if(!pr.error)(pr.data||[]).forEach(x=>pmap[x.id]=x);}
+    const title=`Tele Tuty - Daily Job Report - ${new Date(`${date}T00:00:00`).toLocaleDateString()}`;
+    const body=`<h2>Daily Job Report</h2><div class="meta">Job Date: ${esc(new Date(`${date}T00:00:00`).toLocaleDateString())} • Total Jobs: ${rows.length}</div><table><tr><th>No.</th><th>Job</th><th>Customer</th><th>Location</th><th>Technician</th><th>Engineer</th><th>Created By</th><th>Time</th><th>Status</th></tr>${rows.map((j,i)=>{const c=cmap[j.customer_id]||{};const st=String(j.status||"pending");return `<tr><td>${i+1}</td><td>${esc(j.job_code||j.job_term||"")}<br>${esc(j.work_description||"")}</td><td>${esc(c.name||"—")}<br>${esc(c.phone||"")}</td><td>${esc(j.location||c.address||"")}</td><td>${esc(pmap[j.assigned_worker]?.full_name||"Not assigned")}</td><td>${esc(pmap[j.assigned_engineer]?.full_name||"Not assigned")}</td><td>${esc(pmap[j.created_by]?.full_name||"—")}</td><td>${new Date(j.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</td><td>${esc(dailyStatusLabel(st))}</td></tr>`;}).join("")}</table>`;
+    const w=window.open("","_blank");if(!w)return alert("Allow pop-ups to create the PDF report.");
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#111;background:#fff}.report{max-width:1200px;margin:auto}h1,h2{margin:0 0 12px}.meta{margin-bottom:18px;font-weight:700;color:#475569}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:8px;text-align:left;vertical-align:top;font-size:12px}th{background:#e2e8f0}@media print{body{padding:0}th{background:#eee!important}}</style></head><body><div class="report"><h1>${esc(title)}</h1>${body}<button onclick="window.print()" style="margin-top:16px;padding:10px 16px">Print / Save PDF</button></div></body></html>`);w.document.close();
+  }catch(e){console.error("Daily job print error",e);alert("Could not create daily report: "+(e?.message||e));}
+}
+
 async function printReport(type){
   if(!user)return alert("Login required");
   if(["month_telecom","month_electrical"].includes(type) && !["admin","engineer"].includes(profile?.role)) return alert("Admin/Engineer access required.");
