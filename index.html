@@ -2726,6 +2726,20 @@ body:before,body:after{display:none!important}
     </div>
     <div class="filterBar"><input id="techSearch" placeholder="⌕  Search technician..." oninput="filterSuccess()"><button>⌖ All Zones⌄</button><button>♙ All Teams⌄</button><button class="filterBtn">⚱ Filters</button></div>
     <div class="panel analyticsTable"><div class="tableHead"><span>Technician</span><span>Assigned</span><span>Completed</span><span>Pending</span><span>Not Completed</span><span>Success Rate</span></div><div id="successList"></div></div>
+
+      <div class="card dailyReportCard" id="dailyReportCard">
+        <h3>📅 Daily Work Completion Report</h3>
+        <p class="muted">Engineer / Admin only • Text format • Telephone மேலே, Electrical Works கீழே.</p>
+        <div class="row dailyReportControls">
+          <label style="flex:1">Job Date
+            <input id="dailyReportDate" type="date">
+          </label>
+          <button onclick="loadDailyJobReport()">🔎 View Report</button>
+          <button class="secondary" onclick="copyDailyJobReportText()">📋 Copy Text</button>
+        </div>
+        <div id="dailyReportMeta" class="muted"></div>
+        <textarea id="dailyReportText" class="dailyReportText" readonly placeholder="Select a date and tap View Report."></textarea>
+        <div id="dailyReportList" class="dailyReportList"><div class="empty">Select a date to view the text report.</div></div>
   </div>
 
   <div id="adminTools" class="view hidden">
@@ -2790,19 +2804,6 @@ body:before,body:after{display:none!important}
         <button onclick="printReport('street')">💡 Street Light Survey PDF</button>
         <button onclick="printReport('success')">🏆 Technician Success Rate PDF</button>
       </div>
-      <div class="card dailyReportCard" id="dailyReportCard">
-        <h3>📅 Daily Work Completion Report</h3>
-        <p class="muted">Engineer / Admin only • Text format • Telephone மேலே, Electrical Works கீழே.</p>
-        <div class="row dailyReportControls">
-          <label style="flex:1">Job Date
-            <input id="dailyReportDate" type="date">
-          </label>
-          <button onclick="loadDailyJobReport()">🔎 View Report</button>
-          <button class="secondary" onclick="copyDailyJobReportText()">📋 Copy Text</button>
-        </div>
-        <div id="dailyReportMeta" class="muted"></div>
-        <textarea id="dailyReportText" class="dailyReportText" readonly placeholder="Select a date and tap View Report."></textarea>
-        <div id="dailyReportList" class="dailyReportList"><div class="empty">Select a date to view the text report.</div></div>
       </div>
       <div id="adminOnlyReportButtons" class="hidden">
         <button class="secondary" onclick="printReport('jobs')">📋 Full Jobs Report PDF</button>
@@ -4283,11 +4284,13 @@ function dailyJobGroups(rows,cmap){
   return {telecom,electrical};
 }
 function dailyElectricalText(j,c){
-  const work=String(j.work_description||j.job_code||j.job_term||"Electrical work").trim();
+  const complaint=String(j.work_description||"").trim();
+  const work=String(j.job_code||j.job_term||"Electrical work").trim();
   const loc=String(j.location||c.address||"").trim();
   const st=String(j.status||"pending").toLowerCase();
   let text=work;
   if(loc) text += ` — ${loc}`;
+  if(complaint && complaint.toLowerCase()!==work.toLowerCase()) text += ` — Complaint / Work: ${complaint}`;
   if(st==="in_progress") text += " — Work is in progress.";
   else if(st==="pending") text += " — Pending.";
   else if(st==="not_completed") text += " — Not completed.";
@@ -4310,7 +4313,10 @@ function buildDailyJobReportText(date,groups){
     groups.telecom.forEach(({j,c})=>{
       const number=c.phone||j.job_code||"Telephone";
       const loc=j.location||c.address||"";
-      lines.push(`${number}${loc?` ${loc}`:""}`);
+      const complaint=String(j.work_description||"").trim();
+      let line=`${number}${loc?` ${loc}`:""}`;
+      if(complaint) line += ` — Complaint: ${complaint}`;
+      lines.push(line);
     });
   }else lines.push("No telephone complaints completed.");
   lines.push("","Electrical Works:","");
@@ -4333,7 +4339,7 @@ async function loadDailyJobReport(){
     if(meta) meta.textContent=`Today's Work Completion Report — ${dateLabel} • ${groups.telecom.length} telephone completed • ${groups.electrical.length} electrical works`;
     if(textBox) textBox.value=reportText;
     const tel=groups.telecom.length
-      ? `<section class="dailyReportSection"><h3>☎️ Telephone Complaints Completed:</h3><ol>${groups.telecom.map(({j,c})=>`<li><b>${esc(c.phone||j.job_code||"Telephone")}</b>${j.location||c.address?` ${esc(j.location||c.address)}`:""}</li>`).join("")}</ol></section>`
+      ? `<section class="dailyReportSection"><h3>☎️ Telephone Complaints Completed:</h3><ol>${groups.telecom.map(({j,c})=>{const complaint=String(j.work_description||"").trim();return `<li><b>${esc(c.phone||j.job_code||"Telephone")}</b>${j.location||c.address?` ${esc(j.location||c.address)}`:""}${complaint?`<div class="muted">Complaint: ${esc(complaint)}</div>`:""}</li>`}).join("")}</ol></section>`
       : `<section class="dailyReportSection"><h3>☎️ Telephone Complaints Completed:</h3><div class="muted">No telephone complaints completed.</div></section>`;
     const elec=groups.electrical.length
       ? `<section class="dailyReportSection"><h3>⚡ Electrical Works:</h3><ul>${groups.electrical.map(({j,c})=>`<li>${esc(dailyElectricalText(j,c))}</li>`).join("")}</ul></section>`
