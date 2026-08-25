@@ -2989,9 +2989,30 @@ async function loadHome(){
    if($("homeRecentJobsEng")) $("homeRecentJobsEng").innerHTML=renderRecentJobs(rows.slice(0,8));
    document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }else{
-   const ar=await db.from("job_assignments").select("job_id,status").eq("technician_id",user.id).order("assigned_at",{ascending:false}).limit(100);
+   const ar=await db.from("job_assignments").select("job_id,status").eq("technician_id",user.id).order("assigned_at",{ascending:false}).limit(200);
    const assignmentRows=ar.data||[];
    const mineIds=new Set(assignmentRows.map(a=>a.job_id));
+
+   // Dashboard "Today's Jobs" rule:
+   // 1) Show every job created today (completed/pending/in-progress/not-completed).
+   // 2) Also show ONLY yesterday's pending/in-progress/not-completed jobs.
+   // 3) Do not show yesterday's completed jobs here; they remain available in All Jobs/History.
+   // 4) Older unfinished jobs are also kept out of this compact dashboard list.
+   const dashboardToday=new Date();
+   dashboardToday.setHours(0,0,0,0);
+   const dashboardYesterday=new Date(dashboardToday);
+   dashboardYesterday.setDate(dashboardYesterday.getDate()-1);
+   const dayKey=d=>{const x=new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`};
+   const todayKey=dayKey(dashboardToday), yesterdayKey=dayKey(dashboardYesterday);
+   const dashboardMine=rows.filter(x=>{
+     if(!mineIds.has(x.id)) return false;
+     const jobKey=dayKey(x.created_at);
+     const st=String(x.status||"pending");
+     if(jobKey===todayKey) return true;
+     if(jobKey===yesterdayKey) return ["pending","in_progress","not_completed"].includes(st);
+     return false;
+   });
+   // Keep the normal technician job list logic untouched; only the dashboard preview is date-scoped.
    const mine=rows.filter(x=>{
      if(!mineIds.has(x.id)) return false;
      if(String(x.status||"")!=="completed") return true;
@@ -3007,7 +3028,7 @@ async function loadHome(){
    $("myDone").textContent=md;
    $("myPending").textContent=visibleAssignments.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
    $("myRate").textContent=(assignmentRows.length?Math.round(md/assignmentRows.length*100):0)+"%";
-   if($("homeRecentJobsTech")) $("homeRecentJobsTech").innerHTML=renderRecentJobs(mine.slice(0,8));
+   if($("homeRecentJobsTech")) $("homeRecentJobsTech").innerHTML=renderRecentJobs(dashboardMine.slice(0,8));
    document.querySelector(".dashHeroArt").style.backgroundImage="url('public/images/jobs_field_clean.png')";
  }
  
