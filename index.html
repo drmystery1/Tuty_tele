@@ -4279,9 +4279,7 @@ async function printReport(type){
       (p.data||[]).map(x=>{const a=(j.data||[]).filter(y=>y.technician_id===x.id),d=a.filter(y=>y.status==="completed").length,rate=a.length?Math.round(d/a.length*100):0;return `<tr><td>${esc(x.full_name)}</td><td>${a.length}</td><td>${d}</td><td>${rate}%</td></tr>`}).join("")+"</table>";
     title="Tele Tuty - Technician Success Rate";
   }
-  const w=window.open("","_blank");
-  if(!w)return alert("Allow pop-ups to create the PDF report.");
-  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>
+  const reportHtml=`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>
 :root{color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#071426;color:#f8fbff}
@@ -4933,8 +4931,14 @@ html,body,#app{background:#fff!important;color:#172033!important;opacity:1!impor
 }
 </style>
 
-</body></html>`);
-  w.document.close();
+</body></html>`;
+  const blob=new Blob([reportHtml],{type:"text/html;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const w=window.open(url,"_blank");
+  if(!w){
+    const a=document.createElement("a"); a.href=url; a.target="_blank"; a.rel="noopener"; a.click();
+  }
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
 async function loadBackupSummary(){
   try{
