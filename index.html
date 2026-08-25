@@ -2681,7 +2681,7 @@ body:before,body:after{display:none!important}
       <p id="engineerJobMsg" class="muted"></p>
     </div>
 
-    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="jobsDateFilter"><label>📅 Job Date</label><div class="jobsDateFilterRow"><input id="jobsDateFilter" type="date" onchange="setJobDateFilter(this.value)"><button type="button" class="secondary" onclick="setJobDateFilter(localDateKey(new Date()))">Today</button><button type="button" class="secondary" onclick="setJobDateFilter('')">All Dates</button><button type="button" onclick="printDailyJobReportFromJobs()">🖨️ Daily PDF</button></div></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
+    <div id="jobsListCard" class="card"><div class="panelHead"><h1 class="moduleTitle"><span class="moduleIcon">▣</span> Jobs</h1><button id="newJobTopBtn" class="textBtn hidden" onclick="focusEngineerJobForm()">＋ New Job</button></div><div class="jobsDateFilter"><label>📅 Job Date</label><div class="jobsDateFilterRow"><input id="jobsDateFilter" type="date" onchange="setJobDateFilter(this.value)"><button type="button" class="secondary" onclick="setJobDateFilter(localDateKey(new Date()))">Today</button><button type="button" class="secondary" onclick="setJobDateFilter('')">All Dates</button></div></div><div class="tabs jobStatusTabs" id="jobStatusTabs"><button type="button" data-status="all" aria-label="All Jobs" title="All Jobs" onclick="setJobFilter('all')">▦</button><button type="button" data-status="completed" aria-label="Completed" title="Completed" onclick="setJobFilter('completed')">✓</button><button type="button" data-status="pending" aria-label="Pending" title="Pending" onclick="setJobFilter('pending')">◷</button><button type="button" data-status="not_completed" aria-label="Not Completed" title="Not Completed" onclick="setJobFilter('not_completed')">!</button></div><div id="jobsFilterLabel" class="muted" style="margin:4px 0 12px"></div><div id="jobsList"></div></div>
   </div>
 
 
@@ -2790,18 +2790,19 @@ body:before,body:after{display:none!important}
         <button onclick="printReport('street')">💡 Street Light Survey PDF</button>
         <button onclick="printReport('success')">🏆 Technician Success Rate PDF</button>
       </div>
-      <div class="card dailyReportCard">
+      <div class="card dailyReportCard" id="dailyReportCard">
         <h3>📅 Daily Work Completion Report</h3>
-        <p class="muted">Telephone complaints மேலே, Electrical Works கீழே — selected date-க்கு மட்டும்.</p>
+        <p class="muted">Engineer / Admin only • Text format • Telephone மேலே, Electrical Works கீழே.</p>
         <div class="row dailyReportControls">
           <label style="flex:1">Job Date
             <input id="dailyReportDate" type="date">
           </label>
-          <button onclick="loadDailyJobReport()">🔎 View Jobs</button>
-          <button class="secondary" onclick="printDailyJobReport()">🖨️ Print / PDF</button>
+          <button onclick="loadDailyJobReport()">🔎 View Report</button>
+          <button class="secondary" onclick="copyDailyJobReportText()">📋 Copy Text</button>
         </div>
         <div id="dailyReportMeta" class="muted"></div>
-        <div id="dailyReportList" class="dailyReportList"><div class="empty">Select a date to view jobs.</div></div>
+        <textarea id="dailyReportText" class="dailyReportText" readonly placeholder="Select a date and tap View Report."></textarea>
+        <div id="dailyReportList" class="dailyReportList"><div class="empty">Select a date to view the text report.</div></div>
       </div>
       <div id="adminOnlyReportButtons" class="hidden">
         <button class="secondary" onclick="printReport('jobs')">📋 Full Jobs Report PDF</button>
@@ -2834,7 +2835,7 @@ body:before,body:after{display:none!important}
 </style>
 
 <style id="daily-job-report-ui">
-.dailyReportCard{margin-top:12px}.dailyReportControls{align-items:flex-end}.dailyReportControls label{font-size:12px;font-weight:800;color:#64748b}.dailyReportControls input{margin-top:5px}.dailyReportList{display:grid;gap:14px;margin-top:12px}.dailyReportSection{padding:16px 17px;border:1px solid #dbe4ef;border-radius:16px;background:#fff}.dailyReportSection h3{margin:0 0 12px;color:#172033}.dailyReportSection ol,.dailyReportSection ul{margin:0;padding-left:25px}.dailyReportSection li{margin:8px 0;line-height:1.5;color:#172033}.dailyReportEmpty{padding:18px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px;color:#64748b}@media(max-width:650px){.dailyReportControls{flex-direction:column;align-items:stretch}.dailyReportControls>*{width:100%!important}.dailyReportSection{padding:14px}}
+.dailyReportCard{margin-top:12px}.dailyReportText{width:100%;min-height:230px;margin-top:12px;padding:14px;border:1px solid #d7dde5;border-radius:14px;background:#fff;color:#111827;font:500 15px/1.6 Arial,sans-serif;resize:vertical}.dailyReportControls{align-items:flex-end}.dailyReportControls label{font-size:12px;font-weight:800;color:#64748b}.dailyReportControls input{margin-top:5px}.dailyReportList{display:grid;gap:14px;margin-top:12px}.dailyReportSection{padding:16px 17px;border:1px solid #dbe4ef;border-radius:16px;background:#fff}.dailyReportSection h3{margin:0 0 12px;color:#172033}.dailyReportSection ol,.dailyReportSection ul{margin:0;padding-left:25px}.dailyReportSection li{margin:8px 0;line-height:1.5;color:#172033}.dailyReportEmpty{padding:18px;text-align:center;border:1px dashed #cbd5e1;border-radius:14px;color:#64748b}@media(max-width:650px){.dailyReportControls{flex-direction:column;align-items:stretch}.dailyReportControls>*{width:100%!important}.dailyReportSection{padding:14px}}
 </style>
 </style>
 </section>
@@ -2966,6 +2967,8 @@ async function loadHome(){
  const total=rows.length, completed=rows.filter(x=>x.status==="completed").length, open=rows.filter(x=>["pending","in_progress","not_completed"].includes(x.status)).length;
  const users=p.data||[];
  const role=profile.role;
+ const dailyReportCard=$("dailyReportCard");
+ if(dailyReportCard) dailyReportCard.classList.toggle("hidden", !["admin","engineer"].includes(String(role||"").toLowerCase()));
  $("dashRoleLabel").textContent=role==="admin"?"Admin Dashboard":role==="engineer"?"Engineer Dashboard":"Technician Dashboard";
  $("workersNav").textContent=role==="worker"?"History":role==="engineer"?"Technicians":"Workers";
  document.querySelectorAll(".rolePane").forEach(x=>x.classList.add("hidden"));
@@ -3460,12 +3463,6 @@ function jobLocalDateKey(value){
 function applyJobDateFilter(rows){
   if(!currentJobDateFilter)return rows;
   return rows.filter(j=>jobLocalDateKey(j.created_at)===currentJobDateFilter);
-}
-function printDailyJobReportFromJobs(){
-  const date=currentJobDateFilter || $("jobsDateFilter")?.value || localDateKey(new Date());
-  const input=$("dailyReportDate");
-  if(input) input.value=date;
-  printDailyJobReport();
 }
 function focusServiceRequests(){
   navigate("serviceRequests");
@@ -4278,10 +4275,8 @@ function dailyJobGroups(rows,cmap){
     const c=cmap[j.customer_id]||{};
     const st=String(j.status||"").toLowerCase();
     if(term==="TELECOM" || /telephone|telecom/.test(term.toLowerCase())){
-      // Telephone section is strictly for completed complaints, like the reference format.
       if(st==="completed") telecom.push({j,c});
     }else if(electricalTerms.has(term) || !term || !/telephone|telecom/.test(term.toLowerCase())){
-      // Electrical section includes completed, in-progress, pending and not-completed work.
       electrical.push({j,c});
     }
   });
@@ -4308,9 +4303,25 @@ async function fetchDailyReportRows(date){
   if(customerIds.length){const cr=await db.from("customers").select("id,name,phone,address").in("id",customerIds);if(!cr.error)(cr.data||[]).forEach(c=>cmap[c.id]=c);}
   return {rows,cmap};
 }
+function buildDailyJobReportText(date,groups){
+  const dateLabel=new Date(`${date}T00:00:00`).toLocaleDateString("en-GB");
+  const lines=[`Today's Work Completion Report – ${dateLabel}`,"", "Telephone Complaints Completed:",""];
+  if(groups.telecom.length){
+    groups.telecom.forEach(({j,c})=>{
+      const number=c.phone||j.job_code||"Telephone";
+      const loc=j.location||c.address||"";
+      lines.push(`${number}${loc?` ${loc}`:""}`);
+    });
+  }else lines.push("No telephone complaints completed.");
+  lines.push("","Electrical Works:","");
+  if(groups.electrical.length) groups.electrical.forEach(({j,c})=>lines.push(`• ${dailyElectricalText(j,c)}`));
+  else lines.push("No electrical works for this date.");
+  return lines.join("\n");
+}
 async function loadDailyJobReport(){
   if(!user)return alert("Login required");
-  const input=$("dailyReportDate"), box=$("dailyReportList"), meta=$("dailyReportMeta");
+  if(!["admin","engineer"].includes(profile?.role))return alert("Daily Report is available only to Admin / Engineer.");
+  const input=$("dailyReportDate"), box=$("dailyReportList"), meta=$("dailyReportMeta"), textBox=$("dailyReportText");
   const date=input?.value || localDateKey(new Date());
   if(input && !input.value) input.value=date;
   if(box) box.innerHTML=`<div class="empty">Loading daily report…</div>`;
@@ -4318,35 +4329,26 @@ async function loadDailyJobReport(){
     const {rows,cmap}=await fetchDailyReportRows(date);
     const groups=dailyJobGroups(rows,cmap);
     const dateLabel=new Date(`${date}T00:00:00`).toLocaleDateString("en-GB");
-    if(meta) meta.textContent=`Today's Work Completion Report — ${dateLabel}`;
+    const reportText=buildDailyJobReportText(date,groups);
+    if(meta) meta.textContent=`Today's Work Completion Report — ${dateLabel} • ${groups.telecom.length} telephone completed • ${groups.electrical.length} electrical works`;
+    if(textBox) textBox.value=reportText;
     const tel=groups.telecom.length
       ? `<section class="dailyReportSection"><h3>☎️ Telephone Complaints Completed:</h3><ol>${groups.telecom.map(({j,c})=>`<li><b>${esc(c.phone||j.job_code||"Telephone")}</b>${j.location||c.address?` ${esc(j.location||c.address)}`:""}</li>`).join("")}</ol></section>`
       : `<section class="dailyReportSection"><h3>☎️ Telephone Complaints Completed:</h3><div class="muted">No telephone complaints completed.</div></section>`;
     const elec=groups.electrical.length
       ? `<section class="dailyReportSection"><h3>⚡ Electrical Works:</h3><ul>${groups.electrical.map(({j,c})=>`<li>${esc(dailyElectricalText(j,c))}</li>`).join("")}</ul></section>`
       : `<section class="dailyReportSection"><h3>⚡ Electrical Works:</h3><div class="muted">No electrical works for this date.</div></section>`;
-    box.innerHTML=tel+elec;
+    if(box) box.innerHTML=tel+elec;
   }catch(e){console.error("Daily job report error",e);if(box)box.innerHTML=`<div class="dailyReportEmpty">Could not load daily report: ${esc(e?.message||e)}</div>`;}
 }
-async function printDailyJobReport(){
+async function copyDailyJobReportText(){
   if(!user)return alert("Login required");
-  const input=$("dailyReportDate"), date=input?.value||localDateKey(new Date());
-  if(input && !input.value)input.value=date;
-  try{
-    const {rows,cmap}=await fetchDailyReportRows(date);
-    const groups=dailyJobGroups(rows,cmap);
-    const dateLabel=new Date(`${date}T00:00:00`).toLocaleDateString("en-GB");
-    const title=`Today's Work Completion Report - ${dateLabel}`;
-    const telHtml=groups.telecom.length
-      ? `<h2>Telephone Complaints Completed:</h2><ol>${groups.telecom.map(({j,c})=>`<li><b>${esc(c.phone||j.job_code||"Telephone")}</b>${j.location||c.address?` ${esc(j.location||c.address)}`:""}</li>`).join("")}</ol>`
-      : `<h2>Telephone Complaints Completed:</h2><p>No telephone complaints completed.</p>`;
-    const elecHtml=groups.electrical.length
-      ? `<h2>Electrical Works:</h2><ul>${groups.electrical.map(({j,c})=>`<li>${esc(dailyElectricalText(j,c))}</li>`).join("")}</ul>`
-      : `<h2>Electrical Works:</h2><p>No electrical works for this date.</p>`;
-    const body=`<h1>${esc(title)}</h1>${telHtml}${elecHtml}`;
-    const w=window.open("","_blank");if(!w)return alert("Allow pop-ups to create the daily report.");
-    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#111;line-height:1.65;background:#fff}.report{max-width:850px;margin:auto}h1{font-size:24px;margin:0 0 28px}h2{font-size:19px;margin:24px 0 10px}ol,ul{padding-left:28px}li{margin:8px 0}p{color:#475569}@media print{body{padding:0}.noprint{display:none}}</style></head><body><div class="report">${body}<button class="noprint" onclick="window.print()" style="margin-top:24px;padding:10px 16px">Print / Save PDF</button></div></body></html>`);w.document.close();
-  }catch(e){console.error("Daily job print error",e);alert("Could not create daily report: "+(e?.message||e));}
+  if(!["admin","engineer"].includes(profile?.role))return alert("Daily Report is available only to Admin / Engineer.");
+  let text=$("dailyReportText")?.value||"";
+  if(!text){await loadDailyJobReport();text=$("dailyReportText")?.value||"";}
+  if(!text)return;
+  try{await navigator.clipboard.writeText(text);alert("Daily report text copied.");}
+  catch(e){const ta=$("dailyReportText");ta.focus();ta.select();document.execCommand("copy");alert("Daily report text copied.");}
 }
 
 async function printReport(type){
