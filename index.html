@@ -2372,7 +2372,7 @@ body{margin:0!important;}
 #technicianServiceRequestCard.streetLightMode .jobFormGrid > #srLocationWrap{order:2}
 #technicianServiceRequestCard.streetLightMode .jobFormGrid > #srPhoneWrap{order:3}
 #technicianServiceRequestCard.streetLightMode .jobFormGrid > #srFaultWrap{order:4;grid-column:1/-1}
-</style>
+.jobNote .approvedByBadge{display:block;width:max-content;max-width:100%;margin-top:8px}</style>
 
 <style id="tele-tuty-performance-v1">
 /* Fast UI mode: optimized for high-refresh-rate phones. */
@@ -3738,9 +3738,11 @@ async function loadJobs(){
       const st=String(j.status||"pending");
       const c=customerMap[j.customer_id]||{};
       const isServiceRequest=!!j.approved_by && profileMap[j.created_by]?.role==="worker";
-      const engineerId=j.assigned_engineer || (profileMap[j.created_by]?.role==="engineer" ? j.created_by : null);
+      // If no engineer is assigned, show the job creator as the fallback name.
+      // This keeps the Engineer field useful for every job without changing assignment data.
+      const engineerId=j.assigned_engineer || j.created_by || null;
       const engineer=roleName(engineerId);
-      const approvedBy=roleName(j.approved_by);
+      const approvedBy=j.approved_by ? roleName(j.approved_by) : "";
       const assignments=assignmentMap[j.id]||[];
       const techNames=assignments.map(a=>({a,name:roleName(a.technician_id)}));
       const completedTechs=techNames.filter(x=>x.a.status==="completed");
@@ -3781,11 +3783,11 @@ async function loadJobs(){
             <section class="jobDetailGrid">
               <div class="jobDetailItem"><span>👤 Customer</span><strong>${esc(c.name||"Customer not set")}</strong>${c.phone?`<small>📞 ${esc(c.phone)}</small>`:""}</div>
               <div class="jobDetailItem"><span>📍 Location</span><strong>${esc(j.location||c.address||"Location not set")}</strong></div>
-              <div class="jobDetailItem"><span>${isServiceRequest?"✅ Approved By":"👨‍💼 Engineer"}</span><strong>${esc(isServiceRequest?approvedBy:engineer)}</strong>${!isServiceRequest && rolePhone(engineerId)?`<small>📞 ${esc(rolePhone(engineerId))}</small>`:""}${isServiceRequest?`<small class="approvedByBadge">✓ Engineer approved</small>`:""}</div>
+              <div class="jobDetailItem"><span>${j.approved_by?"✅ Approved By":"👨‍💼 Engineer"}</span><strong>${esc(j.approved_by?approvedBy:engineer)}</strong>${rolePhone(j.approved_by||engineerId)?`<small>📞 ${esc(rolePhone(j.approved_by||engineerId))}</small>`:""}${j.approved_by?`<small class="approvedByBadge">✓ Approved by Engineer: ${esc(approvedBy)}</small>`:""}</div>
               <div class="jobDetailItem"><span>👷 Technicians</span><strong>${esc(technician||"Not assigned")}</strong>${completedBy?`<small style="color:#15803d;font-weight:800">✓ Completed by: ${esc(completedBy)}</small>`:""}</div>
               <div class="jobDetailItem"><span>🕒 Created / History</span><strong>${esc(when)}</strong></div>
             </section>
-            ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong></section>`:""}
+            ${j.worker_remarks?`<section class="jobNote completeNote"><span>✅ Completion remarks</span><strong>${esc(j.worker_remarks)}</strong>${j.approved_by?`<small class="approvedByBadge">✓ Approved by Engineer: ${esc(approvedBy)}</small>`:""}</section>`:(j.approved_by?`<section class="jobNote completeNote"><span>✅ Completion / Approval</span><strong>Approved by Engineer: ${esc(approvedBy)}</strong></section>`:"")}
             ${j.pending_reason?`<section class="jobNote pendingNote"><span>⚠️ Pending reason</span><strong>${esc(j.pending_reason)}</strong></section>`:""}
             ${profile?.role!=="worker" && st==="completed" && (j.completed_at||j.status_updated_at)?`<div class="completionTime">✓ Completed on: ${esc(new Date(j.completed_at||j.status_updated_at).toLocaleString())}</div>`:""}
             <section class="extraWorkSection" id="extraWorkSection${j.id}">
